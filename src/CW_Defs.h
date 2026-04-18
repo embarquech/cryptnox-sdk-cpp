@@ -52,6 +52,10 @@
 #define CW_USER_DATA_PAGE_SIZE        (208U)   /**< Max plaintext bytes per write user data page */
 #define CW_CONNECT_MAX_ATTEMPTS        (5U)    /**< Max NFC connection retry attempts */
 
+/* Byte offsets within a raw 64-byte signature (r[32] || s[32]) */
+#define CW_SIG_R_OFFSET               (0U)   /**< Byte offset of the r component */
+#define CW_SIG_S_OFFSET               (32U)  /**< Byte offset of the s component */
+
 /* DER encoding tags (ASN.1) */
 #define CW_DER_TAG_SEQUENCE           (0x30U)
 #define CW_DER_TAG_INTEGER            (0x02U)
