@@ -12,34 +12,34 @@
  * minimum set of defines/types needed so the SDK headers compile cleanly.
  */
 
-#ifndef ARDUINO
+#ifdef ARDUINO
+/* On Arduino, pull in Arduino.h so SDK headers that reference __FlashStringHelper,
+ * DEC/HEX/OCT/BIN, F(), or delay() compile regardless of whether the including
+ * translation unit already included <Arduino.h>. Arduino.h transitively provides
+ * <stdint.h>, <stddef.h>, <string.h>, etc., so no need to include them here. */
+#  include <Arduino.h>
+#else
+/* Off Arduino, include the C standard headers explicitly so the SDK compiles
+ * without depending on what the including TU may or may not have pulled in. */
 #  include <stdint.h>
 #  include <stddef.h>
 #  include <string.h>
 #  include <stdbool.h>
 
-/* Numeric base constants used as default arguments in CW_Logger. */
 #  define DEC  10
 #  define HEX  16
 #  define OCT   8
 #  define BIN   2
 
-/* Flash-string helper type: on Arduino, F("...") returns a pointer to this
- * class so that print() overloads can distinguish ROM from RAM strings.
- * On non-Arduino it is a dummy empty class; F() is the identity macro so
- * F("foo") just returns a plain const char*, which resolves to the
- * print(const char*) overload. */
+/* F("...") on Arduino returns __FlashStringHelper* to keep string literals in
+ * flash.  On non-Arduino it is the identity macro, resolving to const char*. */
 class __FlashStringHelper {};
 #  define F(string_literal) (string_literal)
 
-/* delay() is an Arduino built-in. On non-Arduino targets it is a no-op so
- * that CryptnoxWallet::connect()'s retry logic still compiles. Platforms that
- * need real sleeping should provide their own implementation before including
- * this header. */
 #  ifndef delay
 static inline void delay(unsigned long /*ms*/) {}
 #  endif
 
-#endif /* !ARDUINO */
+#endif /* ARDUINO / !ARDUINO */
 
 #endif /* PLATFORM_COMPAT_H */
