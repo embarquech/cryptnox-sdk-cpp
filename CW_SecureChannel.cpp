@@ -448,7 +448,7 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
 
     /* 3. Build send APDU: header || Lc || MAC || ciphertext */
     const uint8_t lc = (uint8_t)lcValue;
-    uint16_t sendApduLength = apduLength + APDU_LC_LEN + sizeof(macValue) + encryptedLength;
+    uint8_t sendApduLength = (uint8_t)(apduLength + APDU_LC_LEN + sizeof(macValue) + encryptedLength);
     if (sendApduLength > SEND_APDU_MAX_LEN) {
 #if CW_DEBUG_LOGGING
         _logger.println(F("Error: Send APDU length exceeds buffer."));
