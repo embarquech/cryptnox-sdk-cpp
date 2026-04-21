@@ -677,14 +677,27 @@ bool CW_SecureChannel::getManufacturerCertificate(uint8_t* cert, uint16_t& certL
     certLen = 0U;
 
     if (cert != NULL) {
+        const uint8_t APDU_P2_IDX = 3U;  /* P2 field offset in ISO 7816-4 APDU header */
         uint8_t apdu[5U] = { 0x80U, 0xF7U, 0x00U, 0x00U, 0x00U };
         uint8_t response[130U];
         uint8_t responseLen = sizeof(response);
 
-        if (_driver.sendAPDU(apdu, sizeof(apdu), response, responseLen) &&
-            checkStatusWord(response, responseLen, 0x90U, 0x00U)) {
+        if (!_driver.sendAPDU(apdu, sizeof(apdu), response, responseLen)) {
+#if CW_DEBUG_LOGGING
+            _logger.println(F("getManufacturerCertificate APDU failed."));
+#endif
+            return false;
+        }
+        if (responseLen > sizeof(response)) {
+#if CW_DEBUG_LOGGING
+            _logger.println(F("getManufacturerCertificate: driver reported overflow."));
+#endif
+            return false;
+        }
 
-            uint8_t dataBytes = responseLen - 2U;
+        if (checkStatusWord(response, responseLen, 0x90U, 0x00U)) {
+
+            uint8_t dataBytes = responseLen - RESPONSE_STATUS_WORDS_IN_BYTES;
 
             if (dataBytes >= 2U) {
                 uint16_t totalCertLen = ((uint16_t)response[0] << 8U) | response[1];
@@ -697,15 +710,23 @@ bool CW_SecureChannel::getManufacturerCertificate(uint8_t* cert, uint16_t& certL
 
                     uint8_t pageIdx = 1U;
                     while ((certLen < totalCertLen) && (pageIdx < 8U)) {
-                        apdu[3] = pageIdx;
+                        apdu[APDU_P2_IDX] = pageIdx;
                         responseLen = sizeof(response);
 
-                        if (!_driver.sendAPDU(apdu, sizeof(apdu), response, responseLen) ||
-                            !checkStatusWord(response, responseLen, 0x90U, 0x00U)) {
+                        if (!_driver.sendAPDU(apdu, sizeof(apdu), response, responseLen)) {
+                            break;
+                        }
+                        if (responseLen > sizeof(response)) {
+#if CW_DEBUG_LOGGING
+                            _logger.println(F("getManufacturerCertificate: driver reported overflow."));
+#endif
+                            return false;
+                        }
+                        if (!checkStatusWord(response, responseLen, 0x90U, 0x00U)) {
                             break;
                         }
 
-                        uint8_t pageData = responseLen - 2U;
+                        uint8_t pageData = responseLen - RESPONSE_STATUS_WORDS_IN_BYTES;
                         uint16_t remaining = totalCertLen - certLen;
                         if (pageData > remaining) { pageData = (uint8_t)remaining; }
 
@@ -727,10 +748,6 @@ bool CW_SecureChannel::getManufacturerCertificate(uint8_t* cert, uint16_t& certL
 #endif
                 }
             }
-        } else {
-#if CW_DEBUG_LOGGING
-            _logger.println(F("getManufacturerCertificate APDU failed."));
-#endif
         }
     }
 
