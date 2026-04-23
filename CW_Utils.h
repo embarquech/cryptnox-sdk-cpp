@@ -70,7 +70,7 @@ public:
      * @param len   Number of random bytes to generate.
      * @return true on success, false if dest is NULL or len is zero.
      */
-    static bool random(uint8_t* dest, size_t len);
+    static bool fill_secure_random(uint8_t* dest, size_t len);
 };
 
 #endif // CW_UTILS_H
