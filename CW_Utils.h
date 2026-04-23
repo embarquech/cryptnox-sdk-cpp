@@ -59,6 +59,18 @@ public:
      */
     static bool safe_memcpy(uint8_t* dst, size_t dstSize,
                             const uint8_t* src, size_t count);
+
+    /**
+     * @brief Fill @p len bytes at @p dest with cryptographically random data.
+     *
+     * The implementation is platform-specific; on ESP32 it uses the hardware
+     * TRNG via esp_fill_random().
+     *
+     * @param dest  Destination buffer.
+     * @param len   Number of random bytes to generate.
+     * @return true on success, false if dest is NULL or len is zero.
+     */
+    static bool fill_secure_random(uint8_t* dest, size_t len);
 };
 
 #endif // CW_UTILS_H
