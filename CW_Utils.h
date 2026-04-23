@@ -1,5 +1,5 @@
-#ifndef CRYPTNOX_UTILS_H
-#define CRYPTNOX_UTILS_H
+#ifndef CW_UTILS_H
+#define CW_UTILS_H
 
 /******************************************************************
  * 1. Included files
@@ -12,7 +12,7 @@
  ******************************************************************/
 
 /**
- * @class CryptnoxUtils
+ * @class CW_Utils
  * @brief Portable utility functions for cryptographic and security operations.
  *
  * All methods here are platform-independent pure C++ with no dependency
@@ -21,7 +21,7 @@
  * Hardware-specific helpers (e.g. TRNG byte generation) live in the
  * concrete crypto provider implementation (ArduinoCryptoProvider).
  */
-class CryptnoxUtils {
+class CW_Utils {
 public:
     /**
      * @brief Constant-time buffer comparison, resistant to timing side-channel attacks.
@@ -61,4 +61,4 @@ public:
                             const uint8_t* src, size_t count);
 };
 
-#endif // CRYPTNOX_UTILS_H
+#endif // CW_UTILS_H
