@@ -1,5 +1,5 @@
 #include "CW_SecureChannel.h"
-#include "CryptnoxUtils.h"
+#include "CW_Utils.h"
 #if CW_VERIFY_CERT
 #include "CW_TrustedKeys.h"
 #endif
@@ -316,9 +316,9 @@ bool CW_SecureChannel::mutuallyAuthenticate(CW_SecureSession& session,
 #if CW_DEBUG_LOGGING
             _logger.println(F("RNG failed."));
 #endif
-            CryptnoxUtils::secure_wipe(sharedSecret, sizeof(sharedSecret));
-            CryptnoxUtils::secure_wipe(sha512Output, sizeof(sha512Output));
-            CryptnoxUtils::secure_wipe(concat, sizeof(concat));
+            CW_Utils::secure_wipe(sharedSecret, sizeof(sharedSecret));
+            CW_Utils::secure_wipe(sha512Output, sizeof(sha512Output));
+            CW_Utils::secure_wipe(concat, sizeof(concat));
             return false;
         }
 
@@ -342,10 +342,10 @@ bool CW_SecureChannel::mutuallyAuthenticate(CW_SecureSession& session,
         uint8_t ciphertextMACLong[64U] = { 0U };
 
         if (MAC_data_length > sizeof(MAC_data)) {
-            CryptnoxUtils::secure_wipe(sharedSecret, sizeof(sharedSecret));
-            CryptnoxUtils::secure_wipe(sha512Output, sizeof(sha512Output));
-            CryptnoxUtils::secure_wipe(concat, sizeof(concat));
-            CryptnoxUtils::secure_wipe(RNG_data, sizeof(RNG_data));
+            CW_Utils::secure_wipe(sharedSecret, sizeof(sharedSecret));
+            CW_Utils::secure_wipe(sha512Output, sizeof(sha512Output));
+            CW_Utils::secure_wipe(concat, sizeof(concat));
+            CW_Utils::secure_wipe(RNG_data, sizeof(RNG_data));
             return false;
         }
 
@@ -395,12 +395,12 @@ bool CW_SecureChannel::mutuallyAuthenticate(CW_SecureSession& session,
         }
 
         /* Secure cleanup */
-        CryptnoxUtils::secure_wipe(sharedSecret, sizeof(sharedSecret));
-        CryptnoxUtils::secure_wipe(sha512Output, sizeof(sha512Output));
-        CryptnoxUtils::secure_wipe(concat, sizeof(concat));
-        CryptnoxUtils::secure_wipe(RNG_data, sizeof(RNG_data));
-        CryptnoxUtils::secure_wipe(ciphertextOPC, sizeof(ciphertextOPC));
-        CryptnoxUtils::secure_wipe(MAC_data, sizeof(MAC_data));
+        CW_Utils::secure_wipe(sharedSecret, sizeof(sharedSecret));
+        CW_Utils::secure_wipe(sha512Output, sizeof(sha512Output));
+        CW_Utils::secure_wipe(concat, sizeof(concat));
+        CW_Utils::secure_wipe(RNG_data, sizeof(RNG_data));
+        CW_Utils::secure_wipe(ciphertextOPC, sizeof(ciphertextOPC));
+        CW_Utils::secure_wipe(MAC_data, sizeof(MAC_data));
     }
 
     return ret;
@@ -526,7 +526,7 @@ bool CW_SecureChannel::aesCbcDecrypt(CW_SecureSession& session,
     memcpy(recomputedMacValue, s_apduBuf + macOffset, AES_BLOCK_SIZE);
 
     /* Fixed: was incorrectly calling secureCompare — use secure_compare. */
-    if (!CryptnoxUtils::secure_compare(rep_mac, recomputedMacValue, AES_BLOCK_SIZE)) {
+    if (!CW_Utils::secure_compare(rep_mac, recomputedMacValue, AES_BLOCK_SIZE)) {
 #if CW_DEBUG_LOGGING
         _logger.println(F("MAC mismatch."));
 #endif
