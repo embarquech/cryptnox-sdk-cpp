@@ -2,7 +2,14 @@
 #define CW_SECURECHANNEL_H
 
 /******************************************************************
- * 1. Included files
+ * 1. Public constants
+ ******************************************************************/
+
+#define CW_PAIRING_DATA       "Cryptnox Basic CommonPairingData"
+#define CW_PAIRING_DATA_BYTES (sizeof(CW_PAIRING_DATA) - 1U)
+
+/******************************************************************
+ * 2. Included files
  ******************************************************************/
 
 #include "platform_compat.h"
