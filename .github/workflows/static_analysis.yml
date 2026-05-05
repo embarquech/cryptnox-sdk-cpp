@@ -1,0 +1,35 @@
+name: Static analysis
+permissions:
+  contents: read
+  pull-requests: write
+on:
+  push:
+  pull_request:
+jobs:
+  cppcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install cppcheck
+        run: sudo apt-get install -y cppcheck
+
+      # The SDK depends on host-supplied headers (uECC.h, mbedtls/*, platform
+      # logger) that are not vendored here — they are provided by the
+      # integrating project (e.g. the ESP32 firmware). We suppress
+      # missingInclude rather than try to ship the full toolchain.
+      - name: cppcheck (Cryptnox SDK, C++)
+        run: |
+          cppcheck \
+            --enable=warning,style,performance,portability \
+            --std=c++17 \
+            --language=c++ \
+            --inline-suppr \
+            --error-exitcode=1 \
+            --suppress=missingInclude \
+            --suppress=missingIncludeSystem \
+            --suppress=unusedFunction \
+            -I . \
+            --force \
+            .
