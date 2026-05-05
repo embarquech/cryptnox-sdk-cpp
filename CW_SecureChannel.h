@@ -139,9 +139,9 @@ public:
     bool mutuallyAuthenticate(CW_SecureSession& session,
                               const uint8_t* salt,
                               uint8_t* clientPublicKey,
-                              uint8_t* clientPrivateKey,
+                              const uint8_t* clientPrivateKey,
                               const uECC_Curve_t* sessionCurve,
-                              uint8_t* cardEphemeralPubKey);
+                              const uint8_t* cardEphemeralPubKey);
 
 #if CW_VERIFY_CERT
     /**
@@ -192,7 +192,7 @@ public:
      * @param[out]    decryptedOutputLength Optional pointer to receive decrypted length.
      * @return true if MAC matches and decryption succeeds, false otherwise.
      */
-    bool aesCbcDecrypt(CW_SecureSession& session,
+    bool aesCbcDecrypt(const CW_SecureSession& session,
                        uint8_t* response, size_t responseLen,
                        uint8_t* macValue,
                        uint8_t* decryptedOutput = NULL,

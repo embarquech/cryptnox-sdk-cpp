@@ -68,6 +68,9 @@ CW_SecureChannel::CW_SecureChannel(CW_NfcTransport& driver,
                                    CW_Logger& logger,
                                    CW_CryptoProvider& crypto)
     : _driver(driver), _logger(logger), _crypto(crypto) {
+#if CW_VERIFY_CERT
+    memset(_lastNonce, 0, sizeof(_lastNonce));
+#endif
 }
 
 /******************************************************************
@@ -281,9 +284,9 @@ bool CW_SecureChannel::openSecureChannel(uint8_t* salt,
 bool CW_SecureChannel::mutuallyAuthenticate(CW_SecureSession& session,
                                             const uint8_t* salt,
                                             uint8_t* clientPublicKey,
-                                            uint8_t* clientPrivateKey,
+                                            const uint8_t* clientPrivateKey,
                                             const uECC_Curve_t* sessionCurve,
-                                            uint8_t* cardEphemeralPubKey) {
+                                            const uint8_t* cardEphemeralPubKey) {
     bool ret = false;
     uint8_t sharedSecret[32U] = { 0U };
 
@@ -488,7 +491,7 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
     return ret;
 }
 
-bool CW_SecureChannel::aesCbcDecrypt(CW_SecureSession& session,
+bool CW_SecureChannel::aesCbcDecrypt(const CW_SecureSession& session,
                                      uint8_t* response, size_t response_len,
                                      uint8_t* mac_value,
                                      uint8_t* decryptedOutput, uint16_t* decryptedOutputLength) {
