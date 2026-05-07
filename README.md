@@ -31,7 +31,7 @@ This core is consumed as a submodule by the platform-specific SDKs:
 | Integration | Repository |
 |-------------|------------|
 | ESP32-S3 (ESP-IDF v5.5) | [`embarquech/cryptnox-sdk-esp32`](https://github.com/embarquech/cryptnox-sdk-esp32) |
-| Arduino (Renesas RA4M1) | `embarquech/cryptnox-sdk-arduino` |
+| Arduino (Renesas RA4M1) | [`embarquech/cryptnox-sdk-arduino`](https://github.com/embarquech/cryptnox-sdk-arduino) |
 
 If you want to talk to a Cryptnox card on real hardware, **start from one of those repositories**.
 
