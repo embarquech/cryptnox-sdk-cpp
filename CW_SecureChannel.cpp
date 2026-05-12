@@ -562,7 +562,7 @@ bool CW_SecureChannel::aesCbcDecrypt(const CW_SecureSession& session,
     size_t totalDataLen = response_len - 2U;
     size_t cipherLen    = totalDataLen - AES_BLOCK_SIZE;
 
-    if ((mac_value == NULL) || (cipherLen == 0U)) {
+    if (mac_value == NULL) {
         return false;
     }
 
