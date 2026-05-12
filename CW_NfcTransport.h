@@ -42,7 +42,7 @@ public:
      * @param[out] responseLen  Actual number of bytes written to @p response.
      * @return true if the exchange succeeded, false otherwise.
      */
-    virtual bool sendAPDU(const uint8_t* apdu, uint8_t apduLen,
+    virtual bool sendAPDU(const uint8_t* apdu, uint16_t apduLen,
                           uint8_t* response, uint8_t& responseLen) = 0;
 
     /**

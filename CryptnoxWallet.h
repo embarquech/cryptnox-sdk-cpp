@@ -9,6 +9,7 @@
 #include "CW_Defs.h"
 #include "CW_Logger.h"
 #include "CW_SecureChannel.h"
+#include "CW_Utils.h"
 
 /******************************************************************
  * 2. Typedefs / structs (sign API)
@@ -37,6 +38,10 @@ struct CW_SignRequest {
           pinLessMode(pinless), hash(NULL), hashLength(0U),
           derivePath(NULL), derivePathLength(0U) {
         memset(pin, 0U, sizeof(pin));
+    }
+
+    ~CW_SignRequest() {
+        CW_Utils::secure_wipe(pin, sizeof(pin));
     }
 };
 

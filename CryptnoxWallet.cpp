@@ -2,6 +2,7 @@
  * Arduino compatibility shims (F(), HEX, delay) are provided via
  * platform_compat.h which is pulled in transitively through CryptnoxWallet.h. */
 #include "CryptnoxWallet.h"
+#include "CW_Utils.h"
 
 /******************************************************************
  * Constructor
@@ -150,6 +151,7 @@ void CryptnoxWallet::verifyPin(CW_SecureSession& session, const uint8_t* pin, ui
         memcpy(paddedPin, pin, pinLength);
         uint8_t apdu[] = { 0x80U, 0x20U, 0x00U, 0x00U };
         _secure.aesCbcEncrypt(session, apdu, sizeof(apdu), paddedPin, CW_MAX_PIN_LENGTH);
+        CW_Utils::secure_wipe(paddedPin, sizeof(paddedPin));
     }
 }
 
@@ -223,6 +225,8 @@ CW_SignResult CryptnoxWallet::sign(CW_SignRequest& request) {
                 result.errorCode = CW_OK;
             }
         }
+        CW_Utils::secure_wipe(data, sizeof(data));
+        CW_Utils::secure_wipe(derResponse, sizeof(derResponse));
     }
 
     return result;
@@ -250,7 +254,7 @@ bool CryptnoxWallet::parseDerSignature(const uint8_t* der, uint8_t derLength,
             pos++;
             rLength = der[pos];
             pos++;
-            if ((pos + rLength) > derLength) {
+            if ((rLength > 33U) || ((pos + rLength) > derLength)) {
             }
             else {
                 memcpy(r, der + pos, rLength);
@@ -262,7 +266,7 @@ bool CryptnoxWallet::parseDerSignature(const uint8_t* der, uint8_t derLength,
                     pos++;
                     sLength = der[pos];
                     pos++;
-                    if ((pos + sLength) > derLength) {
+                    if ((sLength > 33U) || ((pos + sLength) > derLength)) {
                     }
                     else {
                         memcpy(s, der + pos, sLength);
@@ -444,6 +448,8 @@ bool CryptnoxWallet::extractRawSignature(const uint8_t* derResponse, uint16_t de
 
                 ret = true;
             }
+            CW_Utils::secure_wipe(r, sizeof(r));
+            CW_Utils::secure_wipe(s, sizeof(s));
         }
     }
 

@@ -217,17 +217,22 @@ bool CW_SecureChannel::extractCardEphemeralKey(const uint8_t* cardCertificate,
         const uint8_t keyStart = 1U + 8U; /* skip 'C' and nonce */
         const uint8_t fullKeyLength = 65U;
 
-        for (uint8_t i = 0U; i < fullKeyLength; i++) {
-            uint8_t b = cardCertificate[keyStart + i];
-            if (fullEphemeralPubKey65 != NULL) {
-                fullEphemeralPubKey65[i] = b;
-            }
-            if (i > 0U) {
-                cardEphemeralPubKey[i - 1U] = b;
-            }
+        /* Reject any key that is not an uncompressed point (0x04 prefix). */
+        if (cardCertificate[keyStart] != 0x04U) {
+            ret = false;
         }
-
-        ret = true;
+        else {
+            for (uint8_t i = 0U; i < fullKeyLength; i++) {
+                uint8_t b = cardCertificate[keyStart + i];
+                if (fullEphemeralPubKey65 != NULL) {
+                    fullEphemeralPubKey65[i] = b;
+                }
+                if (i > 0U) {
+                    cardEphemeralPubKey[i - 1U] = b;
+                }
+            }
+            ret = true;
+        }
     }
 
     return ret;
@@ -290,6 +295,16 @@ bool CW_SecureChannel::mutuallyAuthenticate(CW_SecureSession& session,
     bool ret = false;
     uint8_t sharedSecret[32U] = { 0U };
 
+    /* Validate the card's ephemeral key before using it for ECDH (CRIT-03).
+     * uECC_valid_public_key checks that the point lies on the curve and is not
+     * the identity, preventing invalid-curve / small-subgroup attacks. */
+    if (!uECC_valid_public_key(cardEphemeralPubKey, sessionCurve)) {
+#if CW_DEBUG_LOGGING
+        _logger.println(F("Card ephemeral public key is not a valid curve point. Aborting."));
+#endif
+        return false;
+    }
+
     if (!_crypto.ecdh(cardEphemeralPubKey, clientPrivateKey, sharedSecret, sessionCurve)) {
 #if CW_DEBUG_LOGGING
         _logger.println(F("ECDH failed."));
@@ -319,6 +334,7 @@ bool CW_SecureChannel::mutuallyAuthenticate(CW_SecureSession& session,
 #if CW_DEBUG_LOGGING
             _logger.println(F("RNG failed."));
 #endif
+            session.clear();
             CW_Utils::secure_wipe(sharedSecret, sizeof(sharedSecret));
             CW_Utils::secure_wipe(sha512Output, sizeof(sha512Output));
             CW_Utils::secure_wipe(concat, sizeof(concat));
@@ -345,6 +361,7 @@ bool CW_SecureChannel::mutuallyAuthenticate(CW_SecureSession& session,
         uint8_t ciphertextMACLong[64U] = { 0U };
 
         if (MAC_data_length > sizeof(MAC_data)) {
+            session.clear();
             CW_Utils::secure_wipe(sharedSecret, sizeof(sharedSecret));
             CW_Utils::secure_wipe(sha512Output, sizeof(sha512Output));
             CW_Utils::secure_wipe(concat, sizeof(concat));
@@ -404,6 +421,12 @@ bool CW_SecureChannel::mutuallyAuthenticate(CW_SecureSession& session,
         CW_Utils::secure_wipe(RNG_data, sizeof(RNG_data));
         CW_Utils::secure_wipe(ciphertextOPC, sizeof(ciphertextOPC));
         CW_Utils::secure_wipe(MAC_data, sizeof(MAC_data));
+
+        /* If the APDU exchange failed after session keys were written, clear
+         * them now to prevent a half-initialised session from being used (CRIT-04). */
+        if (!ret) {
+            session.clear();
+        }
     }
 
     return ret;
@@ -415,12 +438,29 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
                                      uint8_t* decryptedOutput, uint16_t* decryptedOutputLength) {
     bool ret = false;
 
+    /* Reject payloads that would overflow s_dataBuf (MED-01). */
+    if (dataLength > INPUT_BUFFER_LIMIT) {
+#if CW_DEBUG_LOGGING
+        _logger.println(F("Error: data too large for encryption buffer."));
+#endif
+        return false;
+    }
+
     /* 1. Encrypt data with Kenc (Bit padding) */
     uint16_t encryptedLength = _crypto.aesCbcEncrypt(data, dataLength, s_dataBuf,
                                                      session.aesKey, sizeof(session.aesKey),
                                                      session.iv, true);
 
     uint16_t lcValue = encryptedLength + (uint16_t)AES_BLOCK_SIZE;
+    /* lcValue must fit in uint8_t: with INPUT_BUFFER_LIMIT=208, max encryptedLength=224,
+     * so max lcValue=240. The static_assert above also caps APDU at 255 bytes (MED-03). */
+    if (lcValue > 0xFFU) {
+#if CW_DEBUG_LOGGING
+        _logger.println(F("Error: lcValue overflow — payload too large."));
+#endif
+        CW_Utils::secure_wipe(s_dataBuf, sizeof(s_dataBuf));
+        return false;
+    }
     uint8_t macApdu[MAC_APDU_LEN] = { 0U };
     macApdu[0U] = (uint8_t)lcValue;
 
@@ -429,6 +469,7 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
 #if CW_DEBUG_LOGGING
         _logger.println(F("Error: MAC data length exceeds buffer."));
 #endif
+        CW_Utils::secure_wipe(s_dataBuf, sizeof(s_dataBuf));
         return false;
     }
 
@@ -456,6 +497,8 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
 #if CW_DEBUG_LOGGING
         _logger.println(F("Error: Send APDU length exceeds buffer."));
 #endif
+        CW_Utils::secure_wipe(s_dataBuf, sizeof(s_dataBuf));
+        CW_Utils::secure_wipe(s_macBuf,  sizeof(s_macBuf));
         return false;
     }
 
@@ -474,9 +517,16 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
 
     if (_driver.sendAPDU(s_apduBuf, sendApduLength, response, responseLength)) {
         if (checkStatusWord(response, responseLength, 0x90U, 0x00U)) {
-            memcpy(session.iv, response, CW_IV_SIZE);
+            /* Update session.iv ONLY after the response MAC is verified (HIGH-01).
+             * Moving it before aesCbcDecrypt would let an attacker-chosen IV
+             * desynchronise the rolling-IV state even on MAC failure. */
             ret = aesCbcDecrypt(session, response, responseLength, macValue,
                                 decryptedOutput, decryptedOutputLength);
+            if (ret) {
+                memcpy(session.iv, response, CW_IV_SIZE);
+            } else {
+                session.clear();
+            }
         } else {
 #if CW_DEBUG_LOGGING
             _logger.println(F("Secured APDU: bad SW."));
@@ -488,6 +538,10 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
 #endif
     }
 
+    /* Wipe plaintext scratch buffers so they do not persist in .bss (MED-04). */
+    CW_Utils::secure_wipe(s_dataBuf, sizeof(s_dataBuf));
+    CW_Utils::secure_wipe(s_macBuf,  sizeof(s_macBuf));
+
     return ret;
 }
 
@@ -495,6 +549,12 @@ bool CW_SecureChannel::aesCbcDecrypt(const CW_SecureSession& session,
                                      uint8_t* response, size_t response_len,
                                      uint8_t* mac_value,
                                      uint8_t* decryptedOutput, uint16_t* decryptedOutputLength) {
+    /* Precondition: response must hold at least MAC(16) + 1 ciphertext byte + SW(2) (HIGH-02).
+     * Without this check, response_len < 18 causes size_t underflow in the subtractions below. */
+    if ((response == NULL) || (response_len < (size_t)(AES_BLOCK_SIZE + 2U + 1U))) {
+        return false;
+    }
+
     /* Response layout: MAC(16) || cipherText(N) || SW1(1) || SW2(1) */
     uint8_t rep_mac[AES_BLOCK_SIZE];
     memcpy(rep_mac, response, AES_BLOCK_SIZE);
@@ -528,11 +588,11 @@ bool CW_SecureChannel::aesCbcDecrypt(const CW_SecureSession& session,
     uint16_t macOffset = macEncryptedLength - AES_BLOCK_SIZE;
     memcpy(recomputedMacValue, s_apduBuf + macOffset, AES_BLOCK_SIZE);
 
-    /* Fixed: was incorrectly calling secureCompare — use secure_compare. */
     if (!CW_Utils::secure_compare(rep_mac, recomputedMacValue, AES_BLOCK_SIZE)) {
 #if CW_DEBUG_LOGGING
         _logger.println(F("MAC mismatch."));
 #endif
+        CW_Utils::secure_wipe(s_macBuf, sizeof(s_macBuf));
         return false;
     }
 
@@ -578,6 +638,10 @@ bool CW_SecureChannel::aesCbcDecrypt(const CW_SecureSession& session,
         }
     }
 
+    /* Wipe plaintext scratch buffers (MED-04). */
+    CW_Utils::secure_wipe(s_dataBuf, sizeof(s_dataBuf));
+    CW_Utils::secure_wipe(s_macBuf,  sizeof(s_macBuf));
+
     return ret;
 }
 
@@ -618,12 +682,21 @@ bool CW_SecureChannel::parseDerSigToRaw(const uint8_t* der, uint8_t derLen,
     bool ret = false;
 
     if ((der != NULL) && (raw64 != NULL) && (derLen >= 6U) && (der[0] == 0x30U)) {
+        /* Validate outer SEQUENCE length against actual buffer (HIGH-04). */
+        if ((uint8_t)(der[1] + 2U) > derLen) {
+            return false;
+        }
+
         uint8_t pos = 2U;  /* skip SEQUENCE tag + length */
 
         if (der[pos] == 0x02U) {
             pos++;
             uint8_t rLen = der[pos];
             pos++;
+            /* Reject malformed r — DER r is at most 33 bytes (32 + 1 zero pad) (HIGH-04). */
+            if (rLen > 33U) {
+                return false;
+            }
             if ((pos + rLen) <= derLen) {
                 const uint8_t* rPtr = der + pos;
                 pos += rLen;
@@ -632,6 +705,10 @@ bool CW_SecureChannel::parseDerSigToRaw(const uint8_t* der, uint8_t derLen,
                     pos++;
                     uint8_t sLen = der[pos];
                     pos++;
+                    /* Reject malformed s (HIGH-04). */
+                    if (sLen > 33U) {
+                        return false;
+                    }
                     if ((pos + sLen) <= derLen) {
                         const uint8_t* sPtr = der + pos;
 
@@ -853,7 +930,9 @@ uint8_t CW_SecureChannel::verifyCertificateChain(const uint8_t* cardCert,
                 result = CW_CERT_FORMAT_ERROR;
             }
             else {
-                uint8_t bitStringLen = s_mfCertBuf[sigOffset];
+                /* Use uint16_t to avoid silent truncation if the length byte is
+                 * misinterpreted; bounds-check before narrowing to uint8_t (HIGH-04). */
+                uint16_t bitStringLen = s_mfCertBuf[sigOffset];
                 sigOffset++;
                 if (s_mfCertBuf[sigOffset] == 0x00U) {
                     sigOffset++;
@@ -862,9 +941,12 @@ uint8_t CW_SecureChannel::verifyCertificateChain(const uint8_t* cardCert,
                 if ((sigOffset + bitStringLen) > mfCertLen) {
                     result = CW_CERT_FORMAT_ERROR;
                 }
+                else if (bitStringLen > 255U) {
+                    result = CW_CERT_FORMAT_ERROR;
+                }
                 else {
                     const uint8_t* mfSig    = s_mfCertBuf + sigOffset;
-                    uint8_t        mfSigLen = bitStringLen;
+                    uint8_t        mfSigLen = (uint8_t)bitStringLen;
 
                     bool mfVerified = false;
                     for (uint8_t i = 0U; i < CW_TRUSTED_CA_COUNT; i++) {

@@ -112,10 +112,17 @@ struct CW_SecureSession {
 
 /**
  * Set to 1 to enable certificate chain verification (adds SHA-256 + ~4 KB Flash).
- * Disabled by default to preserve Flash on resource-constrained boards.
+ * Enabled by default: disabling allows any NFC target to impersonate a Cryptnox card.
+ * To disable on Flash-constrained boards set CW_VERIFY_CERT=0 in your build flags,
+ * but never do so in production — see CRIT-02 in the security audit.
  */
 #ifndef CW_VERIFY_CERT
-#  define CW_VERIFY_CERT 0
+#  define CW_VERIFY_CERT 1
+#endif
+
+#if !CW_VERIFY_CERT
+#  warning "CW_VERIFY_CERT is 0: card identity will NOT be verified. Any NFC target can " \
+           "impersonate a Cryptnox card and learn your PIN. Do NOT deploy in production."
 #endif
 
 /**
