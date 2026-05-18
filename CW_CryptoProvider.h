@@ -105,6 +105,19 @@ public:
      */
     virtual bool random(uint8_t* dest, unsigned size) = 0;
 
+    /**
+     * @brief Verify an ECDSA signature (raw r||s, 64 bytes) against a message hash.
+     *
+     * @param[in] pubKey64  64-byte public key (X||Y, no 0x04 prefix) on secp256r1.
+     * @param[in] hash      Message hash buffer.
+     * @param[in] hashSize  Length of the hash in bytes.
+     * @param[in] rawSig64  64-byte raw signature (r[32]||s[32]).
+     * @return true if the signature is valid, false otherwise.
+     */
+    virtual bool verify(const uint8_t* pubKey64,
+                        const uint8_t* hash, size_t hashSize,
+                        const uint8_t* rawSig64) = 0;
+
     virtual ~CW_CryptoProvider() {}
 };
 

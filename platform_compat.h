@@ -37,8 +37,18 @@ class __FlashStringHelper {};
 #  define F(string_literal) (string_literal)
 
 #  ifndef delay
+#    ifdef ESP_PLATFORM
+/* On ESP-IDF, map delay() to FreeRTOS tick-based sleep so the PN532 settling
+ * delays in connect() are actually honoured instead of being no-ops. */
+#      include <freertos/FreeRTOS.h>
+#      include <freertos/task.h>
+static inline void delay(unsigned long ms) {
+    vTaskDelay(pdMS_TO_TICKS((TickType_t)ms));
+}
+#    else
 static inline void delay(unsigned long /*ms*/) {}
-#  endif
+#    endif /* ESP_PLATFORM */
+#  endif /* delay */
 
 #endif /* ARDUINO / !ARDUINO */
 

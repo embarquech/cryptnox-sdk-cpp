@@ -167,8 +167,13 @@ bool CW_SecureChannel::getCardCertificate(uint8_t* cardCertificate, uint8_t& car
     uint8_t getCardCertificateResponseLength = sizeof(getCardCertificateResponse);
 
     if (cardCertificate != NULL) {
-        uint8_t randomBytes[RANDOM_BYTES];
-        _crypto.random(randomBytes, RANDOM_BYTES);
+        uint8_t randomBytes[RANDOM_BYTES] = { 0U };
+        if (!_crypto.random(randomBytes, RANDOM_BYTES)) {
+#if CW_DEBUG_LOGGING
+            _logger.println(F("getCardCertificate: RNG failed."));
+#endif
+            return false;
+        }
 
         /* Store nonce for replay check in verifyCertificateChain(). */
 #if CW_VERIFY_CERT
@@ -748,8 +753,7 @@ bool CW_SecureChannel::verifyEcdsaSha256(const uint8_t* pubKey64,
         return false;
     }
 
-    return (uECC_verify(pubKey64, hash, sizeof(hash), rawSig,
-                        uECC_secp256r1()) != 0);
+    return _crypto.verify(pubKey64, hash, sizeof(hash), rawSig);
 }
 
 bool CW_SecureChannel::getManufacturerCertificate(uint8_t* cert, uint16_t& certLen) {
