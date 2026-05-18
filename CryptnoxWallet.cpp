@@ -26,9 +26,11 @@ bool CryptnoxWallet::begin() {
 
 bool CryptnoxWallet::connect(CW_SecureSession& session) {
     bool ret = false;
+    session.clear(); /* CRIT-04: clear any stale keys from a previous or partial session */
 
     for (uint8_t attempt = 0U; (attempt < CW_CONNECT_MAX_ATTEMPTS) && (ret == false); attempt++) {
         if (attempt > 0U) {
+            session.clear(); /* CRIT-04: clear partial keys left by a failed attempt before retrying */
 #if CW_DEBUG_LOGGING
             _logger.print(F("Retrying card connection (attempt "));
             _logger.print((uint8_t)(attempt + 1U));
@@ -46,6 +48,10 @@ bool CryptnoxWallet::connect(CW_SecureSession& session) {
                 ret = true;
             }
         }
+    }
+
+    if (!ret) {
+        session.clear(); /* CRIT-04: clear any partial keys from the final failed attempt */
     }
 
     return ret;

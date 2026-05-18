@@ -467,6 +467,11 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
         return false;
     }
     uint8_t macApdu[MAC_APDU_LEN] = { 0U };
+    /* MED-03: Single-byte length encoding and no direction byte are intentional —
+     * this CBC-MAC construction matches the Cryptnox SCCP card firmware spec.
+     * Changing to AES-CMAC, wider encoding, or adding a direction byte would
+     * break the card protocol. lcValue overflow is prevented by the
+     * INPUT_BUFFER_LIMIT precondition above (dataLength <= 208 → lcValue <= 240). */
     macApdu[0U] = (uint8_t)lcValue;
 
     uint16_t macDataLength = apduLength + sizeof(macApdu) + encryptedLength;
@@ -866,6 +871,23 @@ uint8_t CW_SecureChannel::verifyCertificateChain(const uint8_t* cardCert,
             _logger.println(F("verifyCert: device pubkey OID not found."));
 #endif
             result = CW_CERT_KEY_NOT_FOUND;
+        }
+    }
+
+    /* MED-05: reject certs where K1_PUBKEY_OID appears more than once — a second
+     * occurrence would make the position ambiguous and findBytes would silently
+     * pick the first (possibly attacker-planted) match. */
+    if (result == CW_CERT_OK) {
+        uint16_t dummy = 0U;
+        const uint16_t searchOffset = k1OidPos + 1U;
+        if ((searchOffset < mfCertLen) &&
+            findBytes(s_mfCertBuf + searchOffset,
+                      mfCertLen - searchOffset,
+                      K1_PUBKEY_OID, sizeof(K1_PUBKEY_OID), dummy)) {
+#if CW_DEBUG_LOGGING
+            _logger.println(F("verifyCert: device pubkey OID found at multiple positions."));
+#endif
+            result = CW_CERT_FORMAT_ERROR;
         }
     }
 
