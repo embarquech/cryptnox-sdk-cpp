@@ -172,7 +172,7 @@ bool CW_SecureChannel::getCardCertificate(uint8_t* cardCertificate, uint8_t& car
 
         /* Store nonce for replay check in verifyCertificateChain(). */
 #if CW_VERIFY_CERT
-        memcpy(_lastNonce, randomBytes, RANDOM_BYTES);
+        (void)CW_Utils::safe_memcpy(_lastNonce, RANDOM_BYTES, randomBytes, RANDOM_BYTES);
 #endif
 
         uint8_t getCardCertificateApdu[] = {
@@ -180,15 +180,15 @@ bool CW_SecureChannel::getCardCertificate(uint8_t* cardCertificate, uint8_t& car
         };
 
         uint8_t fullApdu[sizeof(getCardCertificateApdu) + RANDOM_BYTES];
-        memcpy(fullApdu, getCardCertificateApdu, sizeof(getCardCertificateApdu));
-        memcpy(fullApdu + sizeof(getCardCertificateApdu), randomBytes, RANDOM_BYTES);
+        (void)CW_Utils::safe_memcpy(fullApdu, sizeof(fullApdu), getCardCertificateApdu, sizeof(getCardCertificateApdu));
+        (void)CW_Utils::safe_memcpy(fullApdu + sizeof(getCardCertificateApdu), RANDOM_BYTES, randomBytes, RANDOM_BYTES);
 
         if (_driver.sendAPDU(fullApdu, sizeof(fullApdu),
                              getCardCertificateResponse, getCardCertificateResponseLength)) {
             if (checkStatusWord(getCardCertificateResponse, getCardCertificateResponseLength,
                                 0x90U, 0x00U)) {
                 cardCertificateLength = getCardCertificateResponseLength - RESPONSE_STATUS_WORDS_IN_BYTES;
-                memcpy(cardCertificate, getCardCertificateResponse, cardCertificateLength);
+                (void)CW_Utils::safe_memcpy(cardCertificate, GETCARDCERTIFICATE_IN_BYTES, getCardCertificateResponse, cardCertificateLength);
                 ret = true;
             } else {
 #if CW_DEBUG_LOGGING
@@ -255,8 +255,8 @@ bool CW_SecureChannel::openSecureChannel(uint8_t* salt,
         };
 
         uint8_t fullApdu[sizeof(opcApduHeader) + CLIENT_PUBLIC_KEY_SIZE];
-        memcpy(fullApdu, opcApduHeader, sizeof(opcApduHeader));
-        memcpy(fullApdu + sizeof(opcApduHeader), sessionPublicKey, CLIENT_PUBLIC_KEY_SIZE);
+        (void)CW_Utils::safe_memcpy(fullApdu, sizeof(fullApdu), opcApduHeader, sizeof(opcApduHeader));
+        (void)CW_Utils::safe_memcpy(fullApdu + sizeof(opcApduHeader), CLIENT_PUBLIC_KEY_SIZE, sessionPublicKey, CLIENT_PUBLIC_KEY_SIZE);
 
         uint8_t response[RESPONSE_OPENSECURECHANNEL_IN_BYTES];
         uint8_t responseLength = sizeof(response);
@@ -264,7 +264,7 @@ bool CW_SecureChannel::openSecureChannel(uint8_t* salt,
         if (_driver.sendAPDU(fullApdu, sizeof(fullApdu), response, responseLength)) {
             if (checkStatusWord(response, responseLength, 0x90U, 0x00U)) {
                 if (responseLength == RESPONSE_OPENSECURECHANNEL_IN_BYTES) {
-                    memcpy(salt, response, OPENSECURECHANNEL_SALT_IN_BYTES);
+                    (void)CW_Utils::safe_memcpy(salt, OPENSECURECHANNEL_SALT_IN_BYTES, response, OPENSECURECHANNEL_SALT_IN_BYTES);
                     ret = true;
                 } else {
 #if CW_DEBUG_LOGGING
@@ -316,14 +316,14 @@ bool CW_SecureChannel::mutuallyAuthenticate(CW_SecureSession& session,
         const size_t pairingKeyLen = sizeof(COMMON_PAIRING_DATA) - 1U;
         const size_t concatLen    = 32U + pairingKeyLen + 32U;
 
-        memcpy(concat, sharedSecret, 32U);
-        memcpy(concat + 32U, COMMON_PAIRING_DATA, pairingKeyLen);
-        memcpy(concat + 32U + pairingKeyLen, salt, 32U);
+        (void)CW_Utils::safe_memcpy(concat, sizeof(concat), sharedSecret, 32U);
+        (void)CW_Utils::safe_memcpy(concat + 32U, sizeof(concat) - 32U, reinterpret_cast<const uint8_t*>(COMMON_PAIRING_DATA), pairingKeyLen);
+        (void)CW_Utils::safe_memcpy(concat + 32U + pairingKeyLen, 32U, salt, 32U);
 
         _crypto.sha512(concat, concatLen, sha512Output);
 
-        memcpy(session.aesKey, sha512Output, CW_AESKEY_SIZE);
-        memcpy(session.macKey, sha512Output + CW_AESKEY_SIZE, CW_MACKEY_SIZE);
+        (void)CW_Utils::safe_memcpy(session.aesKey, CW_AESKEY_SIZE, sha512Output, CW_AESKEY_SIZE);
+        (void)CW_Utils::safe_memcpy(session.macKey, CW_MACKEY_SIZE, sha512Output + CW_AESKEY_SIZE, CW_MACKEY_SIZE);
 
         uint8_t iv_opc[AES_BLOCK_SIZE] = { 0U };
         uint8_t mac_iv[AES_BLOCK_SIZE] = { 0U };
@@ -354,7 +354,7 @@ bool CW_SecureChannel::mutuallyAuthenticate(CW_SecureSession& session,
             (uint8_t)(cipherLength + AES_BLOCK_SIZE)
         };
         uint8_t MAC_apduHeader[AES_BLOCK_SIZE] = { 0U };
-        memcpy(MAC_apduHeader, opcApduHeader, sizeof(opcApduHeader));
+        (void)CW_Utils::safe_memcpy(MAC_apduHeader, sizeof(MAC_apduHeader), opcApduHeader, sizeof(opcApduHeader));
 
         size_t  MAC_data_length = sizeof(MAC_apduHeader) + cipherLength;
         uint8_t MAC_data[64U] = { 0U };
@@ -369,8 +369,8 @@ bool CW_SecureChannel::mutuallyAuthenticate(CW_SecureSession& session,
             return false;
         }
 
-        memcpy(MAC_data, MAC_apduHeader, sizeof(MAC_apduHeader));
-        memcpy(MAC_data + sizeof(MAC_apduHeader), ciphertextOPC, cipherLength);
+        (void)CW_Utils::safe_memcpy(MAC_data, sizeof(MAC_data), MAC_apduHeader, sizeof(MAC_apduHeader));
+        (void)CW_Utils::safe_memcpy(MAC_data + sizeof(MAC_apduHeader), sizeof(MAC_data) - sizeof(MAC_apduHeader), ciphertextOPC, cipherLength);
 
         uint16_t encryptedLengthMAC = _crypto.aesCbcEncrypt(MAC_data, (uint16_t)MAC_data_length,
                                                             ciphertextMACLong,
@@ -379,16 +379,16 @@ bool CW_SecureChannel::mutuallyAuthenticate(CW_SecureSession& session,
 
         uint8_t MAC_value[AES_BLOCK_SIZE] = { 0U };
         uint8_t macOffset = (uint8_t)(encryptedLengthMAC - AES_BLOCK_SIZE);
-        memcpy(MAC_value, ciphertextMACLong + macOffset, AES_BLOCK_SIZE);
+        (void)CW_Utils::safe_memcpy(MAC_value, sizeof(MAC_value), ciphertextMACLong + macOffset, AES_BLOCK_SIZE);
 
         /* Forge MUTUALLY AUTHENTICATE APDU */
         uint8_t sendApduOpc[REQUEST_MUTUALLYAUTHENTICATE_IN_BYTES] = { 0U };
         uint16_t offset = 0U;
-        memcpy(sendApduOpc + offset, opcApduHeader, sizeof(opcApduHeader));
+        (void)CW_Utils::safe_memcpy(sendApduOpc + offset, sizeof(sendApduOpc) - static_cast<size_t>(offset), opcApduHeader, sizeof(opcApduHeader));
         offset += sizeof(opcApduHeader);
-        memcpy(sendApduOpc + offset, MAC_value, sizeof(MAC_value));
+        (void)CW_Utils::safe_memcpy(sendApduOpc + offset, sizeof(sendApduOpc) - static_cast<size_t>(offset), MAC_value, sizeof(MAC_value));
         offset += sizeof(MAC_value);
-        memcpy(sendApduOpc + offset, ciphertextOPC, cipherLength);
+        (void)CW_Utils::safe_memcpy(sendApduOpc + offset, sizeof(sendApduOpc) - static_cast<size_t>(offset), ciphertextOPC, cipherLength);
 
         uint8_t response[255U] = { 0U };
         uint8_t responseLength = sizeof(response);
@@ -396,7 +396,7 @@ bool CW_SecureChannel::mutuallyAuthenticate(CW_SecureSession& session,
         if (_driver.sendAPDU(sendApduOpc, sizeof(sendApduOpc), response, responseLength)) {
             if (checkStatusWord(response, responseLength, 0x90U, 0x00U)) {
                 if (responseLength == RESPONSE_MUTUALLYAUTHENTICATE_IN_BYTES) {
-                    memcpy(session.iv, response, CW_IV_SIZE);
+                    (void)CW_Utils::safe_memcpy(session.iv, CW_IV_SIZE, response, CW_IV_SIZE);
                     ret = true;
                 } else {
 #if CW_DEBUG_LOGGING
@@ -475,11 +475,11 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
 
     /* 2. Build MAC input: APDU header || LC block || ciphertext */
     uint16_t offset = 0U;
-    memcpy(s_macBuf, apdu, apduLength);
+    (void)CW_Utils::safe_memcpy(s_macBuf, sizeof(s_macBuf), apdu, apduLength);
     offset += apduLength;
-    memcpy(s_macBuf + offset, macApdu, sizeof(macApdu));
+    (void)CW_Utils::safe_memcpy(s_macBuf + offset, sizeof(s_macBuf) - static_cast<size_t>(offset), macApdu, sizeof(macApdu));
     offset += sizeof(macApdu);
-    memcpy(s_macBuf + offset, s_dataBuf, encryptedLength);
+    (void)CW_Utils::safe_memcpy(s_macBuf + offset, sizeof(s_macBuf) - static_cast<size_t>(offset), s_dataBuf, encryptedLength);
 
     uint8_t macIv[AES_BLOCK_SIZE] = { 0U };
     uint16_t macEncryptedLength = _crypto.aesCbcEncrypt(s_macBuf, macDataLength, s_apduBuf,
@@ -488,7 +488,7 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
 
     uint8_t macValue[AES_BLOCK_SIZE] = { 0U };
     uint16_t macOffset = macEncryptedLength - AES_BLOCK_SIZE;
-    memcpy(macValue, s_apduBuf + macOffset, AES_BLOCK_SIZE);
+    (void)CW_Utils::safe_memcpy(macValue, sizeof(macValue), s_apduBuf + macOffset, AES_BLOCK_SIZE);
 
     /* 3. Build send APDU: header || Lc || MAC || ciphertext */
     const uint8_t lc = (uint8_t)lcValue;
@@ -503,13 +503,13 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
     }
 
     offset = 0U;
-    memcpy(s_apduBuf, apdu, apduLength);
+    (void)CW_Utils::safe_memcpy(s_apduBuf, sizeof(s_apduBuf), apdu, apduLength);
     offset += apduLength;
     s_apduBuf[offset] = lc;
     offset += APDU_LC_LEN;
-    memcpy(s_apduBuf + offset, macValue, sizeof(macValue));
+    (void)CW_Utils::safe_memcpy(s_apduBuf + offset, sizeof(s_apduBuf) - static_cast<size_t>(offset), macValue, sizeof(macValue));
     offset += sizeof(macValue);
-    memcpy(s_apduBuf + offset, s_dataBuf, encryptedLength);
+    (void)CW_Utils::safe_memcpy(s_apduBuf + offset, sizeof(s_apduBuf) - static_cast<size_t>(offset), s_dataBuf, encryptedLength);
 
     /* 4. Send APDU */
     uint8_t response[255U] = { 0U };
@@ -523,7 +523,7 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
             ret = aesCbcDecrypt(session, response, responseLength, macValue,
                                 decryptedOutput, decryptedOutputLength);
             if (ret) {
-                memcpy(session.iv, response, CW_IV_SIZE);
+                (void)CW_Utils::safe_memcpy(session.iv, CW_IV_SIZE, response, CW_IV_SIZE);
             } else {
                 session.clear();
             }
@@ -557,7 +557,7 @@ bool CW_SecureChannel::aesCbcDecrypt(const CW_SecureSession& session,
 
     /* Response layout: MAC(16) || cipherText(N) || SW1(1) || SW2(1) */
     uint8_t rep_mac[AES_BLOCK_SIZE];
-    memcpy(rep_mac, response, AES_BLOCK_SIZE);
+    (void)CW_Utils::safe_memcpy(rep_mac, sizeof(rep_mac), response, AES_BLOCK_SIZE);
     uint8_t* rep_data  = response + AES_BLOCK_SIZE;
     size_t totalDataLen = response_len - 2U;
     size_t cipherLen    = totalDataLen - AES_BLOCK_SIZE;
@@ -577,7 +577,7 @@ bool CW_SecureChannel::aesCbcDecrypt(const CW_SecureSession& session,
 
     memset(s_macBuf, 0U, AES_BLOCK_SIZE);
     s_macBuf[0] = (uint8_t)totalDataLen;
-    memcpy(s_macBuf + AES_BLOCK_SIZE, rep_data, cipherLen);
+    (void)CW_Utils::safe_memcpy(s_macBuf + AES_BLOCK_SIZE, sizeof(s_macBuf) - AES_BLOCK_SIZE, rep_data, cipherLen);
 
     uint8_t mac_iv[AES_BLOCK_SIZE] = { 0U };
     uint16_t macEncryptedLength = _crypto.aesCbcEncrypt(s_macBuf, (uint16_t)macInputLen, s_apduBuf,
@@ -586,7 +586,7 @@ bool CW_SecureChannel::aesCbcDecrypt(const CW_SecureSession& session,
 
     uint8_t recomputedMacValue[AES_BLOCK_SIZE] = { 0U };
     uint16_t macOffset = macEncryptedLength - AES_BLOCK_SIZE;
-    memcpy(recomputedMacValue, s_apduBuf + macOffset, AES_BLOCK_SIZE);
+    (void)CW_Utils::safe_memcpy(recomputedMacValue, sizeof(recomputedMacValue), s_apduBuf + macOffset, AES_BLOCK_SIZE);
 
     if (!CW_Utils::secure_compare(rep_mac, recomputedMacValue, AES_BLOCK_SIZE)) {
 #if CW_DEBUG_LOGGING
@@ -633,7 +633,7 @@ bool CW_SecureChannel::aesCbcDecrypt(const CW_SecureSession& session,
         }
 
         if ((decryptedOutput != NULL) && (decryptedOutputLength != NULL)) {
-            memcpy(decryptedOutput, s_dataBuf, payloadLength);
+            (void)CW_Utils::safe_memcpy(decryptedOutput, sizeof(s_dataBuf), s_dataBuf, payloadLength);
             *decryptedOutputLength = payloadLength;
         }
     }
@@ -717,13 +717,13 @@ bool CW_SecureChannel::parseDerSigToRaw(const uint8_t* der, uint8_t derLen,
                         /* r: strip optional leading 0x00 padding byte */
                         if ((rLen == 33U) && (rPtr[0] == 0x00U)) { rPtr++; rLen = 32U; }
                         if (rLen <= 32U) {
-                            memcpy(raw64 + (32U - rLen), rPtr, rLen);
+                            (void)CW_Utils::safe_memcpy(raw64 + (32U - rLen), static_cast<size_t>(32U + rLen), rPtr, rLen);
                         }
 
                         /* s: strip optional leading 0x00 padding byte */
                         if ((sLen == 33U) && (sPtr[0] == 0x00U)) { sPtr++; sLen = 32U; }
                         if (sLen <= 32U) {
-                            memcpy(raw64 + 32U + (32U - sLen), sPtr, sLen);
+                            (void)CW_Utils::safe_memcpy(raw64 + 32U + (32U - sLen), static_cast<size_t>(sLen), sPtr, sLen);
                         }
 
                         ret = true;
@@ -785,7 +785,7 @@ bool CW_SecureChannel::getManufacturerCertificate(uint8_t* cert, uint16_t& certL
                 if (totalCertLen <= CW_MANUF_CERT_MAX_BYTES) {
                     uint8_t certInPage = dataBytes - 2U;
                     if (certInPage > totalCertLen) { certInPage = (uint8_t)totalCertLen; }
-                    memcpy(cert, response + 2U, certInPage);
+                    (void)CW_Utils::safe_memcpy(cert, CW_MANUF_CERT_MAX_BYTES, response + 2U, certInPage);
                     certLen = certInPage;
 
                     uint8_t pageIdx = 1U;
@@ -811,7 +811,7 @@ bool CW_SecureChannel::getManufacturerCertificate(uint8_t* cert, uint16_t& certL
                         if (pageData > remaining) { pageData = (uint8_t)remaining; }
 
                         if ((certLen + pageData) > CW_MANUF_CERT_MAX_BYTES) { break; }
-                        memcpy(cert + certLen, response, pageData);
+                        (void)CW_Utils::safe_memcpy(cert + certLen, CW_MANUF_CERT_MAX_BYTES - static_cast<size_t>(certLen), response, pageData);
                         certLen += pageData;
                         pageIdx++;
                     }

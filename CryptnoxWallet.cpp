@@ -148,7 +148,7 @@ void CryptnoxWallet::verifyPin(CW_SecureSession& session, const uint8_t* pin, ui
     }
     else {
         uint8_t paddedPin[CW_MAX_PIN_LENGTH] = { 0U };
-        memcpy(paddedPin, pin, pinLength);
+        (void)CW_Utils::safe_memcpy(paddedPin, sizeof(paddedPin), pin, pinLength);
         uint8_t apdu[] = { 0x80U, 0x20U, 0x00U, 0x00U };
         _secure.aesCbcEncrypt(session, apdu, sizeof(apdu), paddedPin, CW_MAX_PIN_LENGTH);
         CW_Utils::secure_wipe(paddedPin, sizeof(paddedPin));
@@ -257,7 +257,7 @@ bool CryptnoxWallet::parseDerSignature(const uint8_t* der, uint8_t derLength,
             if ((rLength > 33U) || ((pos + rLength) > derLength)) {
             }
             else {
-                memcpy(r, der + pos, rLength);
+                (void)CW_Utils::safe_memcpy(r, 33U, der + pos, rLength);
                 pos += rLength;
 
                 if ((pos >= derLength) || (der[pos] != CW_DER_TAG_INTEGER)) {
@@ -269,7 +269,7 @@ bool CryptnoxWallet::parseDerSignature(const uint8_t* der, uint8_t derLength,
                     if ((sLength > 33U) || ((pos + sLength) > derLength)) {
                     }
                     else {
-                        memcpy(s, der + pos, sLength);
+                        (void)CW_Utils::safe_memcpy(s, 33U, der + pos, sLength);
                         ret = true;
                     }
                 }
@@ -347,12 +347,13 @@ bool CryptnoxWallet::validateSignRequest(const CW_SignRequest& request, CW_SignR
 
 void CryptnoxWallet::buildSignPayload(const CW_SignRequest& request,
                                        uint8_t* data, uint16_t& dataLength) {
+    const size_t kDataBufSize = static_cast<size_t>(CW_HASH_SIZE) + static_cast<size_t>(CW_MAX_DERIVE_PATH_LENGTH) + static_cast<size_t>(CW_MAX_PIN_LENGTH);
     dataLength = request.hashLength;
-    memcpy(data, request.hash, request.hashLength);
+    (void)CW_Utils::safe_memcpy(data, kDataBufSize, request.hash, request.hashLength);
 
     if ((request.keyType == CW_SIGN_DERIVE_K1 || request.keyType == CW_SIGN_DERIVE_R1) &&
         (request.derivePath != NULL) && (request.derivePathLength > 0U)) {
-        memcpy(data + dataLength, request.derivePath, request.derivePathLength);
+        (void)CW_Utils::safe_memcpy(data + dataLength, kDataBufSize - static_cast<size_t>(dataLength), request.derivePath, request.derivePathLength);
         dataLength += request.derivePathLength;
     }
 
@@ -363,7 +364,7 @@ void CryptnoxWallet::buildSignPayload(const CW_SignRequest& request,
             pinLength++;
         }
         if (pinLength > 0U) {
-            memcpy(data + dataLength, request.pin, CW_MAX_PIN_LENGTH);
+            (void)CW_Utils::safe_memcpy(data + dataLength, kDataBufSize - static_cast<size_t>(dataLength), request.pin, CW_MAX_PIN_LENGTH);
             dataLength += CW_MAX_PIN_LENGTH;
         }
     }
@@ -433,7 +434,7 @@ bool CryptnoxWallet::extractRawSignature(const uint8_t* derResponse, uint16_t de
                     uint8_t rDstLen = 32U;
                     if ((rLen == 33U) && (r[0] == 0x00U)) { rSrc = 1U; rLen = 32U; }
                     if (rLen <= rDstLen) {
-                        memcpy(result.signature + (rDstLen - rLen), r + rSrc, rLen);
+                        (void)CW_Utils::safe_memcpy(result.signature + (rDstLen - rLen), static_cast<size_t>(rDstLen + rLen), r + rSrc, rLen);
                     }
                 }
 
@@ -442,7 +443,7 @@ bool CryptnoxWallet::extractRawSignature(const uint8_t* derResponse, uint16_t de
                     uint8_t sDstLen = 32U;
                     if ((sLen == 33U) && (s[0] == 0x00U)) { sSrc = 1U; sLen = 32U; }
                     if (sLen <= sDstLen) {
-                        memcpy(result.signature + 32U + (sDstLen - sLen), s + sSrc, sLen);
+                        (void)CW_Utils::safe_memcpy(result.signature + 32U + (sDstLen - sLen), static_cast<size_t>(sLen), s + sSrc, sLen);
                     }
                 }
 
