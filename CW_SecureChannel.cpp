@@ -899,13 +899,9 @@ static bool derWalkMfCert(const uint8_t* buf, uint16_t bufLen,
         }
     }
 
-    /* Jump to end of TBSCertificate — skip any extensions after SPKI */
+    /* Jump to end of TBSCertificate, then skip signatureAlgorithm SEQUENCE */
     if (ok) {
         pos = tbsEnd;
-    }
-
-    /* ── signatureAlgorithm SEQUENCE (second child of Certificate) ── */
-    if (ok) {
         if (!derSkipField(buf, bufLen, pos)) {
             ok = false;
         }
@@ -1157,9 +1153,7 @@ uint8_t CW_SecureChannel::verifyCertificateChain(const uint8_t* cardCert,
     const uint8_t* devicePubKey64 = NULL;
     if (result == CW_CERT_OK) {
         devicePubKey64 = pubKey65Ptr + 1U; /* skip the 0x04 uncompressed prefix */
-    }
 
-    if (result == CW_CERT_OK) {
         const uint8_t* mfMsg    = s_mfCertBuf + tbsMsgStart;
         uint16_t       mfMsgLen = tbsMsgLen;
 
