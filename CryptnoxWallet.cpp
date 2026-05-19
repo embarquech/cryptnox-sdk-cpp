@@ -156,7 +156,9 @@ bool CryptnoxWallet::getCardInfo(CW_SecureSession& session, CW_CardInfo* info) {
             pos += 1U;
             if ((nameLen <= CW_CARD_NAME_MAX_LEN) &&
                 ((uint16_t)(pos + nameLen + 1U) <= decryptedLen)) {
-                memcpy(info->name, decrypted + pos, nameLen);
+                (void)CW_Utils::safe_memcpy(reinterpret_cast<uint8_t*>(info->name),
+                                            sizeof(info->name),
+                                            decrypted + pos, nameLen);
                 info->name[nameLen] = '\0';
                 pos += nameLen;
 
@@ -164,7 +166,9 @@ bool CryptnoxWallet::getCardInfo(CW_SecureSession& session, CW_CardInfo* info) {
                 pos += 1U;
                 if ((emailLen <= CW_CARD_EMAIL_MAX_LEN) &&
                     ((uint16_t)(pos + emailLen) <= decryptedLen)) {
-                    memcpy(info->email, decrypted + pos, emailLen);
+                    (void)CW_Utils::safe_memcpy(reinterpret_cast<uint8_t*>(info->email),
+                                                sizeof(info->email),
+                                                decrypted + pos, emailLen);
                     info->email[emailLen] = '\0';
                     ret = true;
                 }
