@@ -15,6 +15,29 @@
  * 2. Typedefs / structs (sign API)
  ******************************************************************/
 
+/** @brief Max name length stored on a Cryptnox card (per card spec). */
+#define CW_CARD_NAME_MAX_LEN  (20U)
+
+/** @brief Max email length stored on a Cryptnox card (per card spec). */
+#define CW_CARD_EMAIL_MAX_LEN (60U)
+
+/**
+ * @struct CW_CardInfo
+ * @brief Subset of the Cryptnox card info returned by APDU 0x80FA0000.
+ *
+ * Mirrors the fields the Python SDK exposes as @c card._owner: ASCII name
+ * and email programmed when the card was initialised. NUL-terminated.
+ */
+struct CW_CardInfo {
+    char name[CW_CARD_NAME_MAX_LEN + 1U];    /**< NUL-terminated ASCII name. */
+    char email[CW_CARD_EMAIL_MAX_LEN + 1U];  /**< NUL-terminated ASCII email. */
+
+    CW_CardInfo() {
+        name[0]  = '\0';
+        email[0] = '\0';
+    }
+};
+
 /**
  * @struct CW_SignRequest
  * @brief Request parameters for the sign operation.
@@ -121,10 +144,17 @@ public:
     void disconnect(CW_SecureSession& session);
 
     /**
-     * @brief Send a secured GET CARD INFO APDU.
-     * @param[in,out] session Valid secure session.
+     * @brief Send a secured GET CARD INFO APDU (0x80FA0000) and optionally
+     *        decode the owner name/email from the response.
+     *
+     * @param[in,out] session  Valid secure session.
+     * @param[out]    info     Optional output. When non-NULL and the call
+     *                         succeeds, populated with the card's owner
+     *                         name and email (ASCII, NUL-terminated).
+     * @return true if the secure exchange completed and (when @c info is
+     *         non-NULL) parsing the name/email fields succeeded.
      */
-    void getCardInfo(CW_SecureSession& session);
+    bool getCardInfo(CW_SecureSession& session, CW_CardInfo* info = NULL);
 
     /**
      * @brief Verify the PIN code on the smart card.
@@ -132,8 +162,10 @@ public:
      * @param[in,out] session   Valid secure session.
      * @param[in]     pin       PIN bytes (ASCII digits, 4–9 characters).
      * @param[in]     pinLength Length of the PIN.
+     * @return true if the card accepted the PIN (status word 0x9000), false on
+     *         wrong PIN, closed/invalid session, or transport/MAC failure.
      */
-    void verifyPin(CW_SecureSession& session, const uint8_t* pin, uint8_t pinLength);
+    bool verifyPin(CW_SecureSession& session, const uint8_t* pin, uint8_t pinLength);
 
     /**
      * @brief Sign a hash using the card's stored key.

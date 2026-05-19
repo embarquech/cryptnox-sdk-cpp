@@ -532,9 +532,15 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
             } else {
                 session.clear();
             }
-        } else {
+        } else if (responseLength >= 2U) {
+            /* Card-level error: surface the SW so the caller can diagnose
+             * common cases (e.g. 0x63Cn = wrong PIN with n retries left). */
 #if CW_DEBUG_LOGGING
-            _logger.println(F("Secured APDU: bad SW."));
+            _logger.print(F("Secured APDU: bad SW 0x"));
+            if (response[responseLength - 2U] < 0x10U) { _logger.print(F("0")); }
+            _logger.print(response[responseLength - 2U], HEX);
+            if (response[responseLength - 1U] < 0x10U) { _logger.print(F("0")); }
+            _logger.println(response[responseLength - 1U], HEX);
 #endif
         }
     } else {
