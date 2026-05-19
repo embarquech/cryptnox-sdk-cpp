@@ -2,6 +2,7 @@
  * Arduino compatibility shims (F(), HEX, delay) are provided via
  * platform_compat.h which is pulled in transitively through CryptnoxWallet.h. */
 #include "CryptnoxWallet.h"
+#include "CW_Utils.h"
 
 /******************************************************************
  * Constructor
@@ -122,19 +123,58 @@ void CryptnoxWallet::disconnect(CW_SecureSession& session) {
     _secure.resetReader();
 }
 
-void CryptnoxWallet::getCardInfo(CW_SecureSession& session) {
+bool CryptnoxWallet::getCardInfo(CW_SecureSession& session, CW_CardInfo* info) {
+    bool ret = false;
     if (!isSecureChannelOpen(session)) {
 #if CW_DEBUG_LOGGING
         _logger.println(F("Error: Secure channel not open. Cannot get card info."));
 #endif
-        return;
+        return false;
     }
     uint8_t data[] = { 0x00U };
     uint8_t apdu[] = { 0x80U, 0xFAU, 0x00U, 0x00U };
-    _secure.aesCbcEncrypt(session, apdu, sizeof(apdu), data, sizeof(data));
+
+    uint8_t  decrypted[255U] = { 0U };
+    uint16_t decryptedLen    = 0U;
+
+    ret = _secure.aesCbcEncrypt(session, apdu, sizeof(apdu),
+                                data, sizeof(data),
+                                decrypted, &decryptedLen);
+
+    if (ret && (info != NULL)) {
+        /* Response layout (Cryptnox basic_g1 spec):
+         *   [byte0] [name_len(1)] [name(name_len)]
+         *           [email_len(1)] [email(email_len)] [... more fields ...]
+         * byte0 = unused/flags. */
+        ret = false;
+        if (decryptedLen >= 4U) {
+            uint16_t pos     = 1U;
+            uint8_t  nameLen = decrypted[pos];
+            pos += 1U;
+            if ((nameLen <= CW_CARD_NAME_MAX_LEN) &&
+                ((uint16_t)(pos + nameLen + 1U) <= decryptedLen)) {
+                memcpy(info->name, decrypted + pos, nameLen);
+                info->name[nameLen] = '\0';
+                pos += nameLen;
+
+                uint8_t emailLen = decrypted[pos];
+                pos += 1U;
+                if ((emailLen <= CW_CARD_EMAIL_MAX_LEN) &&
+                    ((uint16_t)(pos + emailLen) <= decryptedLen)) {
+                    memcpy(info->email, decrypted + pos, emailLen);
+                    info->email[emailLen] = '\0';
+                    ret = true;
+                }
+            }
+        }
+    }
+
+    CW_Utils::secure_wipe(decrypted, sizeof(decrypted));
+    return ret;
 }
 
-void CryptnoxWallet::verifyPin(CW_SecureSession& session, const uint8_t* pin, uint8_t pinLength) {
+bool CryptnoxWallet::verifyPin(CW_SecureSession& session, const uint8_t* pin, uint8_t pinLength) {
+    bool ret = false;
     if (!isSecureChannelOpen(session)) {
 #if CW_DEBUG_LOGGING
         _logger.println(F("Error: Secure channel not open. Cannot verify PIN."));
@@ -149,8 +189,9 @@ void CryptnoxWallet::verifyPin(CW_SecureSession& session, const uint8_t* pin, ui
         uint8_t paddedPin[CW_MAX_PIN_LENGTH] = { 0U };
         memcpy(paddedPin, pin, pinLength);
         uint8_t apdu[] = { 0x80U, 0x20U, 0x00U, 0x00U };
-        _secure.aesCbcEncrypt(session, apdu, sizeof(apdu), paddedPin, CW_MAX_PIN_LENGTH);
+        ret = _secure.aesCbcEncrypt(session, apdu, sizeof(apdu), paddedPin, CW_MAX_PIN_LENGTH);
     }
+    return ret;
 }
 
 bool CryptnoxWallet::writeUserData(CW_SecureSession& session, uint8_t slot,
