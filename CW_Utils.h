@@ -63,13 +63,13 @@ public:
     /**
      * @brief Fill @p len bytes at @p dest with cryptographically random data.
      *
-     * The implementation is platform-specific.  On ESP32 it mixes the hardware
-     * TRNG output with a high-resolution timer sample through SHA-256 so that
-     * the output quality is adequate even before Wi-Fi/BT is initialised (SEC-001).
+     * The implementation is platform-specific.  On ESP32 it calls esp_fill_random()
+     * after verifying that Wi-Fi or Bluetooth is active, ensuring the hardware TRNG
+     * is properly seeded.  Returns false (hard failure) if neither radio is on (SEC-001).
      *
      * @param dest  Destination buffer.
      * @param len   Number of random bytes to generate.
-     * @return true on success, false if dest is NULL or len is zero.
+     * @return true on success, false if dest is NULL, len is zero, or no radio is active.
      */
     static bool fill_secure_random(uint8_t* dest, size_t len);
 };
