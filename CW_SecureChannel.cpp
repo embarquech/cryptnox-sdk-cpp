@@ -702,10 +702,10 @@ static bool derReadLength(const uint8_t* buf, uint16_t bufLen,
 
 /* Skip one complete DER TLV (tag byte + length bytes + value) at buf[*pos]. */
 static bool derSkipField(const uint8_t* buf, uint16_t bufLen, uint16_t& pos) {
-    bool     ok         = false;
-    uint16_t contentLen = 0U;
+    bool ok = false;
 
     if ((buf != NULL) && (pos < bufLen)) {
+        uint16_t contentLen = 0U;
         pos += 1U; /* skip tag byte */
         if (derReadLength(buf, bufLen, pos, contentLen)) {
             if ((pos + contentLen) <= bufLen) {
@@ -729,14 +729,13 @@ static bool derWalkMfCert(const uint8_t* buf, uint16_t bufLen,
                            uint16_t& tbsMsgStart, uint16_t& tbsMsgLen,
                            const uint8_t*& pubKey65Ptr,
                            const uint8_t*& sigPtr, uint8_t& sigLen) {
-    bool     ok              = true;
-    uint16_t pos             = 0U;
-    uint16_t certContentLen  = 0U;
-    uint16_t tbsContentLen   = 0U;
-    uint16_t tbsContentStart = 0U;
-    uint16_t tbsEnd          = 0U;
-    uint16_t spkiContentLen  = 0U;
-    uint16_t bsLen           = 0U;
+    bool     ok             = true;
+    uint16_t pos            = 0U;
+    uint16_t certContentLen = 0U;
+    uint16_t tbsContentLen  = 0U;
+    uint16_t tbsEnd         = 0U;
+    uint16_t spkiContentLen = 0U;
+    uint16_t bsLen          = 0U;
 
     tbsMsgStart = 0U;
     tbsMsgLen   = 0U;
@@ -780,9 +779,8 @@ static bool derWalkMfCert(const uint8_t* buf, uint16_t bufLen,
         }
     }
     if (ok) {
-        tbsContentStart = pos;
-        tbsMsgLen       = (tbsContentStart - tbsMsgStart) + tbsContentLen;
-        tbsEnd          = tbsContentStart + tbsContentLen;
+        tbsMsgLen = (pos - tbsMsgStart) + tbsContentLen;
+        tbsEnd    = pos + tbsContentLen;
         if (tbsEnd > bufLen) {
             ok = false;
         }
@@ -894,15 +892,11 @@ static bool derWalkMfCert(const uint8_t* buf, uint16_t bufLen,
     if (ok) {
         if (buf[pos] != DER_BIT_UNUSED_ZERO) {
             ok = false; /* unused bits must be 0 */
-        }
-    }
-    if (ok) {
-        if (buf[pos + 1U] != DER_EC_UNCOMPRESSED) {
+        } else if (buf[pos + 1U] != DER_EC_UNCOMPRESSED) {
             ok = false; /* must be an uncompressed EC point */
+        } else {
+            pubKey65Ptr = buf + pos + 1U; /* points to: 0x04 || X[32] || Y[32] */
         }
-    }
-    if (ok) {
-        pubKey65Ptr = buf + pos + 1U; /* points to: 0x04 || X[32] || Y[32] */
     }
 
     /* Jump to end of TBSCertificate — skip any extensions after SPKI */
