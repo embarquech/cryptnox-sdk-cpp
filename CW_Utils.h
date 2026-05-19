@@ -63,8 +63,9 @@ public:
     /**
      * @brief Fill @p len bytes at @p dest with cryptographically random data.
      *
-     * The implementation is platform-specific; on ESP32 it uses the hardware
-     * TRNG via esp_fill_random().
+     * The implementation is platform-specific.  On ESP32 it mixes the hardware
+     * TRNG output with a high-resolution timer sample through SHA-256 so that
+     * the output quality is adequate even before Wi-Fi/BT is initialised (SEC-001).
      *
      * @param dest  Destination buffer.
      * @param len   Number of random bytes to generate.

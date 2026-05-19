@@ -47,17 +47,20 @@ static uint8_t s_dataBuf[ENC_BUF_MAX_LEN];   /* 224 bytes */
 /* Manufacturer certificate assembly buffer (used only during verifyCertificateChain). */
 static uint8_t s_mfCertBuf[CW_MANUF_CERT_MAX_BYTES];
 
-/* ASN.1 / DER OID patterns used for certificate parsing. */
-static const uint8_t K1_PUBKEY_OID[11U] = {
-    0x2aU, 0x86U, 0x48U, 0xceU, 0x3dU,
-    0x03U, 0x01U, 0x07U,               /* secp256r1 OID */
-    0x03U, 0x42U, 0x00U                /* BIT STRING: tag, len=66, unused=0 */
-};
-static const uint8_t ECDSA_SHA256_OID[11U] = {
-    0x06U, 0x08U,                      /* OID tag + length 8 */
-    0x2aU, 0x86U, 0x48U, 0xceU, 0x3dU, 0x04U, 0x03U, 0x02U, /* ecdsa-with-SHA256 */
-    0x03U                              /* BIT STRING tag */
-};
+/* DER TLV tag bytes */
+#define DER_TAG_SEQUENCE    (0x30U)  /* SEQUENCE (universal, constructed) */
+#define DER_TAG_BIT_STRING  (0x03U)  /* BIT STRING */
+#define DER_TAG_CTX0        (0xA0U)  /* [0] EXPLICIT — version in v3 TBSCertificate */
+
+/* DER length-field encoding */
+#define DER_LEN_LONG_FLAG   (0x80U)  /* set = long-form length */
+#define DER_LEN_LONG_1      (0x81U)  /* long form, 1 following byte */
+#define DER_LEN_LONG_2      (0x82U)  /* long form, 2 following bytes */
+
+/* EC-point encoding */
+#define DER_EC_UNCOMPRESSED (0x04U)  /* uncompressed point prefix */
+#define DER_EC_POINT_BYTES  (65U)    /* 0x04 || X[32] || Y[32] */
+#define DER_BIT_UNUSED_ZERO (0x00U)  /* BIT STRING unused-bits field must be 0 */
 #endif /* CW_VERIFY_CERT */
 
 /******************************************************************
@@ -661,30 +664,302 @@ bool CW_SecureChannel::aesCbcDecrypt(const CW_SecureSession& session,
 
 #if CW_VERIFY_CERT
 
-bool CW_SecureChannel::findBytes(const uint8_t* hay, uint16_t hayLen,
-                                 const uint8_t* needle, uint8_t needleLen,
-                                 uint16_t& pos) {
-    bool found = false;
+/* Read the DER length at buf[*pos]; advance *pos past the length bytes.
+ * Supports short form and long form with 1 or 2 extra bytes only. */
+static bool derReadLength(const uint8_t* buf, uint16_t bufLen,
+                           uint16_t& pos, uint16_t& fieldLen) {
+    bool    ok   = false;
+    fieldLen     = 0U;
 
-    if ((hay != NULL) && (needle != NULL) && (hayLen >= (uint16_t)needleLen)) {
-        uint16_t limit = hayLen - (uint16_t)needleLen;
-        for (uint16_t i = 0U; i <= limit; i++) {
-            bool match = true;
-            for (uint8_t j = 0U; j < needleLen; j++) {
-                if (hay[i + j] != needle[j]) {
-                    match = false;
-                    break;
-                }
+    if ((buf != NULL) && (pos < bufLen)) {
+        uint8_t b = buf[pos];
+        pos += 1U;
+
+        if ((b & DER_LEN_LONG_FLAG) == 0U) {
+            fieldLen = static_cast<uint16_t>(b);
+            ok = true;
+        } else if (b == DER_LEN_LONG_1) {
+            if (pos < bufLen) {
+                fieldLen = static_cast<uint16_t>(buf[pos]);
+                pos += 1U;
+                ok = true;
             }
-            if (match) {
-                pos = i;
-                found = true;
-                break;
+        } else if (b == DER_LEN_LONG_2) {
+            if ((pos + 1U) < bufLen) {
+                fieldLen  = static_cast<uint16_t>(
+                                static_cast<uint16_t>(buf[pos]) << 8U);
+                fieldLen |= static_cast<uint16_t>(buf[pos + 1U]);
+                pos += 2U;
+                ok = true;
+            }
+        } else {
+            ok = false; /* indefinite form or > 2 extra bytes — unsupported */
+        }
+    }
+
+    return ok;
+}
+
+/* Skip one complete DER TLV (tag byte + length bytes + value) at buf[*pos]. */
+static bool derSkipField(const uint8_t* buf, uint16_t bufLen, uint16_t& pos) {
+    bool     ok         = false;
+    uint16_t contentLen = 0U;
+
+    if ((buf != NULL) && (pos < bufLen)) {
+        pos += 1U; /* skip tag byte */
+        if (derReadLength(buf, bufLen, pos, contentLen)) {
+            if ((pos + contentLen) <= bufLen) {
+                pos += contentLen;
+                ok   = true;
             }
         }
     }
 
-    return found;
+    return ok;
+}
+
+/* Walk a DER X.509 Certificate to extract — without any byte-pattern search:
+ *   tbsMsgStart  offset of TBSCertificate SEQUENCE tag inside buf
+ *   tbsMsgLen    total byte count of TBSCertificate (tag + length + content)
+ *   pubKey65Ptr  pointer to 65-byte uncompressed EC point (0x04 || X || Y)
+ *   sigPtr       pointer to the DER ECDSA signature bytes
+ *   sigLen       byte count of the DER ECDSA signature
+ * Returns false on any format or bounds error. */
+static bool derWalkMfCert(const uint8_t* buf, uint16_t bufLen,
+                           uint16_t& tbsMsgStart, uint16_t& tbsMsgLen,
+                           const uint8_t*& pubKey65Ptr,
+                           const uint8_t*& sigPtr, uint8_t& sigLen) {
+    bool     ok              = true;
+    uint16_t pos             = 0U;
+    uint16_t certContentLen  = 0U;
+    uint16_t tbsContentLen   = 0U;
+    uint16_t tbsContentStart = 0U;
+    uint16_t tbsEnd          = 0U;
+    uint16_t spkiContentLen  = 0U;
+    uint16_t bsLen           = 0U;
+
+    tbsMsgStart = 0U;
+    tbsMsgLen   = 0U;
+    pubKey65Ptr = NULL;
+    sigPtr      = NULL;
+    sigLen      = 0U;
+
+    if ((buf == NULL) || (bufLen == 0U)) {
+        ok = false;
+    }
+
+    /* ── outer Certificate SEQUENCE ── */
+    if (ok) {
+        if (buf[pos] != DER_TAG_SEQUENCE) {
+            ok = false;
+        }
+    }
+    if (ok) {
+        pos += 1U;
+        if (!derReadLength(buf, bufLen, pos, certContentLen)) {
+            ok = false;
+        }
+    }
+    if (ok) {
+        if ((pos + certContentLen) > bufLen) {
+            ok = false;
+        }
+    }
+
+    /* ── TBSCertificate SEQUENCE (first child) ── */
+    if (ok) {
+        if (buf[pos] != DER_TAG_SEQUENCE) {
+            ok = false;
+        }
+    }
+    if (ok) {
+        tbsMsgStart = pos;
+        pos += 1U;
+        if (!derReadLength(buf, bufLen, pos, tbsContentLen)) {
+            ok = false;
+        }
+    }
+    if (ok) {
+        tbsContentStart = pos;
+        tbsMsgLen       = (tbsContentStart - tbsMsgStart) + tbsContentLen;
+        tbsEnd          = tbsContentStart + tbsContentLen;
+        if (tbsEnd > bufLen) {
+            ok = false;
+        }
+    }
+
+    /* ── Walk TBSCertificate fields in order ── */
+
+    /* [0] EXPLICIT version — present in X.509 v3 */
+    if (ok && (pos < tbsEnd)) {
+        if (buf[pos] == DER_TAG_CTX0) {
+            if (!derSkipField(buf, tbsEnd, pos)) {
+                ok = false;
+            }
+        }
+    }
+
+    /* serialNumber INTEGER */
+    if (ok) {
+        if (!derSkipField(buf, tbsEnd, pos)) {
+            ok = false;
+        }
+    }
+
+    /* signature AlgorithmIdentifier SEQUENCE */
+    if (ok) {
+        if (!derSkipField(buf, tbsEnd, pos)) {
+            ok = false;
+        }
+    }
+
+    /* issuer Name SEQUENCE */
+    if (ok) {
+        if (!derSkipField(buf, tbsEnd, pos)) {
+            ok = false;
+        }
+    }
+
+    /* validity SEQUENCE */
+    if (ok) {
+        if (!derSkipField(buf, tbsEnd, pos)) {
+            ok = false;
+        }
+    }
+
+    /* subject Name SEQUENCE */
+    if (ok) {
+        if (!derSkipField(buf, tbsEnd, pos)) {
+            ok = false;
+        }
+    }
+
+    /* ── SubjectPublicKeyInfo SEQUENCE ── */
+    if (ok) {
+        if (pos >= tbsEnd) {
+            ok = false;
+        }
+    }
+    if (ok) {
+        if (buf[pos] != DER_TAG_SEQUENCE) {
+            ok = false;
+        }
+    }
+    if (ok) {
+        pos += 1U;
+        if (!derReadLength(buf, bufLen, pos, spkiContentLen)) {
+            ok = false;
+        }
+    }
+    if (ok) {
+        if ((pos + spkiContentLen) > bufLen) {
+            ok = false;
+        }
+    }
+
+    /* Skip AlgorithmIdentifier SEQUENCE inside SubjectPublicKeyInfo */
+    if (ok) {
+        if (!derSkipField(buf, bufLen, pos)) {
+            ok = false;
+        }
+    }
+
+    /* subjectPublicKey BIT STRING */
+    if (ok) {
+        if (pos >= bufLen) {
+            ok = false;
+        }
+    }
+    if (ok) {
+        if (buf[pos] != DER_TAG_BIT_STRING) {
+            ok = false;
+        }
+    }
+    if (ok) {
+        pos += 1U;
+        if (!derReadLength(buf, bufLen, pos, bsLen)) {
+            ok = false;
+        }
+    }
+    if (ok) {
+        if ((pos + bsLen) > bufLen) {
+            ok = false;
+        }
+    }
+    if (ok) {
+        if (bsLen < (1U + static_cast<uint16_t>(DER_EC_POINT_BYTES))) {
+            ok = false; /* too short: unused-bits byte + 65-byte EC point */
+        }
+    }
+    if (ok) {
+        if (buf[pos] != DER_BIT_UNUSED_ZERO) {
+            ok = false; /* unused bits must be 0 */
+        }
+    }
+    if (ok) {
+        if (buf[pos + 1U] != DER_EC_UNCOMPRESSED) {
+            ok = false; /* must be an uncompressed EC point */
+        }
+    }
+    if (ok) {
+        pubKey65Ptr = buf + pos + 1U; /* points to: 0x04 || X[32] || Y[32] */
+    }
+
+    /* Jump to end of TBSCertificate — skip any extensions after SPKI */
+    if (ok) {
+        pos = tbsEnd;
+    }
+
+    /* ── signatureAlgorithm SEQUENCE (second child of Certificate) ── */
+    if (ok) {
+        if (!derSkipField(buf, bufLen, pos)) {
+            ok = false;
+        }
+    }
+
+    /* ── signatureValue BIT STRING (third child of Certificate) ── */
+    if (ok) {
+        if (pos >= bufLen) {
+            ok = false;
+        }
+    }
+    if (ok) {
+        if (buf[pos] != DER_TAG_BIT_STRING) {
+            ok = false;
+        }
+    }
+    if (ok) {
+        pos += 1U;
+        if (!derReadLength(buf, bufLen, pos, bsLen)) {
+            ok = false;
+        }
+    }
+    if (ok) {
+        if ((pos + bsLen) > bufLen) {
+            ok = false;
+        }
+    }
+    if (ok) {
+        if (bsLen < 2U) {
+            ok = false; /* need unused-bits byte + at least 1 signature byte */
+        }
+    }
+    if (ok) {
+        if (buf[pos] != DER_BIT_UNUSED_ZERO) {
+            ok = false; /* unused bits must be 0 */
+        }
+    }
+    if (ok) {
+        uint16_t rawSigLen = bsLen - 1U;
+        if (rawSigLen > 255U) {
+            ok = false;
+        } else {
+            sigPtr = buf + pos + 1U; /* DER ECDSA signature, after unused-bits byte */
+            sigLen = static_cast<uint8_t>(rawSigLen);
+        }
+    }
+
+    return ok;
 }
 
 bool CW_SecureChannel::parseDerSigToRaw(const uint8_t* der, uint8_t derLen,
@@ -864,139 +1139,56 @@ uint8_t CW_SecureChannel::verifyCertificateChain(const uint8_t* cardCert,
         }
     }
 
-    uint16_t k1OidPos = 0U;
+    /* MED-05: replace byte-pattern search with a structural DER walker that
+     * enforces field order.  This prevents attacker-planted OID sequences in
+     * unsigned extensions from being picked up as the device public key. */
+    uint16_t       tbsMsgStart = 0U;
+    uint16_t       tbsMsgLen   = 0U;
+    const uint8_t* pubKey65Ptr = NULL;
+    const uint8_t* mfSigPtr    = NULL;
+    uint8_t        mfSigLen    = 0U;
+
     if (result == CW_CERT_OK) {
-        if (!findBytes(s_mfCertBuf, mfCertLen, K1_PUBKEY_OID, sizeof(K1_PUBKEY_OID), k1OidPos)) {
+        if (!derWalkMfCert(s_mfCertBuf, mfCertLen,
+                           tbsMsgStart, tbsMsgLen,
+                           pubKey65Ptr,
+                           mfSigPtr, mfSigLen)) {
 #if CW_DEBUG_LOGGING
-            _logger.println(F("verifyCert: device pubkey OID not found."));
+            _logger.println(F("verifyCert: DER walk of mfr cert failed."));
 #endif
             result = CW_CERT_KEY_NOT_FOUND;
         }
     }
 
-    /* MED-05: reject certs where K1_PUBKEY_OID appears more than once — a second
-     * occurrence would make the position ambiguous and findBytes would silently
-     * pick the first (possibly attacker-planted) match. */
-    if (result == CW_CERT_OK) {
-        uint16_t dummy = 0U;
-        const uint16_t searchOffset = k1OidPos + 1U;
-        if ((searchOffset < mfCertLen) &&
-            findBytes(s_mfCertBuf + searchOffset,
-                      mfCertLen - searchOffset,
-                      K1_PUBKEY_OID, sizeof(K1_PUBKEY_OID), dummy)) {
-#if CW_DEBUG_LOGGING
-            _logger.println(F("verifyCert: device pubkey OID found at multiple positions."));
-#endif
-            result = CW_CERT_FORMAT_ERROR;
-        }
-    }
-
-    uint16_t pubkeyStart = 0U;
-    if (result == CW_CERT_OK) {
-        pubkeyStart = k1OidPos + (uint16_t)sizeof(K1_PUBKEY_OID);
-        if ((pubkeyStart + 65U) > mfCertLen) {
-#if CW_DEBUG_LOGGING
-            _logger.println(F("verifyCert: device pubkey out of bounds."));
-#endif
-            result = CW_CERT_FORMAT_ERROR;
-        }
-    }
-
     const uint8_t* devicePubKey64 = NULL;
     if (result == CW_CERT_OK) {
-        const uint8_t* devicePubKey65 = s_mfCertBuf + pubkeyStart;
-        if (devicePubKey65[0] != 0x04U) {
-#if CW_DEBUG_LOGGING
-            _logger.println(F("verifyCert: unexpected pubkey prefix."));
-#endif
-            result = CW_CERT_FORMAT_ERROR;
-        }
-        else {
-            devicePubKey64 = devicePubKey65 + 1U;
-        }
-    }
-
-    const uint8_t MF_CERT_HEADER_SKIP = 4U;
-    const uint8_t* mfMsg    = NULL;
-    uint16_t       mfMsgLen = 0U;
-
-    if (result == CW_CERT_OK) {
-        if (k1OidPos <= MF_CERT_HEADER_SKIP) {
-#if CW_DEBUG_LOGGING
-            _logger.println(F("verifyCert: mfr cert structure error."));
-#endif
-            result = CW_CERT_FORMAT_ERROR;
-        }
-        else {
-            mfMsg    = s_mfCertBuf + MF_CERT_HEADER_SKIP;
-            mfMsgLen = (k1OidPos - MF_CERT_HEADER_SKIP) +
-                       (uint16_t)sizeof(K1_PUBKEY_OID) + 65U;
-
-            if ((MF_CERT_HEADER_SKIP + mfMsgLen) > mfCertLen) {
-#if CW_DEBUG_LOGGING
-                _logger.println(F("verifyCert: mfr cert msg out of bounds."));
-#endif
-                result = CW_CERT_FORMAT_ERROR;
-            }
-        }
+        devicePubKey64 = pubKey65Ptr + 1U; /* skip the 0x04 uncompressed prefix */
     }
 
     if (result == CW_CERT_OK) {
-        uint16_t ecdsaOidPos = 0U;
-        if (!findBytes(s_mfCertBuf, mfCertLen,
-                       ECDSA_SHA256_OID, sizeof(ECDSA_SHA256_OID), ecdsaOidPos)) {
-#if CW_DEBUG_LOGGING
-            _logger.println(F("verifyCert: ECDSA-SHA256 OID not found in mfr cert."));
-#endif
-            result = CW_CERT_FORMAT_ERROR;
-        }
-        else {
-            uint16_t sigOffset = ecdsaOidPos + (uint16_t)sizeof(ECDSA_SHA256_OID);
-            if ((sigOffset + 2U) > mfCertLen) {
-                result = CW_CERT_FORMAT_ERROR;
-            }
-            else {
-                /* Use uint16_t to avoid silent truncation if the length byte is
-                 * misinterpreted; bounds-check before narrowing to uint8_t (HIGH-04). */
-                uint16_t bitStringLen = s_mfCertBuf[sigOffset];
-                sigOffset++;
-                if (s_mfCertBuf[sigOffset] == 0x00U) {
-                    sigOffset++;
-                    bitStringLen = (bitStringLen > 1U) ? (bitStringLen - 1U) : 0U;
-                }
-                if ((sigOffset + bitStringLen) > mfCertLen) {
-                    result = CW_CERT_FORMAT_ERROR;
-                }
-                else if (bitStringLen > 255U) {
-                    result = CW_CERT_FORMAT_ERROR;
-                }
-                else {
-                    const uint8_t* mfSig    = s_mfCertBuf + sigOffset;
-                    uint8_t        mfSigLen = (uint8_t)bitStringLen;
+        const uint8_t* mfMsg    = s_mfCertBuf + tbsMsgStart;
+        uint16_t       mfMsgLen = tbsMsgLen;
 
-                    bool mfVerified = false;
-                    for (uint8_t i = 0U; i < CW_TRUSTED_CA_COUNT; i++) {
-                        if (verifyEcdsaSha256(CW_TRUSTED_CA_KEYS[i],
-                                              mfMsg, mfMsgLen,
-                                              mfSig, mfSigLen)) {
-                            mfVerified = true;
-                            break;
-                        }
-                    }
-                    if (!mfVerified) {
-#if CW_DEBUG_LOGGING
-                        _logger.println(F("verifyCert: mfr cert sig INVALID — card NOT genuine."));
-#endif
-                        result = CW_CERT_MANUF_SIG_INVALID;
-                    }
-#if CW_DEBUG_LOGGING
-                    else {
-                        _logger.println(F("Manufacturer cert signature OK."));
-                    }
-#endif
-                }
+        bool mfVerified = false;
+        for (uint8_t i = 0U; i < CW_TRUSTED_CA_COUNT; i++) {
+            if (verifyEcdsaSha256(CW_TRUSTED_CA_KEYS[i],
+                                  mfMsg, mfMsgLen,
+                                  mfSigPtr, mfSigLen)) {
+                mfVerified = true;
+                break;
             }
         }
+        if (!mfVerified) {
+#if CW_DEBUG_LOGGING
+            _logger.println(F("verifyCert: mfr cert sig INVALID — card NOT genuine."));
+#endif
+            result = CW_CERT_MANUF_SIG_INVALID;
+        }
+#if CW_DEBUG_LOGGING
+        else {
+            _logger.println(F("Manufacturer cert signature OK."));
+        }
+#endif
     }
 
     const uint8_t CARD_CERT_MSG_LEN = 74U;

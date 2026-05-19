@@ -219,10 +219,6 @@ private:
     /** @brief Nonce sent in the last getCardCertificate() call; checked in verifyCertificateChain(). */
     uint8_t _lastNonce[CW_CERT_NONCE_SIZE];
 
-    static bool findBytes(const uint8_t* hay, uint16_t hayLen,
-                          const uint8_t* needle, uint8_t needleLen,
-                          uint16_t& pos);
-
     static bool parseDerSigToRaw(const uint8_t* der, uint8_t derLen,
                                  uint8_t* raw64);
 

@@ -111,26 +111,35 @@ struct CW_SecureSession {
  ******************************************************************/
 
 /**
- * Set to 1 to enable certificate chain verification (adds SHA-256 + ~4 KB Flash).
- * Enabled by default: disabling allows any NFC target to impersonate a Cryptnox card.
- * To disable on Flash-constrained boards set CW_VERIFY_CERT=0 in your build flags,
- * but never do so in production — see CRIT-02 in the security audit.
+ * Certificate chain verification — must remain 1 (enabled).
+ * Disabling (CW_VERIFY_CERT=0) is a hard build error: without this check any
+ * NFC target can impersonate a Cryptnox card and learn the user's PIN.
+ * See SEC-004 in the security audit.
  */
 #ifndef CW_VERIFY_CERT
 #  define CW_VERIFY_CERT 1
 #endif
 
 #if !CW_VERIFY_CERT
-#  warning "CW_VERIFY_CERT is 0: card identity will NOT be verified. Any NFC target can " \
-           "impersonate a Cryptnox card and learn your PIN. Do NOT deploy in production."
+#  error "CW_VERIFY_CERT is 0: card identity will NOT be verified — any NFC target can " \
+         "impersonate a Cryptnox card and learn your PIN.  Building without certificate " \
+         "verification is forbidden.  Remove -DCW_VERIFY_CERT=0 from your build flags (SEC-004)."
 #endif
 
 /**
  * Set to 1 to enable library-internal debug logging via CW_Logger.
  * Disabled by default to preserve Flash on resource-constrained boards.
+ * Must never be enabled in release/optimised builds — doing so leaks
+ * session state over UART (SEC-012).
  */
 #ifndef CW_DEBUG_LOGGING
 #  define CW_DEBUG_LOGGING 0
+#endif
+
+#if CW_DEBUG_LOGGING && defined(NDEBUG)
+#  error "CW_DEBUG_LOGGING=1 is set but NDEBUG is defined (release/optimised build). " \
+         "Debug logging must not ship in production firmware — it leaks session state " \
+         "over UART.  Remove -DCW_DEBUG_LOGGING=1 from your release build flags (SEC-012)."
 #endif
 
 #endif // CW_DEFS_H
