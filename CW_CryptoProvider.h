@@ -28,8 +28,9 @@ public:
      * @param[in]  data  Input buffer.
      * @param[in]  len   Number of bytes to hash.
      * @param[out] out   32-byte output buffer.
+     * @return true on success, false if the underlying hash accelerator faults.
      */
-    virtual void sha256(const uint8_t* data, size_t len, uint8_t* out) = 0;
+    virtual bool sha256(const uint8_t* data, size_t len, uint8_t* out) = 0;
 
     /**
      * @brief Compute SHA-512 over a contiguous data buffer.
@@ -37,8 +38,9 @@ public:
      * @param[in]  data  Input buffer.
      * @param[in]  len   Number of bytes to hash.
      * @param[out] out   64-byte output buffer.
+     * @return true on success, false if the underlying hash accelerator faults.
      */
-    virtual void sha512(const uint8_t* data, size_t len, uint8_t* out) = 0;
+    virtual bool sha512(const uint8_t* data, size_t len, uint8_t* out) = 0;
 
     /**
      * @brief AES-CBC encrypt.

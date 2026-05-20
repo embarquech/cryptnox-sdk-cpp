@@ -222,6 +222,10 @@ private:
     bool verifyEcdsaSha256(const uint8_t* pubKey64,
                            const uint8_t* message, uint16_t msgLen,
                            const uint8_t* derSig, uint8_t derSigLen);
+
+#ifdef CW_FUZZ_BUILD
+    friend struct DerFuzzTarget;
+#endif
 };
 
 #endif // CW_SECURECHANNEL_H

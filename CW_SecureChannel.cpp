@@ -320,7 +320,14 @@ bool CW_SecureChannel::mutuallyAuthenticate(CW_SecureSession& session,
         (void)CW_Utils::safe_memcpy(concat + 32U, sizeof(concat) - 32U, reinterpret_cast<const uint8_t*>(COMMON_PAIRING_DATA), pairingKeyLen);
         (void)CW_Utils::safe_memcpy(concat + 32U + pairingKeyLen, 32U, salt, 32U);
 
-        _crypto.sha512(concat, concatLen, sha512Output);
+        bool sha512Ok = _crypto.sha512(concat, concatLen, sha512Output);
+
+        if (!sha512Ok) {
+            CW_Utils::secure_wipe(sharedSecret, sizeof(sharedSecret));
+            CW_Utils::secure_wipe(sha512Output, sizeof(sha512Output));
+            CW_Utils::secure_wipe(concat, sizeof(concat));
+            return false;
+        }
 
         (void)CW_Utils::safe_memcpy(session.aesKey, CW_AESKEY_SIZE, sha512Output, CW_AESKEY_SIZE);
         (void)CW_Utils::safe_memcpy(session.macKey, CW_MACKEY_SIZE, sha512Output + CW_AESKEY_SIZE, CW_MACKEY_SIZE);
@@ -1011,16 +1018,17 @@ bool CW_SecureChannel::parseDerSigToRaw(const uint8_t* der, uint8_t derLen,
 bool CW_SecureChannel::verifyEcdsaSha256(const uint8_t* pubKey64,
                                          const uint8_t* message, uint16_t msgLen,
                                          const uint8_t* derSig, uint8_t derSigLen) {
+    bool result = false;
     uint8_t hash[32U] = { 0U };
     uint8_t rawSig[64U] = { 0U };
 
-    _crypto.sha256(message, msgLen, hash);
+    bool hashOk = _crypto.sha256(message, msgLen, hash);
 
-    if (!parseDerSigToRaw(derSig, derSigLen, rawSig)) {
-        return false;
+    if (hashOk && parseDerSigToRaw(derSig, derSigLen, rawSig)) {
+        result = _crypto.verify(pubKey64, hash, sizeof(hash), rawSig);
     }
 
-    return _crypto.verify(pubKey64, hash, sizeof(hash), rawSig);
+    return result;
 }
 
 bool CW_SecureChannel::getManufacturerCertificate(uint8_t* cert, uint16_t& certLen) {
