@@ -33,12 +33,6 @@
 #include <stddef.h>
 #include <string.h>
 
-/* ── Stub: uECC opaque struct ──────────────────────────────────────────
- * The real definition lives in uECC_esp32.cpp (ESP32 only).  The DER
- * parser paths never dereference a uECC_Curve_t pointer, so an empty
- * placeholder is sufficient to satisfy the compiler and linker.        */
-struct uECC_Curve_t { int _placeholder; };
-
 /* ── SDK headers ────────────────────────────────────────────────────── */
 #include "../CW_CryptoProvider.h"
 #include "../CW_NfcTransport.h"
@@ -100,16 +94,13 @@ public:
 
 /* ── uECC API stubs ────────────────────────────────────────────────────
  * Symbols are referenced in CW_SecureChannel.cpp method bodies that are
- * compiled but never called from the DER-parser paths.                 */
+ * compiled but never called from the DER-parser paths.
+ * uECC_Curve_t is an opaque type (forward-declared in uECC.h); returning
+ * NULL is valid for pointer-to-incomplete-type and safe because no DER
+ * parser path ever dereferences the curve pointer.                     */
 extern "C" {
-    const uECC_Curve_t* uECC_secp256r1(void) {
-        static const uECC_Curve_t c = { 0 };
-        return &c;
-    }
-    const uECC_Curve_t* uECC_secp256k1(void) {
-        static const uECC_Curve_t c = { 0 };
-        return &c;
-    }
+    const uECC_Curve_t* uECC_secp256r1(void) { return NULL; }
+    const uECC_Curve_t* uECC_secp256k1(void) { return NULL; }
     void uECC_set_rng(int (*)(uint8_t*, unsigned)) {}
     int uECC_make_key(uint8_t*, uint8_t*, const uECC_Curve_t*) { return 0; }
     int uECC_shared_secret(const uint8_t*, const uint8_t*, uint8_t*,
