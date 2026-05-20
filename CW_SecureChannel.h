@@ -143,7 +143,6 @@ public:
                               const uECC_Curve_t* sessionCurve,
                               const uint8_t* cardEphemeralPubKey);
 
-#if CW_VERIFY_CERT
     /**
      * @brief Retrieve the manufacturer certificate stored in card flash.
      *
@@ -161,7 +160,6 @@ public:
      * @return CW_CERT_OK (0) on success, or a CW_CERT_* error code otherwise.
      */
     uint8_t verifyCertificateChain(const uint8_t* cardCert, uint8_t cardCertLen);
-#endif /* CW_VERIFY_CERT */
 
     /**
      * @brief AES-CBC encrypt payload, compute MAC, send APDU, and decrypt response.
@@ -215,7 +213,6 @@ private:
     CW_Logger&        _logger; ///< Logging interface.
     CW_CryptoProvider& _crypto; ///< Crypto operations (AES, SHA, ECDH, RNG).
 
-#if CW_VERIFY_CERT
     /** @brief Nonce sent in the last getCardCertificate() call; checked in verifyCertificateChain(). */
     uint8_t _lastNonce[CW_CERT_NONCE_SIZE];
 
@@ -225,7 +222,6 @@ private:
     bool verifyEcdsaSha256(const uint8_t* pubKey64,
                            const uint8_t* message, uint16_t msgLen,
                            const uint8_t* derSig, uint8_t derSigLen);
-#endif /* CW_VERIFY_CERT */
 };
 
 #endif // CW_SECURECHANNEL_H

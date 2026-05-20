@@ -1,8 +1,6 @@
 #include "CW_SecureChannel.h"
 #include "CW_Utils.h"
-#if CW_VERIFY_CERT
 #include "CW_TrustedKeys.h"
-#endif
 #include "uECC.h"
 
 /******************************************************************
@@ -43,7 +41,6 @@ static uint8_t s_apduBuf[SEND_APDU_MAX_LEN];  /* 245 bytes */
 static uint8_t s_macBuf [MAX_MAC_DATA_LEN];   /* 240 bytes */
 static uint8_t s_dataBuf[ENC_BUF_MAX_LEN];   /* 224 bytes */
 
-#if CW_VERIFY_CERT
 /* Manufacturer certificate assembly buffer (used only during verifyCertificateChain). */
 static uint8_t s_mfCertBuf[CW_MANUF_CERT_MAX_BYTES];
 
@@ -61,7 +58,6 @@ static uint8_t s_mfCertBuf[CW_MANUF_CERT_MAX_BYTES];
 #define DER_EC_UNCOMPRESSED (0x04U)  /* uncompressed point prefix */
 #define DER_EC_POINT_BYTES  (65U)    /* 0x04 || X[32] || Y[32] */
 #define DER_BIT_UNUSED_ZERO (0x00U)  /* BIT STRING unused-bits field must be 0 */
-#endif /* CW_VERIFY_CERT */
 
 /******************************************************************
  * Constructor
@@ -71,9 +67,7 @@ CW_SecureChannel::CW_SecureChannel(CW_NfcTransport& driver,
                                    CW_Logger& logger,
                                    CW_CryptoProvider& crypto)
     : _driver(driver), _logger(logger), _crypto(crypto) {
-#if CW_VERIFY_CERT
     memset(_lastNonce, 0, sizeof(_lastNonce));
-#endif
 }
 
 /******************************************************************
@@ -179,9 +173,7 @@ bool CW_SecureChannel::getCardCertificate(uint8_t* cardCertificate, uint8_t& car
         }
 
         /* Store nonce for replay check in verifyCertificateChain(). */
-#if CW_VERIFY_CERT
         (void)CW_Utils::safe_memcpy(_lastNonce, RANDOM_BYTES, randomBytes, RANDOM_BYTES);
-#endif
 
         uint8_t getCardCertificateApdu[] = {
             0x80, 0xF8, 0x00, 0x00, 0x08
@@ -659,10 +651,9 @@ bool CW_SecureChannel::aesCbcDecrypt(const CW_SecureSession& session,
 }
 
 /******************************************************************
- * Certificate verification — static helpers (CW_VERIFY_CERT only)
+ * Certificate verification — static helpers
  ******************************************************************/
 
-#if CW_VERIFY_CERT
 
 /* Read the DER length at buf[*pos]; advance *pos past the length bytes.
  * Supports short form and long form with 1 or 2 extra bytes only. */
@@ -1225,5 +1216,3 @@ uint8_t CW_SecureChannel::verifyCertificateChain(const uint8_t* cardCert,
 
     return result;
 }
-
-#endif /* CW_VERIFY_CERT */

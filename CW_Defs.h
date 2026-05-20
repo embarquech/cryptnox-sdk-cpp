@@ -110,21 +110,8 @@ struct CW_SecureSession {
  * 4. Compile-time feature flags
  ******************************************************************/
 
-/**
- * Certificate chain verification — must remain 1 (enabled).
- * Disabling (CW_VERIFY_CERT=0) is a hard build error: without this check any
- * NFC target can impersonate a Cryptnox card and learn the user's PIN.
- * See SEC-004 in the security audit.
- */
-#ifndef CW_VERIFY_CERT
-#  define CW_VERIFY_CERT 1
-#endif
-
-#if !CW_VERIFY_CERT
-#  error "CW_VERIFY_CERT is 0: card identity will NOT be verified — any NFC target can " \
-         "impersonate a Cryptnox card and learn your PIN.  Building without certificate " \
-         "verification is forbidden.  Remove -DCW_VERIFY_CERT=0 from your build flags (SEC-004)."
-#endif
+/** Certificate chain verification is always enabled (SEC-004). */
+static const uint8_t CW_VERIFY_CERT = 1U;
 
 /**
  * Set to 1 to enable library-internal debug logging via CW_Logger.
