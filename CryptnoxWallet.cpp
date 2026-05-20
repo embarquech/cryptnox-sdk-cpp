@@ -65,7 +65,6 @@ bool CryptnoxWallet::establishSecureChannel(CW_SecureSession& session) {
         uint8_t cardCertificateLength = 0U;
 
         if (_secure.getCardCertificate(cardCertificate, cardCertificateLength)) {
-#if CW_VERIFY_CERT
             uint8_t certResult = _secure.verifyCertificateChain(cardCertificate,
                                                                 cardCertificateLength);
             if (certResult != CW_CERT_OK) {
@@ -74,39 +73,37 @@ bool CryptnoxWallet::establishSecureChannel(CW_SecureSession& session) {
                 _logger.print(certResult, HEX);
                 _logger.println(F("). Aborting."));
 #endif
-                return false;
-            }
-#endif /* CW_VERIFY_CERT */
-
-            uint8_t cardEphemeralPubKey[64U];
-            if (_secure.extractCardEphemeralKey(cardCertificate, cardEphemeralPubKey)) {
-                uint8_t openSecureChannelSalt[32U];
-                uint8_t clientPrivateKey[32U];
-                uint8_t clientPublicKey[64U];
-                const uECC_Curve_t* sessionCurve = uECC_secp256r1();
-                if (_secure.openSecureChannel(openSecureChannelSalt, clientPublicKey,
-                                              clientPrivateKey, sessionCurve)) {
-                    if (_secure.mutuallyAuthenticate(session, openSecureChannelSalt,
-                                                    clientPublicKey, clientPrivateKey,
-                                                    sessionCurve, cardEphemeralPubKey)) {
+            } else {
+                uint8_t cardEphemeralPubKey[64U];
+                if (_secure.extractCardEphemeralKey(cardCertificate, cardEphemeralPubKey)) {
+                    uint8_t openSecureChannelSalt[32U];
+                    uint8_t clientPrivateKey[32U];
+                    uint8_t clientPublicKey[64U];
+                    const uECC_Curve_t* sessionCurve = uECC_secp256r1();
+                    if (_secure.openSecureChannel(openSecureChannelSalt, clientPublicKey,
+                                                  clientPrivateKey, sessionCurve)) {
+                        if (_secure.mutuallyAuthenticate(session, openSecureChannelSalt,
+                                                        clientPublicKey, clientPrivateKey,
+                                                        sessionCurve, cardEphemeralPubKey)) {
 #if CW_DEBUG_LOGGING
-                        _logger.println(F("Secure channel established"));
+                            _logger.println(F("Secure channel established"));
 #endif
-                        ret = true;
+                            ret = true;
+                        } else {
+#if CW_DEBUG_LOGGING
+                            _logger.println(F("Mutual authentication failed"));
+#endif
+                        }
                     } else {
 #if CW_DEBUG_LOGGING
-                        _logger.println(F("Mutual authentication failed"));
+                        _logger.println(F("Failed to open secure channel"));
 #endif
                     }
                 } else {
 #if CW_DEBUG_LOGGING
-                    _logger.println(F("Failed to open secure channel"));
+                    _logger.println(F("Failed to extract card ephemeral key"));
 #endif
                 }
-            } else {
-#if CW_DEBUG_LOGGING
-                _logger.println(F("Failed to extract card ephemeral key"));
-#endif
             }
         } else {
 #if CW_DEBUG_LOGGING
