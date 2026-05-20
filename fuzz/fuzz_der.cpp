@@ -37,6 +37,7 @@
 #include "../CW_CryptoProvider.h"
 #include "../CW_NfcTransport.h"
 #include "../CW_Logger.h"
+#include "../CW_Platform.h"
 #include "../CW_SecureChannel.h"
 
 /* ── Minimal concrete stubs for the three abstract interfaces ──────────
@@ -84,30 +85,18 @@ public:
                            const uint8_t*, uint8_t,
                            uint8_t*, bool) override { return 0U; }
     bool ecdh(const uint8_t*, const uint8_t*, uint8_t*,
-              const uECC_Curve_t*) override { return false; }
+              CW_Curve) override { return false; }
     bool makeKey(uint8_t*, uint8_t*,
-                 const uECC_Curve_t*) override { return false; }
+                 CW_Curve) override { return false; }
     bool random(uint8_t*, unsigned) override { return false; }
-    bool verify(const uint8_t*, const uint8_t*, size_t,
-                const uint8_t*) override { return false; }
+    bool ecdsaVerify(const uint8_t*, const uint8_t*, size_t,
+                     const uint8_t*, CW_Curve) override { return false; }
 };
 
-/* ── uECC API stubs ────────────────────────────────────────────────────
- * Symbols are referenced in CW_SecureChannel.cpp method bodies that are
- * compiled but never called from the DER-parser paths.
- * uECC_Curve_t is an opaque type (forward-declared in uECC.h); returning
- * NULL is valid for pointer-to-incomplete-type and safe because no DER
- * parser path ever dereferences the curve pointer.                     */
-extern "C" {
-    const uECC_Curve_t* uECC_secp256r1(void) { return NULL; }
-    const uECC_Curve_t* uECC_secp256k1(void) { return NULL; }
-    void uECC_set_rng(int (*)(uint8_t*, unsigned)) {}
-    int uECC_make_key(uint8_t*, uint8_t*, const uECC_Curve_t*) { return 0; }
-    int uECC_shared_secret(const uint8_t*, const uint8_t*, uint8_t*,
-                           const uECC_Curve_t*) { return 0; }
-    int uECC_verify(const uint8_t*, const uint8_t*, unsigned,
-                    const uint8_t*, const uECC_Curve_t*) { return 0; }
-}
+class StubPlatform final : public CW_Platform {
+public:
+    void sleep_ms(uint32_t) override {}
+};
 
 /* ── CW_Utils::fill_secure_random stub ─────────────────────────────────
  * The real implementation is ESP32-specific (esp32_random.cpp).

@@ -6,7 +6,7 @@
  ******************************************************************/
 
 #include "platform_compat.h"
-#include <uECC.h>
+#include "CW_Defs.h"
 
 /******************************************************************
  * 2. Class declaration
@@ -17,8 +17,9 @@
  * @brief Abstract interface for cryptographic operations used by CW_SecureChannel.
  *
  * Decouples the secure channel protocol from any specific crypto library.
- * The concrete implementation (ArduinoCryptoProvider) wraps AESLib, SHA512,
- * micro-ecc, and the RA4M1 hardware TRNG.
+ * The concrete ESP32 implementation (ESP32CryptoProvider) wraps mbedTLS
+ * (SHA-256/SHA-512/AES-CBC hardware-accelerated on ESP32-S3) and the
+ * ESP32 hardware TRNG for random number generation.
  */
 class CW_CryptoProvider {
 public:
@@ -81,22 +82,22 @@ public:
      * @param[in]  pubKey  Remote public key (64 bytes, X||Y, no 0x04 prefix).
      * @param[in]  privKey Local private key (32 bytes).
      * @param[out] secret  32-byte shared secret output.
-     * @param[in]  curve   uECC curve (e.g. uECC_secp256r1()).
+     * @param[in]  curve   Curve identifier (CW_CURVE_SECP256R1 or CW_CURVE_SECP256K1).
      * @return true on success, false otherwise.
      */
     virtual bool ecdh(const uint8_t* pubKey, const uint8_t* privKey,
-                      uint8_t* secret, const uECC_Curve_t* curve) = 0;
+                      uint8_t* secret, CW_Curve curve) = 0;
 
     /**
      * @brief Generate a new EC key pair.
      *
      * @param[out] pubKey   64-byte public key output (X||Y, no prefix).
      * @param[out] privKey  32-byte private key output.
-     * @param[in]  curve    uECC curve.
+     * @param[in]  curve    Curve identifier (CW_CURVE_SECP256R1 or CW_CURVE_SECP256K1).
      * @return true on success, false otherwise.
      */
     virtual bool makeKey(uint8_t* pubKey, uint8_t* privKey,
-                         const uECC_Curve_t* curve) = 0;
+                         CW_Curve curve) = 0;
 
     /**
      * @brief Fill a buffer with cryptographically random bytes.
@@ -110,15 +111,16 @@ public:
     /**
      * @brief Verify an ECDSA signature (raw r||s, 64 bytes) against a message hash.
      *
-     * @param[in] pubKey64  64-byte public key (X||Y, no 0x04 prefix) on secp256r1.
+     * @param[in] pubKey64  64-byte public key (X||Y, no 0x04 prefix).
      * @param[in] hash      Message hash buffer.
-     * @param[in] hashSize  Length of the hash in bytes.
-     * @param[in] rawSig64  64-byte raw signature (r[32]||s[32]).
+     * @param[in] hashLen   Length of the hash in bytes.
+     * @param[in] sig       64-byte raw signature (r[32]||s[32]).
+     * @param[in] curve     Curve identifier for the verification operation.
      * @return true if the signature is valid, false otherwise.
      */
-    virtual bool verify(const uint8_t* pubKey64,
-                        const uint8_t* hash, size_t hashSize,
-                        const uint8_t* rawSig64) = 0;
+    virtual bool ecdsaVerify(const uint8_t* pubKey64,
+                             const uint8_t* hash, size_t hashLen,
+                             const uint8_t* sig, CW_Curve curve) = 0;
 
     virtual ~CW_CryptoProvider() {}
 };

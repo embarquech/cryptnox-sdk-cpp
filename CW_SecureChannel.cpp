@@ -1,7 +1,6 @@
 #include "CW_SecureChannel.h"
 #include "CW_Utils.h"
 #include "CW_TrustedKeys.h"
-#include "uECC.h"
 
 /******************************************************************
  * Module-level constants
@@ -65,8 +64,10 @@ static uint8_t s_mfCertBuf[CW_MANUF_CERT_MAX_BYTES];
 
 CW_SecureChannel::CW_SecureChannel(CW_NfcTransport& driver,
                                    CW_Logger& logger,
-                                   CW_CryptoProvider& crypto)
-    : _driver(driver), _logger(logger), _crypto(crypto) {
+                                   CW_CryptoProvider& crypto,
+                                   CW_Platform& platform)
+    : _driver(driver), _logger(logger), _crypto(crypto), _platform(platform),
+      _cachedMfCertLen(0U) {
     memset(_lastNonce, 0, sizeof(_lastNonce));
 }
 
@@ -241,7 +242,7 @@ bool CW_SecureChannel::extractCardEphemeralKey(const uint8_t* cardCertificate,
 bool CW_SecureChannel::openSecureChannel(uint8_t* salt,
                                          uint8_t* sessionPublicKey,
                                          uint8_t* sessionPrivateKey,
-                                         const uECC_Curve_t* sessionCurve) {
+                                         CW_Curve sessionCurve) {
     bool ret = false;
 
     if (!_crypto.makeKey(sessionPublicKey, sessionPrivateKey, sessionCurve)) {
@@ -290,20 +291,11 @@ bool CW_SecureChannel::mutuallyAuthenticate(CW_SecureSession& session,
                                             const uint8_t* salt,
                                             uint8_t* clientPublicKey,
                                             const uint8_t* clientPrivateKey,
-                                            const uECC_Curve_t* sessionCurve,
+                                            CW_Curve sessionCurve,
                                             const uint8_t* cardEphemeralPubKey) {
     bool ret = false;
     uint8_t sharedSecret[32U] = { 0U };
-
-    /* Validate the card's ephemeral key before using it for ECDH (CRIT-03).
-     * uECC_valid_public_key checks that the point lies on the curve and is not
-     * the identity, preventing invalid-curve / small-subgroup attacks. */
-    if (!uECC_valid_public_key(cardEphemeralPubKey, sessionCurve)) {
-#if CW_DEBUG_LOGGING
-        _logger.println(F("Card ephemeral public key is not a valid curve point. Aborting."));
-#endif
-        return false;
-    }
+    (void)clientPublicKey;
 
     if (!_crypto.ecdh(cardEphemeralPubKey, clientPrivateKey, sharedSecret, sessionCurve)) {
 #if CW_DEBUG_LOGGING
@@ -1025,7 +1017,7 @@ bool CW_SecureChannel::verifyEcdsaSha256(const uint8_t* pubKey64,
     bool hashOk = _crypto.sha256(message, msgLen, hash);
 
     if (hashOk && parseDerSigToRaw(derSig, derSigLen, rawSig)) {
-        result = _crypto.verify(pubKey64, hash, sizeof(hash), rawSig);
+        result = _crypto.ecdsaVerify(pubKey64, hash, sizeof(hash), rawSig, CW_CURVE_SECP256R1);
     }
 
     return result;
@@ -1113,6 +1105,15 @@ bool CW_SecureChannel::getManufacturerCertificate(uint8_t* cert, uint16_t& certL
     return ret;
 }
 
+bool CW_SecureChannel::preFetchManufacturerCert() {
+    _cachedMfCertLen = 0U;
+    bool result = getManufacturerCertificate(s_mfCertBuf, _cachedMfCertLen);
+    if (!result) {
+        _cachedMfCertLen = 0U;
+    }
+    return result;
+}
+
 uint8_t CW_SecureChannel::verifyCertificateChain(const uint8_t* cardCert,
                                                   uint8_t cardCertLen) {
     uint8_t result = CW_CERT_OK;
@@ -1124,13 +1125,27 @@ uint8_t CW_SecureChannel::verifyCertificateChain(const uint8_t* cardCert,
         result = CW_CERT_FORMAT_ERROR;
     }
 
-    uint16_t mfCertLen = 0U;
+    /* Consume the pre-fetched cert (filled by preFetchManufacturerCert() before
+     * getCardCertificate() was called).  Fall back to fetching now if none cached —
+     * this will fail on cards whose state machine has already advanced past INS=F7. */
+    uint16_t mfCertLen = _cachedMfCertLen;
+    _cachedMfCertLen = 0U;
+
     if (result == CW_CERT_OK) {
-        if (!getManufacturerCertificate(s_mfCertBuf, mfCertLen) || (mfCertLen < 20U)) {
+        if (mfCertLen == 0U) {
+            if (!getManufacturerCertificate(s_mfCertBuf, mfCertLen) || (mfCertLen < 20U)) {
 #if CW_DEBUG_LOGGING
-            _logger.println(F("verifyCert: failed to get mfr cert."));
+                _logger.println(F("verifyCert: failed to get mfr cert."));
+#endif
+                result = CW_CERT_FORMAT_ERROR;
+            }
+        } else if (mfCertLen < 20U) {
+#if CW_DEBUG_LOGGING
+            _logger.println(F("verifyCert: pre-fetched mfr cert too short."));
 #endif
             result = CW_CERT_FORMAT_ERROR;
+        } else {
+            /* Pre-fetched cert in s_mfCertBuf is valid — no APDU needed. */
         }
     }
 

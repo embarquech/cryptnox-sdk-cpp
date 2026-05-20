@@ -8,6 +8,7 @@
 #include "platform_compat.h"
 #include "CW_Defs.h"
 #include "CW_Logger.h"
+#include "CW_Platform.h"
 #include "CW_SecureChannel.h"
 #include "CW_Utils.h"
 
@@ -101,11 +102,13 @@ public:
     /**
      * @brief Construct a CryptnoxWallet.
      *
-     * @param driver Reference to the NFC transport implementation.
-     * @param logger Reference to the logging implementation.
-     * @param crypto Reference to the crypto provider implementation.
+     * @param driver   Reference to the NFC transport implementation.
+     * @param logger   Reference to the logging implementation.
+     * @param crypto   Reference to the crypto provider implementation.
+     * @param platform Reference to the platform abstraction (for sleep_ms).
      */
-    CryptnoxWallet(CW_NfcTransport& driver, CW_Logger& logger, CW_CryptoProvider& crypto);
+    CryptnoxWallet(CW_NfcTransport& driver, CW_Logger& logger,
+                   CW_CryptoProvider& crypto, CW_Platform& platform);
 
     CryptnoxWallet(const CryptnoxWallet&) = delete;
     CryptnoxWallet& operator=(const CryptnoxWallet&) = delete;
@@ -203,8 +206,9 @@ public:
                                   uint8_t* s, uint8_t& sLength);
 
 private:
-    CW_Logger&       _logger;  ///< Logging interface.
-    CW_SecureChannel _secure;  ///< Owned secure channel.
+    CW_Logger&       _logger;   ///< Logging interface.
+    CW_Platform&     _platform; ///< Platform abstraction (sleep_ms).
+    CW_SecureChannel _secure;   ///< Owned secure channel.
 
     bool isSecureChannelOpen(const CW_SecureSession& session) const;
     bool printPN532FirmwareVersion();

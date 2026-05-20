@@ -16,8 +16,8 @@
 #include "CW_NfcTransport.h"
 #include "CW_Logger.h"
 #include "CW_CryptoProvider.h"
-#include "CW_Defs.h"          /* for CW_SecureSession and constants */
-#include "uECC.h"
+#include "CW_Platform.h"
+#include "CW_Defs.h"          /* for CW_SecureSession, CW_Curve, and constants */
 
 /******************************************************************
  * 2. Class declaration
@@ -43,11 +43,13 @@ public:
     /**
      * @brief Construct a CW_SecureChannel.
      *
-     * @param driver Reference to the NFC transport.
-     * @param logger Reference to the logging interface.
-     * @param crypto Reference to the crypto provider.
+     * @param driver   Reference to the NFC transport.
+     * @param logger   Reference to the logging interface.
+     * @param crypto   Reference to the crypto provider.
+     * @param platform Reference to the platform abstraction (for sleep_ms).
      */
-    CW_SecureChannel(CW_NfcTransport& driver, CW_Logger& logger, CW_CryptoProvider& crypto);
+    CW_SecureChannel(CW_NfcTransport& driver, CW_Logger& logger,
+                     CW_CryptoProvider& crypto, CW_Platform& platform);
 
     CW_SecureChannel(const CW_SecureChannel&) = delete;
     CW_SecureChannel& operator=(const CW_SecureChannel&) = delete;
@@ -120,7 +122,7 @@ public:
     bool openSecureChannel(uint8_t* salt,
                            uint8_t* clientPublicKey,
                            uint8_t* clientPrivateKey,
-                           const uECC_Curve_t* sessionCurve);
+                           CW_Curve sessionCurve);
 
     /**
      * @brief Perform ECDH key derivation and MUTUALLY AUTHENTICATE with the card.
@@ -140,7 +142,7 @@ public:
                               const uint8_t* salt,
                               uint8_t* clientPublicKey,
                               const uint8_t* clientPrivateKey,
-                              const uECC_Curve_t* sessionCurve,
+                              CW_Curve sessionCurve,
                               const uint8_t* cardEphemeralPubKey);
 
     /**
@@ -151,6 +153,18 @@ public:
      * @return true on success, false if APDU fails or buffer too small.
      */
     bool getManufacturerCertificate(uint8_t* cert, uint16_t& certLen);
+
+    /**
+     * @brief Fetch and cache the manufacturer certificate before getCardCertificate().
+     *
+     * The Cryptnox card state machine advances after GET_CARD_CERTIFICATE (INS=F8)
+     * and will not respond to GET_MANUFACTURER_CERTIFICATE (INS=F7) after that point.
+     * Call this method immediately after selectApdu() and before getCardCertificate()
+     * so that verifyCertificateChain() can use the cached copy without an APDU.
+     *
+     * @return true if the certificate was fetched and cached, false otherwise.
+     */
+    bool preFetchManufacturerCert();
 
     /**
      * @brief Verify the full card certificate chain.
@@ -209,12 +223,16 @@ public:
                          uint8_t sw1Expected, uint8_t sw2Expected);
 
 private:
-    CW_NfcTransport&  _driver; ///< NFC transport for APDU exchange.
-    CW_Logger&        _logger; ///< Logging interface.
-    CW_CryptoProvider& _crypto; ///< Crypto operations (AES, SHA, ECDH, RNG).
+    CW_NfcTransport&   _driver;   ///< NFC transport for APDU exchange.
+    CW_Logger&         _logger;   ///< Logging interface.
+    CW_CryptoProvider& _crypto;   ///< Crypto operations (AES, SHA, ECDH, RNG).
+    CW_Platform&       _platform; ///< Platform abstraction (sleep_ms).
 
     /** @brief Nonce sent in the last getCardCertificate() call; checked in verifyCertificateChain(). */
     uint8_t _lastNonce[CW_CERT_NONCE_SIZE];
+
+    /** @brief Non-zero when s_mfCertBuf holds a valid pre-fetched manufacturer certificate. */
+    uint16_t _cachedMfCertLen;
 
     static bool parseDerSigToRaw(const uint8_t* der, uint8_t derLen,
                                  uint8_t* raw64);

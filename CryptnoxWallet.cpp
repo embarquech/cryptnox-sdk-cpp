@@ -8,8 +8,9 @@
  * Constructor
  ******************************************************************/
 
-CryptnoxWallet::CryptnoxWallet(CW_NfcTransport& driver, CW_Logger& logger, CW_CryptoProvider& crypto)
-    : _logger(logger), _secure(driver, logger, crypto) {
+CryptnoxWallet::CryptnoxWallet(CW_NfcTransport& driver, CW_Logger& logger,
+                               CW_CryptoProvider& crypto, CW_Platform& platform)
+    : _logger(logger), _platform(platform), _secure(driver, logger, crypto, platform) {
 }
 
 /******************************************************************
@@ -37,13 +38,11 @@ bool CryptnoxWallet::connect(CW_SecureSession& session) {
             _logger.println(F(")..."));
 #endif
             _secure.resetReader();
-            /* On Arduino: delay() is the hardware delay.
-             * On non-Arduino: platform_compat.h provides a no-op stub. */
-            delay(200);
+            _platform.sleep_ms(200U);
         }
 
         if (_secure.inListPassiveTarget()) {
-            delay(200);
+            _platform.sleep_ms(200U);
             if (establishSecureChannel(session)) {
                 ret = true;
             }
@@ -61,6 +60,17 @@ bool CryptnoxWallet::establishSecureChannel(CW_SecureSession& session) {
     bool ret = false;
 
     if (_secure.selectApdu()) {
+        /* Fetch the manufacturer certificate BEFORE getCardCertificate().
+         * The Cryptnox card state machine advances after GET_CARD_CERTIFICATE
+         * (INS=F8) and will not respond to GET_MANUFACTURER_CERTIFICATE (INS=F7)
+         * after that point.  Pre-fetching here caches the cert inside
+         * CW_SecureChannel so that verifyCertificateChain() can use it without
+         * issuing another APDU. */
+        if (!_secure.preFetchManufacturerCert()) {
+#if CW_DEBUG_LOGGING
+            _logger.println(F("Failed to pre-fetch manufacturer certificate"));
+#endif
+        } else {
         uint8_t cardCertificate[146U];
         uint8_t cardCertificateLength = 0U;
 
@@ -79,7 +89,7 @@ bool CryptnoxWallet::establishSecureChannel(CW_SecureSession& session) {
                     uint8_t openSecureChannelSalt[32U];
                     uint8_t clientPrivateKey[32U];
                     uint8_t clientPublicKey[64U];
-                    const uECC_Curve_t* sessionCurve = uECC_secp256r1();
+                    CW_Curve sessionCurve = CW_CURVE_SECP256R1;
                     if (_secure.openSecureChannel(openSecureChannelSalt, clientPublicKey,
                                                   clientPrivateKey, sessionCurve)) {
                         if (_secure.mutuallyAuthenticate(session, openSecureChannelSalt,
@@ -110,6 +120,7 @@ bool CryptnoxWallet::establishSecureChannel(CW_SecureSession& session) {
             _logger.println(F("Failed to get card certificate"));
 #endif
         }
+        } /* end preFetchManufacturerCert else */
     } else {
 #if CW_DEBUG_LOGGING
         _logger.println(F("Failed to select Cryptnox application"));

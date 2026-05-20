@@ -76,7 +76,24 @@
 #define CW_MANUF_CERT_MAX_BYTES       (400U)
 
 /******************************************************************
- * 3. CW_SecureSession struct
+ * 3. CW_Curve enum
+ ******************************************************************/
+
+/**
+ * @enum CW_Curve
+ * @brief Portable curve identifier used throughout the SDK.
+ *
+ * Replaces direct references to uECC_Curve_t at every API boundary so the
+ * abstract interfaces (CW_CryptoProvider, CW_SecureChannel) remain decoupled
+ * from any specific ECC back-end.
+ */
+enum CW_Curve {
+    CW_CURVE_SECP256R1 = 0,  /**< NIST P-256 / secp256r1 */
+    CW_CURVE_SECP256K1 = 1   /**< Koblitz secp256k1 */
+};
+
+/******************************************************************
+ * 4. CW_SecureSession struct
  ******************************************************************/
 
 /**
@@ -107,7 +124,7 @@ struct CW_SecureSession {
 };
 
 /******************************************************************
- * 4. Compile-time feature flags
+ * 5. Compile-time feature flags
  ******************************************************************/
 
 /** Certificate chain verification is always enabled (SEC-004). */
