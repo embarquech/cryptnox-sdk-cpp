@@ -219,7 +219,7 @@ public:
      * @param sw2Expected    Expected SW2 byte.
      * @return true if last two bytes match expectations, false otherwise.
      */
-    bool checkStatusWord(const uint8_t* response, uint8_t responseLength,
+    bool checkStatusWord(const uint8_t* response, uint16_t responseLength,
                          uint8_t sw1Expected, uint8_t sw2Expected);
 
 private:

@@ -6,8 +6,11 @@
  * Module-level constants
  ******************************************************************/
 
-#define RESPONSE_GETCARDCERTIFICATE_IN_BYTES    148U
-#define RESPONSE_SELECT_IN_BYTES                 26U
+#define RESPONSE_GETCARDCERTIFICATE_IN_BYTES        148U
+/* SELECT AID: 1 (type) + 3 (ver) + 32 (status) + 2 (SW) = 38 bytes */
+#define RESPONSE_SELECT_IN_BYTES                     40U
+/* GET_MANUFACTURER_CERT: full DataOut up to certLen(2)+cert(411)+SW(2)=415 bytes; 420 for margin. */
+#define RESPONSE_GETMANUFACTURERCERT_PAGE_IN_BYTES  420U
 #define RESPONSE_OPENSECURECHANNEL_IN_BYTES      34U
 #define REQUEST_MUTUALLYAUTHENTICATE_IN_BYTES    69U
 #define RESPONSE_MUTUALLYAUTHENTICATE_IN_BYTES   66U
@@ -95,7 +98,7 @@ bool CW_SecureChannel::printFirmwareVersion() {
  * Private helpers
  ******************************************************************/
 
-bool CW_SecureChannel::checkStatusWord(const uint8_t* response, uint8_t responseLength,
+bool CW_SecureChannel::checkStatusWord(const uint8_t* response, uint16_t responseLength,
                                        uint8_t sw1Expected, uint8_t sw2Expected) {
     bool ret = false;
 
@@ -140,7 +143,7 @@ bool CW_SecureChannel::selectApdu() {
     };
 
     uint8_t response[RESPONSE_SELECT_IN_BYTES];
-    uint8_t responseLength = sizeof(response);
+    uint8_t responseLength = static_cast<uint8_t>(sizeof(response));
 
     if (_driver.sendAPDU(selectApduCmd, sizeof(selectApduCmd), response, responseLength)) {
         if (checkStatusWord(response, responseLength, 0x90U, 0x00U)) {
@@ -162,7 +165,7 @@ bool CW_SecureChannel::selectApdu() {
 bool CW_SecureChannel::getCardCertificate(uint8_t* cardCertificate, uint8_t& cardCertificateLength) {
     bool ret = false;
     uint8_t getCardCertificateResponse[RESPONSE_GETCARDCERTIFICATE_IN_BYTES];
-    uint8_t getCardCertificateResponseLength = sizeof(getCardCertificateResponse);
+    uint8_t getCardCertificateResponseLength = static_cast<uint8_t>(sizeof(getCardCertificateResponse));
 
     if (cardCertificate != NULL) {
         uint8_t randomBytes[RANDOM_BYTES] = { 0U };
@@ -188,7 +191,8 @@ bool CW_SecureChannel::getCardCertificate(uint8_t* cardCertificate, uint8_t& car
                              getCardCertificateResponse, getCardCertificateResponseLength)) {
             if (checkStatusWord(getCardCertificateResponse, getCardCertificateResponseLength,
                                 0x90U, 0x00U)) {
-                cardCertificateLength = getCardCertificateResponseLength - RESPONSE_STATUS_WORDS_IN_BYTES;
+                cardCertificateLength = static_cast<uint8_t>(
+                    static_cast<uint8_t>(getCardCertificateResponseLength - RESPONSE_STATUS_WORDS_IN_BYTES));
                 (void)CW_Utils::safe_memcpy(cardCertificate, GETCARDCERTIFICATE_IN_BYTES, getCardCertificateResponse, cardCertificateLength);
                 ret = true;
             } else {
@@ -260,11 +264,11 @@ bool CW_SecureChannel::openSecureChannel(uint8_t* salt,
         (void)CW_Utils::safe_memcpy(fullApdu + sizeof(opcApduHeader), CLIENT_PUBLIC_KEY_SIZE, sessionPublicKey, CLIENT_PUBLIC_KEY_SIZE);
 
         uint8_t response[RESPONSE_OPENSECURECHANNEL_IN_BYTES];
-        uint8_t responseLength = sizeof(response);
+        uint8_t responseLength = static_cast<uint8_t>(sizeof(response));
 
         if (_driver.sendAPDU(fullApdu, sizeof(fullApdu), response, responseLength)) {
             if (checkStatusWord(response, responseLength, 0x90U, 0x00U)) {
-                if (responseLength == RESPONSE_OPENSECURECHANNEL_IN_BYTES) {
+                if (responseLength == static_cast<uint8_t>(RESPONSE_OPENSECURECHANNEL_IN_BYTES)) {
                     (void)CW_Utils::safe_memcpy(salt, OPENSECURECHANNEL_SALT_IN_BYTES, response, OPENSECURECHANNEL_SALT_IN_BYTES);
                     ret = true;
                 } else {
@@ -390,11 +394,11 @@ bool CW_SecureChannel::mutuallyAuthenticate(CW_SecureSession& session,
         (void)CW_Utils::safe_memcpy(sendApduOpc + offset, sizeof(sendApduOpc) - static_cast<size_t>(offset), ciphertextOPC, cipherLength);
 
         uint8_t response[255U] = { 0U };
-        uint8_t responseLength = sizeof(response);
+        uint8_t responseLength = static_cast<uint8_t>(sizeof(response));
 
         if (_driver.sendAPDU(sendApduOpc, sizeof(sendApduOpc), response, responseLength)) {
             if (checkStatusWord(response, responseLength, 0x90U, 0x00U)) {
-                if (responseLength == RESPONSE_MUTUALLYAUTHENTICATE_IN_BYTES) {
+                if (responseLength == static_cast<uint8_t>(RESPONSE_MUTUALLYAUTHENTICATE_IN_BYTES)) {
                     (void)CW_Utils::safe_memcpy(session.iv, CW_IV_SIZE, response, CW_IV_SIZE);
                     ret = true;
                 } else {
@@ -517,14 +521,14 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
 
     /* 4. Send APDU */
     uint8_t response[255U] = { 0U };
-    uint8_t responseLength = sizeof(response);
+    uint8_t responseLength = static_cast<uint8_t>(sizeof(response));
 
     if (_driver.sendAPDU(s_apduBuf, sendApduLength, response, responseLength)) {
         if (checkStatusWord(response, responseLength, 0x90U, 0x00U)) {
             /* Update session.iv ONLY after the response MAC is verified (HIGH-01).
              * Moving it before aesCbcDecrypt would let an attacker-chosen IV
              * desynchronise the rolling-IV state even on MAC failure. */
-            ret = aesCbcDecrypt(session, response, responseLength, macValue,
+            ret = aesCbcDecrypt(session, response, static_cast<size_t>(responseLength), macValue,
                                 decryptedOutput, decryptedOutputLength);
             if (ret) {
                 (void)CW_Utils::safe_memcpy(session.iv, CW_IV_SIZE, response, CW_IV_SIZE);
@@ -1030,16 +1034,17 @@ bool CW_SecureChannel::getManufacturerCertificate(uint8_t* cert, uint16_t& certL
     if (cert != NULL) {
         const uint8_t APDU_P2_IDX = 3U;  /* P2 field offset in ISO 7816-4 APDU header */
         uint8_t apdu[5U] = { 0x80U, 0xF7U, 0x00U, 0x00U, 0x00U };
-        uint8_t response[130U];
-        uint8_t responseLen = sizeof(response);
+        uint8_t response[RESPONSE_GETMANUFACTURERCERT_PAGE_IN_BYTES];
+        uint16_t responseLen = static_cast<uint16_t>(sizeof(response));
 
-        if (!_driver.sendAPDU(apdu, sizeof(apdu), response, responseLen)) {
+        if (!_driver.sendAPDULarge(apdu, static_cast<uint8_t>(sizeof(apdu)), response,
+                                   responseLen)) {
 #if CW_DEBUG_LOGGING
             _logger.println(F("getManufacturerCertificate APDU failed."));
 #endif
             return false;
         }
-        if (responseLen > sizeof(response)) {
+        if (responseLen > static_cast<uint16_t>(sizeof(response))) {
 #if CW_DEBUG_LOGGING
             _logger.println(F("getManufacturerCertificate: driver reported overflow."));
 #endif
@@ -1048,26 +1053,32 @@ bool CW_SecureChannel::getManufacturerCertificate(uint8_t* cert, uint16_t& certL
 
         if (checkStatusWord(response, responseLen, 0x90U, 0x00U)) {
 
-            uint8_t dataBytes = responseLen - RESPONSE_STATUS_WORDS_IN_BYTES;
+            uint16_t dataBytes = static_cast<uint16_t>(
+                responseLen - static_cast<uint16_t>(RESPONSE_STATUS_WORDS_IN_BYTES));
 
             if (dataBytes >= 2U) {
-                uint16_t totalCertLen = ((uint16_t)response[0] << 8U) | response[1];
+                uint16_t totalCertLen = (static_cast<uint16_t>(response[0]) << 8U)
+                                      | static_cast<uint16_t>(response[1]);
 
                 if (totalCertLen <= CW_MANUF_CERT_MAX_BYTES) {
-                    uint8_t certInPage = dataBytes - 2U;
-                    if (certInPage > totalCertLen) { certInPage = (uint8_t)totalCertLen; }
-                    (void)CW_Utils::safe_memcpy(cert, CW_MANUF_CERT_MAX_BYTES, response + 2U, certInPage);
+                    uint16_t certInPage = static_cast<uint16_t>(dataBytes - 2U);
+                    if (certInPage > totalCertLen) {
+                        certInPage = totalCertLen;
+                    }
+                    (void)CW_Utils::safe_memcpy(cert, CW_MANUF_CERT_MAX_BYTES, response + 2U,
+                                                static_cast<size_t>(certInPage));
                     certLen = certInPage;
 
                     uint8_t pageIdx = 1U;
                     while ((certLen < totalCertLen) && (pageIdx < 8U)) {
                         apdu[APDU_P2_IDX] = pageIdx;
-                        responseLen = sizeof(response);
+                        responseLen = static_cast<uint16_t>(sizeof(response));
 
-                        if (!_driver.sendAPDU(apdu, sizeof(apdu), response, responseLen)) {
+                        if (!_driver.sendAPDULarge(apdu, static_cast<uint8_t>(sizeof(apdu)),
+                                                   response, responseLen)) {
                             break;
                         }
-                        if (responseLen > sizeof(response)) {
+                        if (responseLen > static_cast<uint16_t>(sizeof(response))) {
 #if CW_DEBUG_LOGGING
                             _logger.println(F("getManufacturerCertificate: driver reported overflow."));
 #endif
@@ -1077,13 +1088,20 @@ bool CW_SecureChannel::getManufacturerCertificate(uint8_t* cert, uint16_t& certL
                             break;
                         }
 
-                        uint8_t pageData = responseLen - RESPONSE_STATUS_WORDS_IN_BYTES;
-                        uint16_t remaining = totalCertLen - certLen;
-                        if (pageData > remaining) { pageData = (uint8_t)remaining; }
+                        uint16_t pageData = static_cast<uint16_t>(
+                            responseLen - static_cast<uint16_t>(RESPONSE_STATUS_WORDS_IN_BYTES));
+                        uint16_t remaining = static_cast<uint16_t>(totalCertLen - certLen);
+                        if (pageData > remaining) {
+                            pageData = remaining;
+                        }
 
-                        if ((certLen + pageData) > CW_MANUF_CERT_MAX_BYTES) { break; }
-                        (void)CW_Utils::safe_memcpy(cert + certLen, CW_MANUF_CERT_MAX_BYTES - static_cast<size_t>(certLen), response, pageData);
-                        certLen += pageData;
+                        if ((certLen + pageData) > static_cast<uint16_t>(CW_MANUF_CERT_MAX_BYTES)) {
+                            break;
+                        }
+                        (void)CW_Utils::safe_memcpy(cert + certLen,
+                                                    CW_MANUF_CERT_MAX_BYTES - static_cast<size_t>(certLen),
+                                                    response, static_cast<size_t>(pageData));
+                        certLen = static_cast<uint16_t>(certLen + pageData);
                         pageIdx++;
                     }
 

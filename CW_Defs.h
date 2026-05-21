@@ -72,8 +72,8 @@
 #define CW_CERT_KEY_NOT_FOUND         (0x14U)  /**< Device public key OID not found */
 
 /* Manufacturer certificate maximum buffer size (bytes).
- * Typical Cryptnox manufacturer certificates are 200–280 bytes. */
-#define CW_MANUF_CERT_MAX_BYTES       (400U)
+ * Actual Cryptnox Basic G1 manufacturer certificate is 411 bytes (0x019B). */
+#define CW_MANUF_CERT_MAX_BYTES       (420U)
 
 /******************************************************************
  * 3. CW_Curve enum
