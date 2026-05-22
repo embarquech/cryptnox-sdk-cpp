@@ -8,6 +8,7 @@
  * Constructor
  ******************************************************************/
 
+// cppcheck-suppress misra-c2012-12.3
 CryptnoxWallet::CryptnoxWallet(CW_NfcTransport& driver, CW_Logger& logger,
                                CW_CryptoProvider& crypto, CW_Platform& platform)
     : _logger(logger), _platform(platform), _secure(driver, logger, crypto, platform) {
