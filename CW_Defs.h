@@ -128,7 +128,9 @@ struct CW_SecureSession {
  ******************************************************************/
 
 /** Certificate chain verification is always enabled (SEC-004). */
-static const uint8_t CW_VERIFY_CERT = 1U;
+#ifndef CW_VERIFY_CERT
+#define CW_VERIFY_CERT 1
+#endif
 
 /**
  * Set to 1 to enable library-internal debug logging via CW_Logger.
