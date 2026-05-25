@@ -8,7 +8,7 @@
  * Constructor
  ******************************************************************/
 
-// cppcheck-suppress misra-c2012-12.3
+// cppcheck-suppress misra-c2012-12.3 -- C++: member initializer-list commas are not the comma operator
 CryptnoxWallet::CryptnoxWallet(CW_NfcTransport& driver, CW_Logger& logger,
                                CW_CryptoProvider& crypto, CW_Platform& platform)
     : _logger(logger), _platform(platform), _secure(driver, logger, crypto, platform) {

@@ -65,7 +65,7 @@ static uint8_t s_mfCertBuf[CW_MANUF_CERT_MAX_BYTES];
  * Constructor
  ******************************************************************/
 
-// cppcheck-suppress misra-c2012-12.3
+// cppcheck-suppress misra-c2012-12.3 -- C++: member initializer-list commas are not the comma operator
 CW_SecureChannel::CW_SecureChannel(CW_NfcTransport& driver,
                                    CW_Logger& logger,
                                    CW_CryptoProvider& crypto,
