@@ -6,6 +6,7 @@
  ******************************************************************/
 
 #include "platform_compat.h"
+#include "CW_Utils.h"
 
 /******************************************************************
  * 2. Constants / define declarations
@@ -72,11 +73,28 @@
 #define CW_CERT_KEY_NOT_FOUND         (0x14U)  /**< Device public key OID not found */
 
 /* Manufacturer certificate maximum buffer size (bytes).
- * Typical Cryptnox manufacturer certificates are 200–280 bytes. */
-#define CW_MANUF_CERT_MAX_BYTES       (400U)
+ * Actual Cryptnox Basic G1 manufacturer certificate is 411 bytes (0x019B). */
+#define CW_MANUF_CERT_MAX_BYTES       (420U)
 
 /******************************************************************
- * 3. CW_SecureSession struct
+ * 3. CW_Curve enum
+ ******************************************************************/
+
+/**
+ * @enum CW_Curve
+ * @brief Portable curve identifier used throughout the SDK.
+ *
+ * Replaces direct references to uECC_Curve_t at every API boundary so the
+ * abstract interfaces (CW_CryptoProvider, CW_SecureChannel) remain decoupled
+ * from any specific ECC back-end.
+ */
+enum CW_Curve {
+    CW_CURVE_SECP256R1 = 0,  /**< NIST P-256 / secp256r1 */
+    CW_CURVE_SECP256K1 = 1   /**< Koblitz secp256k1 */
+};
+
+/******************************************************************
+ * 4. CW_SecureSession struct
  ******************************************************************/
 
 /**
@@ -100,30 +118,41 @@ struct CW_SecureSession {
 
     /** @brief Securely clear all session keys and IV. */
     void clear() {
-        memset(aesKey, 0U, sizeof(aesKey));
-        memset(macKey, 0U, sizeof(macKey));
-        memset(iv, 0U, sizeof(iv));
+        CW_Utils::secure_wipe(aesKey, sizeof(aesKey));
+        CW_Utils::secure_wipe(macKey, sizeof(macKey));
+        CW_Utils::secure_wipe(iv,     sizeof(iv));
     }
 };
 
 /******************************************************************
- * 4. Compile-time feature flags
+ * 5. Compile-time feature flags
  ******************************************************************/
 
-/**
- * Set to 1 to enable certificate chain verification (adds SHA-256 + ~4 KB Flash).
- * Disabled by default to preserve Flash on resource-constrained boards.
- */
+/** Certificate chain verification is always enabled (SEC-004 / H-07).
+ * Building with -DCW_VERIFY_CERT=0 is a hard error — it disables the card
+ * authenticity gate and allows any forged key to be accepted. */
 #ifndef CW_VERIFY_CERT
-#  define CW_VERIFY_CERT 0
+#define CW_VERIFY_CERT 1
+#endif
+#if CW_VERIFY_CERT == 0
+#  error "CW_VERIFY_CERT=0 disables certificate chain verification (CRIT-02/H-07). " \
+         "Remove -DCW_VERIFY_CERT=0 from your build flags — this gate must never be disabled."
 #endif
 
 /**
  * Set to 1 to enable library-internal debug logging via CW_Logger.
  * Disabled by default to preserve Flash on resource-constrained boards.
+ * Must never be enabled in release/optimised builds — doing so leaks
+ * session state over UART (SEC-012).
  */
 #ifndef CW_DEBUG_LOGGING
 #  define CW_DEBUG_LOGGING 0
+#endif
+
+#if CW_DEBUG_LOGGING && defined(NDEBUG)
+#  error "CW_DEBUG_LOGGING=1 is set but NDEBUG is defined (release/optimised build). " \
+         "Debug logging must not ship in production firmware — it leaks session state " \
+         "over UART.  Remove -DCW_DEBUG_LOGGING=1 from your release build flags (SEC-012)."
 #endif
 
 #endif // CW_DEFS_H

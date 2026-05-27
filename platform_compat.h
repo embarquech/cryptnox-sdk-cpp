@@ -36,10 +36,6 @@
 class __FlashStringHelper {};
 #  define F(string_literal) (string_literal)
 
-#  ifndef delay
-static inline void delay(unsigned long /*ms*/) {}
-#  endif
-
 #endif /* ARDUINO / !ARDUINO */
 
 #endif /* PLATFORM_COMPAT_H */

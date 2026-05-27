@@ -6,6 +6,7 @@
  ******************************************************************/
 
 #include "platform_compat.h"
+#include <stdint.h>
 
 /******************************************************************
  * 2. Class declaration
@@ -44,6 +45,32 @@ public:
      */
     virtual bool sendAPDU(const uint8_t* apdu, uint8_t apduLen,
                           uint8_t* response, uint8_t& responseLen) = 0;
+
+    /**
+     * @brief Send an APDU and receive a response that may exceed 255 bytes.
+     *
+     * Used for APDUs whose DataOut can be larger than a uint8_t can express
+     * (e.g. GET_MANUFACTURER_CERTIFICATE returns up to 415 bytes).
+     * Implementations that cannot deliver more than 255 bytes may delegate
+     * to sendAPDU; the default below does exactly that.
+     *
+     * @param[in]     apdu        APDU command bytes.
+     * @param[in]     apduLen     Length of the APDU command.
+     * @param[out]    response    Buffer to receive the card response.
+     * @param[in,out] responseLen On entry: capacity of @p response.
+     *                            On exit: actual bytes written.
+     * @return true if the exchange succeeded, false otherwise.
+     */
+    virtual bool sendAPDULarge(const uint8_t* apdu, uint8_t apduLen,
+                               uint8_t* response, uint16_t& responseLen) {
+        uint8_t smallLen = static_cast<uint8_t>(
+            (responseLen > static_cast<uint16_t>(UINT8_MAX))
+                ? static_cast<uint16_t>(UINT8_MAX)
+                : responseLen);
+        bool result = sendAPDU(apdu, apduLen, response, smallLen);
+        responseLen = static_cast<uint16_t>(smallLen);
+        return result;
+    }
 
     /**
      * @brief Reset the NFC reader/field for the next card detection cycle.

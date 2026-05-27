@@ -8,8 +8,10 @@
  * Constructor
  ******************************************************************/
 
-CryptnoxWallet::CryptnoxWallet(CW_NfcTransport& driver, CW_Logger& logger, CW_CryptoProvider& crypto)
-    : _logger(logger), _secure(driver, logger, crypto) {
+// cppcheck-suppress misra-c2012-12.3 -- C++: member initializer-list commas are not the comma operator
+CryptnoxWallet::CryptnoxWallet(CW_NfcTransport& driver, CW_Logger& logger,
+                               CW_CryptoProvider& crypto, CW_Platform& platform)
+    : _logger(logger), _platform(platform), _secure(driver, logger, crypto, platform) {
 }
 
 /******************************************************************
@@ -26,26 +28,30 @@ bool CryptnoxWallet::begin() {
 
 bool CryptnoxWallet::connect(CW_SecureSession& session) {
     bool ret = false;
+    session.clear(); /* CRIT-04: clear any stale keys from a previous or partial session */
 
     for (uint8_t attempt = 0U; (attempt < CW_CONNECT_MAX_ATTEMPTS) && (ret == false); attempt++) {
         if (attempt > 0U) {
+            session.clear(); /* CRIT-04: clear partial keys left by a failed attempt before retrying */
 #if CW_DEBUG_LOGGING
             _logger.print(F("Retrying card connection (attempt "));
             _logger.print((uint8_t)(attempt + 1U));
             _logger.println(F(")..."));
 #endif
             _secure.resetReader();
-            /* On Arduino: delay() is the hardware delay.
-             * On non-Arduino: platform_compat.h provides a no-op stub. */
-            delay(200);
+            _platform.sleep_ms(200U);
         }
 
         if (_secure.inListPassiveTarget()) {
-            delay(200);
+            _platform.sleep_ms(200U);
             if (establishSecureChannel(session)) {
                 ret = true;
             }
         }
+    }
+
+    if (!ret) {
+        session.clear(); /* CRIT-04: clear any partial keys from the final failed attempt */
     }
 
     return ret;
@@ -54,64 +60,82 @@ bool CryptnoxWallet::connect(CW_SecureSession& session) {
 bool CryptnoxWallet::establishSecureChannel(CW_SecureSession& session) {
     bool ret = false;
 
+    /* Declare all sensitive stack buffers at function entry so they can be
+     * wiped on every exit path (H-01, M-02). */
+    uint8_t cardCertificate[146U]      = { 0U };
+    uint8_t cardCertificateLength      = 0U;
+    uint8_t cardEphemeralPubKey[64U]   = { 0U };
+    uint8_t openSecureChannelSalt[32U] = { 0U };
+    uint8_t clientPrivateKey[32U]      = { 0U };
+    uint8_t clientPublicKey[64U]       = { 0U };
+    CW_Curve sessionCurve              = CW_CURVE_SECP256R1;
+
     if (_secure.selectApdu()) {
-        uint8_t cardCertificate[146U];
-        uint8_t cardCertificateLength = 0U;
-
-        if (_secure.getCardCertificate(cardCertificate, cardCertificateLength)) {
-#if CW_VERIFY_CERT
-            uint8_t certResult = _secure.verifyCertificateChain(cardCertificate,
-                                                                cardCertificateLength);
-            if (certResult != CW_CERT_OK) {
+        /* Fetch the manufacturer certificate BEFORE getCardCertificate().
+         * The Cryptnox card state machine advances after GET_CARD_CERTIFICATE
+         * (INS=F8) and will not respond to GET_MANUFACTURER_CERTIFICATE (INS=F7)
+         * after that point.  Pre-fetching here caches the cert inside
+         * CW_SecureChannel so that verifyCertificateChain() can use it without
+         * issuing another APDU. */
+        if (!_secure.preFetchManufacturerCert()) {
 #if CW_DEBUG_LOGGING
-                _logger.print(F("Card authenticity check failed (code 0x"));
-                _logger.print(certResult, HEX);
-                _logger.println(F("). Aborting."));
+            _logger.println(F("Failed to pre-fetch manufacturer certificate"));
 #endif
-                return false;
-            }
-#endif /* CW_VERIFY_CERT */
-
-            uint8_t cardEphemeralPubKey[64U];
-            if (_secure.extractCardEphemeralKey(cardCertificate, cardEphemeralPubKey)) {
-                uint8_t openSecureChannelSalt[32U];
-                uint8_t clientPrivateKey[32U];
-                uint8_t clientPublicKey[64U];
-                const uECC_Curve_t* sessionCurve = uECC_secp256r1();
-                if (_secure.openSecureChannel(openSecureChannelSalt, clientPublicKey,
-                                              clientPrivateKey, sessionCurve)) {
-                    if (_secure.mutuallyAuthenticate(session, openSecureChannelSalt,
-                                                    clientPublicKey, clientPrivateKey,
-                                                    sessionCurve, cardEphemeralPubKey)) {
+        } else {
+            if (_secure.getCardCertificate(cardCertificate, cardCertificateLength)) {
+                uint8_t certResult = _secure.verifyCertificateChain(cardCertificate,
+                                                                    cardCertificateLength);
+                if (certResult != CW_CERT_OK) {
 #if CW_DEBUG_LOGGING
-                        _logger.println(F("Secure channel established"));
+                    _logger.print(F("Card authenticity check failed (code 0x"));
+                    _logger.print(certResult, HEX);
+                    _logger.println(F("). Aborting."));
 #endif
-                        ret = true;
+                } else {
+                    if (_secure.extractCardEphemeralKey(cardCertificate, cardEphemeralPubKey)) {
+                        if (_secure.openSecureChannel(openSecureChannelSalt, clientPublicKey,
+                                                      clientPrivateKey, sessionCurve)) {
+                            if (_secure.mutuallyAuthenticate(session, openSecureChannelSalt,
+                                                            clientPublicKey, clientPrivateKey,
+                                                            sessionCurve, cardEphemeralPubKey)) {
+#if CW_DEBUG_LOGGING
+                                _logger.println(F("Secure channel established"));
+#endif
+                                ret = true;
+                            } else {
+#if CW_DEBUG_LOGGING
+                                _logger.println(F("Mutual authentication failed"));
+#endif
+                            }
+                        } else {
+#if CW_DEBUG_LOGGING
+                            _logger.println(F("Failed to open secure channel"));
+#endif
+                        }
                     } else {
 #if CW_DEBUG_LOGGING
-                        _logger.println(F("Mutual authentication failed"));
+                        _logger.println(F("Failed to extract card ephemeral key"));
 #endif
                     }
-                } else {
-#if CW_DEBUG_LOGGING
-                    _logger.println(F("Failed to open secure channel"));
-#endif
                 }
             } else {
 #if CW_DEBUG_LOGGING
-                _logger.println(F("Failed to extract card ephemeral key"));
+                _logger.println(F("Failed to get card certificate"));
 #endif
             }
-        } else {
-#if CW_DEBUG_LOGGING
-            _logger.println(F("Failed to get card certificate"));
-#endif
-        }
+        } /* end preFetchManufacturerCert else */
     } else {
 #if CW_DEBUG_LOGGING
         _logger.println(F("Failed to select Cryptnox application"));
 #endif
     }
+
+    /* Wipe all sensitive ephemeral key material on every exit path (H-01, M-02). */
+    CW_Utils::secure_wipe(clientPrivateKey,      sizeof(clientPrivateKey));
+    CW_Utils::secure_wipe(openSecureChannelSalt, sizeof(openSecureChannelSalt));
+    CW_Utils::secure_wipe(clientPublicKey,       sizeof(clientPublicKey));
+    CW_Utils::secure_wipe(cardEphemeralPubKey,   sizeof(cardEphemeralPubKey));
+    CW_Utils::secure_wipe(cardCertificate,       sizeof(cardCertificate));
 
     return ret;
 }
@@ -191,9 +215,10 @@ bool CryptnoxWallet::verifyPin(CW_SecureSession& session, const uint8_t* pin, ui
     }
     else {
         uint8_t paddedPin[CW_MAX_PIN_LENGTH] = { 0U };
-        memcpy(paddedPin, pin, pinLength);
+        (void)CW_Utils::safe_memcpy(paddedPin, sizeof(paddedPin), pin, pinLength);
         uint8_t apdu[] = { 0x80U, 0x20U, 0x00U, 0x00U };
         ret = _secure.aesCbcEncrypt(session, apdu, sizeof(apdu), paddedPin, CW_MAX_PIN_LENGTH);
+        CW_Utils::secure_wipe(paddedPin, sizeof(paddedPin));
     }
     return ret;
 }
@@ -268,6 +293,8 @@ CW_SignResult CryptnoxWallet::sign(CW_SignRequest& request) {
                 result.errorCode = CW_OK;
             }
         }
+        CW_Utils::secure_wipe(data, sizeof(data));
+        CW_Utils::secure_wipe(derResponse, sizeof(derResponse));
     }
 
     return result;
@@ -295,10 +322,10 @@ bool CryptnoxWallet::parseDerSignature(const uint8_t* der, uint8_t derLength,
             pos++;
             rLength = der[pos];
             pos++;
-            if ((pos + rLength) > derLength) {
+            if ((rLength > 33U) || ((pos + rLength) > derLength)) {
             }
             else {
-                memcpy(r, der + pos, rLength);
+                (void)CW_Utils::safe_memcpy(r, 33U, der + pos, rLength);
                 pos += rLength;
 
                 if ((pos >= derLength) || (der[pos] != CW_DER_TAG_INTEGER)) {
@@ -307,10 +334,10 @@ bool CryptnoxWallet::parseDerSignature(const uint8_t* der, uint8_t derLength,
                     pos++;
                     sLength = der[pos];
                     pos++;
-                    if ((pos + sLength) > derLength) {
+                    if ((sLength > 33U) || ((pos + sLength) > derLength)) {
                     }
                     else {
-                        memcpy(s, der + pos, sLength);
+                        (void)CW_Utils::safe_memcpy(s, 33U, der + pos, sLength);
                         ret = true;
                     }
                 }
@@ -388,12 +415,13 @@ bool CryptnoxWallet::validateSignRequest(const CW_SignRequest& request, CW_SignR
 
 void CryptnoxWallet::buildSignPayload(const CW_SignRequest& request,
                                        uint8_t* data, uint16_t& dataLength) {
+    const size_t kDataBufSize = static_cast<size_t>(CW_HASH_SIZE) + static_cast<size_t>(CW_MAX_DERIVE_PATH_LENGTH) + static_cast<size_t>(CW_MAX_PIN_LENGTH);
     dataLength = request.hashLength;
-    memcpy(data, request.hash, request.hashLength);
+    (void)CW_Utils::safe_memcpy(data, kDataBufSize, request.hash, request.hashLength);
 
     if ((request.keyType == CW_SIGN_DERIVE_K1 || request.keyType == CW_SIGN_DERIVE_R1) &&
         (request.derivePath != NULL) && (request.derivePathLength > 0U)) {
-        memcpy(data + dataLength, request.derivePath, request.derivePathLength);
+        (void)CW_Utils::safe_memcpy(data + dataLength, kDataBufSize - static_cast<size_t>(dataLength), request.derivePath, request.derivePathLength);
         dataLength += request.derivePathLength;
     }
 
@@ -404,7 +432,7 @@ void CryptnoxWallet::buildSignPayload(const CW_SignRequest& request,
             pinLength++;
         }
         if (pinLength > 0U) {
-            memcpy(data + dataLength, request.pin, CW_MAX_PIN_LENGTH);
+            (void)CW_Utils::safe_memcpy(data + dataLength, kDataBufSize - static_cast<size_t>(dataLength), request.pin, CW_MAX_PIN_LENGTH);
             dataLength += CW_MAX_PIN_LENGTH;
         }
     }
@@ -474,7 +502,7 @@ bool CryptnoxWallet::extractRawSignature(const uint8_t* derResponse, uint16_t de
                     uint8_t rDstLen = 32U;
                     if ((rLen == 33U) && (r[0] == 0x00U)) { rSrc = 1U; rLen = 32U; }
                     if (rLen <= rDstLen) {
-                        memcpy(result.signature + (rDstLen - rLen), r + rSrc, rLen);
+                        (void)CW_Utils::safe_memcpy(result.signature + (rDstLen - rLen), static_cast<size_t>(rDstLen + rLen), r + rSrc, rLen);
                     }
                 }
 
@@ -483,12 +511,14 @@ bool CryptnoxWallet::extractRawSignature(const uint8_t* derResponse, uint16_t de
                     uint8_t sDstLen = 32U;
                     if ((sLen == 33U) && (s[0] == 0x00U)) { sSrc = 1U; sLen = 32U; }
                     if (sLen <= sDstLen) {
-                        memcpy(result.signature + 32U + (sDstLen - sLen), s + sSrc, sLen);
+                        (void)CW_Utils::safe_memcpy(result.signature + 32U + (sDstLen - sLen), static_cast<size_t>(sLen), s + sSrc, sLen);
                     }
                 }
 
                 ret = true;
             }
+            CW_Utils::secure_wipe(r, sizeof(r));
+            CW_Utils::secure_wipe(s, sizeof(s));
         }
     }
 
