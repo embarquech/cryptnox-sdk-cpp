@@ -6,6 +6,7 @@
  ******************************************************************/
 
 #include "platform_compat.h"
+#include "CW_Utils.h"
 
 /******************************************************************
  * 2. Constants / define declarations
@@ -115,14 +116,11 @@ struct CW_SecureSession {
         memset(iv, 0U, sizeof(iv));
     }
 
-    /** @brief Securely clear all session keys and IV (H-02: volatile barrier prevents dead-store elimination). */
+    /** @brief Securely clear all session keys and IV. */
     void clear() {
-        volatile uint8_t* p = aesKey;
-        for (uint8_t i = 0U; i < CW_AESKEY_SIZE; i++) { p[i] = 0U; }
-        p = macKey;
-        for (uint8_t i = 0U; i < CW_MACKEY_SIZE; i++) { p[i] = 0U; }
-        p = iv;
-        for (uint8_t i = 0U; i < CW_IV_SIZE; i++) { p[i] = 0U; }
+        CW_Utils::secure_wipe(aesKey, sizeof(aesKey));
+        CW_Utils::secure_wipe(macKey, sizeof(macKey));
+        CW_Utils::secure_wipe(iv,     sizeof(iv));
     }
 };
 
