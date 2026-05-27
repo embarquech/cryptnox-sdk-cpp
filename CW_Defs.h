@@ -115,11 +115,14 @@ struct CW_SecureSession {
         memset(iv, 0U, sizeof(iv));
     }
 
-    /** @brief Securely clear all session keys and IV. */
+    /** @brief Securely clear all session keys and IV (H-02: volatile barrier prevents dead-store elimination). */
     void clear() {
-        memset(aesKey, 0U, sizeof(aesKey));
-        memset(macKey, 0U, sizeof(macKey));
-        memset(iv, 0U, sizeof(iv));
+        volatile uint8_t* p = aesKey;
+        for (uint8_t i = 0U; i < CW_AESKEY_SIZE; i++) { p[i] = 0U; }
+        p = macKey;
+        for (uint8_t i = 0U; i < CW_MACKEY_SIZE; i++) { p[i] = 0U; }
+        p = iv;
+        for (uint8_t i = 0U; i < CW_IV_SIZE; i++) { p[i] = 0U; }
     }
 };
 
@@ -127,9 +130,15 @@ struct CW_SecureSession {
  * 5. Compile-time feature flags
  ******************************************************************/
 
-/** Certificate chain verification is always enabled (SEC-004). */
+/** Certificate chain verification is always enabled (SEC-004 / H-07).
+ * Building with -DCW_VERIFY_CERT=0 is a hard error — it disables the card
+ * authenticity gate and allows any forged key to be accepted. */
 #ifndef CW_VERIFY_CERT
 #define CW_VERIFY_CERT 1
+#endif
+#if CW_VERIFY_CERT == 0
+#  error "CW_VERIFY_CERT=0 disables certificate chain verification (CRIT-02/H-07). " \
+         "Remove -DCW_VERIFY_CERT=0 from your build flags — this gate must never be disabled."
 #endif
 
 /**

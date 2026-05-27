@@ -986,6 +986,11 @@ bool CW_SecureChannel::parseDerSigToRaw(const uint8_t* der, uint8_t derLen,
                         return false;
                     }
                     if ((pos + sLen) <= derLen) {
+                        /* M-06: verify sum of both INTEGER fields matches the outer SEQUENCE length.
+                         * Trailing garbage after s would indicate malformed/crafted DER. */
+                        if ((pos + sLen) != (uint8_t)(2U + der[1])) {
+                            return false;
+                        }
                         const uint8_t* sPtr = der + pos;
 
                         memset(raw64, 0U, 64U);
@@ -1248,7 +1253,7 @@ uint8_t CW_SecureChannel::verifyCertificateChain(const uint8_t* cardCert,
 
     if (result == CW_CERT_OK) {
         if ((cardCertLen <= (1U + CW_CERT_NONCE_SIZE)) ||
-            (memcmp(cardCert + 1U, _lastNonce, CW_CERT_NONCE_SIZE) != 0)) {
+            (!CW_Utils::secure_compare(cardCert + 1U, _lastNonce, CW_CERT_NONCE_SIZE))) { /* M-03: constant-time nonce compare */
 #if CW_DEBUG_LOGGING
             _logger.println(F("verifyCert: nonce mismatch — possible replay."));
 #endif
@@ -1261,6 +1266,9 @@ uint8_t CW_SecureChannel::verifyCertificateChain(const uint8_t* cardCert,
         _logger.println(F("Certificate chain OK. Card is genuine."));
     }
 #endif
+
+    /* Wipe manufacturer cert buffer — it held the card device public key (M-01). */
+    CW_Utils::secure_wipe(s_mfCertBuf, sizeof(s_mfCertBuf));
 
     return result;
 }

@@ -60,6 +60,16 @@ bool CryptnoxWallet::connect(CW_SecureSession& session) {
 bool CryptnoxWallet::establishSecureChannel(CW_SecureSession& session) {
     bool ret = false;
 
+    /* Declare all sensitive stack buffers at function entry so they can be
+     * wiped on every exit path (H-01, M-02). */
+    uint8_t cardCertificate[146U]      = { 0U };
+    uint8_t cardCertificateLength      = 0U;
+    uint8_t cardEphemeralPubKey[64U]   = { 0U };
+    uint8_t openSecureChannelSalt[32U] = { 0U };
+    uint8_t clientPrivateKey[32U]      = { 0U };
+    uint8_t clientPublicKey[64U]       = { 0U };
+    CW_Curve sessionCurve              = CW_CURVE_SECP256R1;
+
     if (_secure.selectApdu()) {
         /* Fetch the manufacturer certificate BEFORE getCardCertificate().
          * The Cryptnox card state machine advances after GET_CARD_CERTIFICATE
@@ -72,61 +82,60 @@ bool CryptnoxWallet::establishSecureChannel(CW_SecureSession& session) {
             _logger.println(F("Failed to pre-fetch manufacturer certificate"));
 #endif
         } else {
-        uint8_t cardCertificate[146U];
-        uint8_t cardCertificateLength = 0U;
-
-        if (_secure.getCardCertificate(cardCertificate, cardCertificateLength)) {
-            uint8_t certResult = _secure.verifyCertificateChain(cardCertificate,
-                                                                cardCertificateLength);
-            if (certResult != CW_CERT_OK) {
+            if (_secure.getCardCertificate(cardCertificate, cardCertificateLength)) {
+                uint8_t certResult = _secure.verifyCertificateChain(cardCertificate,
+                                                                    cardCertificateLength);
+                if (certResult != CW_CERT_OK) {
 #if CW_DEBUG_LOGGING
-                _logger.print(F("Card authenticity check failed (code 0x"));
-                _logger.print(certResult, HEX);
-                _logger.println(F("). Aborting."));
+                    _logger.print(F("Card authenticity check failed (code 0x"));
+                    _logger.print(certResult, HEX);
+                    _logger.println(F("). Aborting."));
 #endif
-            } else {
-                uint8_t cardEphemeralPubKey[64U];
-                if (_secure.extractCardEphemeralKey(cardCertificate, cardEphemeralPubKey)) {
-                    uint8_t openSecureChannelSalt[32U];
-                    uint8_t clientPrivateKey[32U];
-                    uint8_t clientPublicKey[64U];
-                    CW_Curve sessionCurve = CW_CURVE_SECP256R1;
-                    if (_secure.openSecureChannel(openSecureChannelSalt, clientPublicKey,
-                                                  clientPrivateKey, sessionCurve)) {
-                        if (_secure.mutuallyAuthenticate(session, openSecureChannelSalt,
-                                                        clientPublicKey, clientPrivateKey,
-                                                        sessionCurve, cardEphemeralPubKey)) {
+                } else {
+                    if (_secure.extractCardEphemeralKey(cardCertificate, cardEphemeralPubKey)) {
+                        if (_secure.openSecureChannel(openSecureChannelSalt, clientPublicKey,
+                                                      clientPrivateKey, sessionCurve)) {
+                            if (_secure.mutuallyAuthenticate(session, openSecureChannelSalt,
+                                                            clientPublicKey, clientPrivateKey,
+                                                            sessionCurve, cardEphemeralPubKey)) {
 #if CW_DEBUG_LOGGING
-                            _logger.println(F("Secure channel established"));
+                                _logger.println(F("Secure channel established"));
 #endif
-                            ret = true;
+                                ret = true;
+                            } else {
+#if CW_DEBUG_LOGGING
+                                _logger.println(F("Mutual authentication failed"));
+#endif
+                            }
                         } else {
 #if CW_DEBUG_LOGGING
-                            _logger.println(F("Mutual authentication failed"));
+                            _logger.println(F("Failed to open secure channel"));
 #endif
                         }
                     } else {
 #if CW_DEBUG_LOGGING
-                        _logger.println(F("Failed to open secure channel"));
+                        _logger.println(F("Failed to extract card ephemeral key"));
 #endif
                     }
-                } else {
-#if CW_DEBUG_LOGGING
-                    _logger.println(F("Failed to extract card ephemeral key"));
-#endif
                 }
-            }
-        } else {
+            } else {
 #if CW_DEBUG_LOGGING
-            _logger.println(F("Failed to get card certificate"));
+                _logger.println(F("Failed to get card certificate"));
 #endif
-        }
+            }
         } /* end preFetchManufacturerCert else */
     } else {
 #if CW_DEBUG_LOGGING
         _logger.println(F("Failed to select Cryptnox application"));
 #endif
     }
+
+    /* Wipe all sensitive ephemeral key material on every exit path (H-01, M-02). */
+    CW_Utils::secure_wipe(clientPrivateKey,      sizeof(clientPrivateKey));
+    CW_Utils::secure_wipe(openSecureChannelSalt, sizeof(openSecureChannelSalt));
+    CW_Utils::secure_wipe(clientPublicKey,       sizeof(clientPublicKey));
+    CW_Utils::secure_wipe(cardEphemeralPubKey,   sizeof(cardEphemeralPubKey));
+    CW_Utils::secure_wipe(cardCertificate,       sizeof(cardCertificate));
 
     return ret;
 }
