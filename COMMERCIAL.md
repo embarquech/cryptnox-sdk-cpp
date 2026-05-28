@@ -28,7 +28,7 @@ A commercial license is required in the following situations:
 - When modifications to the SDK are made and the publisher does not wish to release these modifications as required under the LGPLv3  
 - When a proprietary licensing framework, commercial guarantees, or dedicated support are required
 
-For standard Python usage through regular imports, the LGPLv3 terms generally permit integration into proprietary software, provided all conditions of the license are strictly met.
+For standard C/C++ usage where the SDK is linked against an end application — dynamically (shared library) or statically — the LGPLv3 terms generally permit integration into proprietary software, provided all conditions of the license are strictly met (notably the user's ability to relink the application against a modified version of the SDK).
 
 ---
 
@@ -61,7 +61,7 @@ These conditions apply to both open-source and proprietary software.
 
 | License type           | Permitted use                                               | Obligations                                 |
 |------------------------|-------------------------------------------------------------|----------------------------------------------|
-| **LGPLv3**             | Integration via standard Python imports, including proprietary software | Compliance with all LGPLv3 terms             |
+| **LGPLv3**             | Integration via dynamic or static linking, including into proprietary software | Compliance with all LGPLv3 terms             |
 | **Commercial license** | Any use outside the scope of the LGPLv3                     | No LGPL obligations                           |
 
 ---
