@@ -3,6 +3,16 @@
  * Copyright (c) 2026 Cryptnox SA
  */
 
+/**
+ * @file CryptnoxWallet.cpp
+ * @brief Implementation of the high-level CryptnoxWallet API.
+ *
+ * Coordinates the secure channel layer (@ref CW_SecureChannel) with the
+ * higher-level wallet operations declared in @ref CryptnoxWallet.h. Handles
+ * connection retries, sensitive buffer wiping on every exit path, PIN/sign
+ * payload assembly, and DER signature parsing.
+ */
+
 /* NOTE: Do NOT include <Arduino.h> here — this is a platform-independent file.
  * Arduino compatibility shims (F(), HEX, delay) are provided via
  * platform_compat.h which is pulled in transitively through CryptnoxWallet.h. */

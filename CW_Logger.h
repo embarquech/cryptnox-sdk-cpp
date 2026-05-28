@@ -3,6 +3,21 @@
  * Copyright (c) 2026 Cryptnox SA
  */
 
+/**
+ * @file CW_Logger.h
+ * @brief Abstract logging interface.
+ *
+ * Declares @ref CW_Logger, the contract that any concrete output sink
+ * (UART, USB CDC, stdout, syslog, network, …) must implement so the SDK
+ * remains independent of the host platform's logging facility.
+ *
+ * The Arduino-style print/println overloads keep `F("...")`-quoted string
+ * literals in flash on Arduino targets; on non-Arduino targets `F()` is
+ * the identity macro (see @ref platform_compat.h).
+ *
+ * One of the three adapter interfaces a host integration must provide.
+ */
+
 #ifndef CW_LOGGER_H
 #define CW_LOGGER_H
 
@@ -18,6 +33,7 @@
 
 /**
  * @class CW_Logger
+ * @ingroup adapters
  * @brief Abstract interface for serial/debug output.
  *
  * Provides a hardware-agnostic logging contract so that higher-level

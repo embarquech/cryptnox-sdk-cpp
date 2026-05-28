@@ -3,6 +3,23 @@
  * Copyright (c) 2026 Cryptnox SA
  */
 
+/**
+ * @file CryptnoxWallet.h
+ * @brief High-level API for interacting with a Cryptnox Hardware Wallet over NFC.
+ *
+ * Declares @ref CryptnoxWallet, the main entry point for application code.
+ * The class wires together the four abstract adapters supplied by the host
+ * integration (NFC transport, crypto provider, logger, platform) and exposes
+ * the wallet operations: card connection, secure channel establishment,
+ * card info retrieval, PIN verification, transaction signing, and user-data
+ * writing.
+ *
+ * @see CW_NfcTransport
+ * @see CW_CryptoProvider
+ * @see CW_Logger
+ * @see CW_Platform
+ */
+
 #ifndef CRYPTNOXWALLET_H
 #define CRYPTNOXWALLET_H
 
@@ -29,6 +46,7 @@
 
 /**
  * @struct CW_CardInfo
+ * @ingroup api
  * @brief Subset of the Cryptnox card info returned by APDU 0x80FA0000.
  *
  * Mirrors the fields the Python SDK exposes as @c card._owner: ASCII name
@@ -46,19 +64,31 @@ struct CW_CardInfo {
 
 /**
  * @struct CW_SignRequest
- * @brief Request parameters for the sign operation.
+ * @ingroup api
+ * @brief Request parameters for @ref CryptnoxWallet::sign.
+ *
+ * Owns the PIN buffer for the lifetime of the request — the destructor
+ * securely wipes it (@ref CW_Utils::secure_wipe), so allocating the request
+ * on the stack inside a tight scope is the recommended pattern.
  */
 struct CW_SignRequest {
-    CW_SecureSession& session;       /**< Reference to a valid secure session */
-    uint8_t keyType;                 /**< Key / path type (e.g. CW_SIGN_CURR_K1) */
-    uint8_t signatureType;           /**< Signature type (e.g. CW_SIGN_SIG_ECDSA_LOW_S) */
-    uint8_t pin[CW_MAX_PIN_LENGTH];  /**< PIN bytes (4–9 ASCII digits) */
-    bool pinLessMode;                /**< false = PIN path, true = PIN-less path */
-    const uint8_t* hash;             /**< Pointer to the hash to sign (32 bytes) */
-    uint8_t hashLength;              /**< Length of the hash in bytes */
-    const uint8_t* derivePath;       /**< BIP32 path bytes for DERIVE modes (NULL for CURR) */
-    uint8_t derivePathLength;        /**< Length of derivePath (must be a multiple of 4) */
+    CW_SecureSession& session;       /**< Reference to an open secure session. */
+    uint8_t keyType;                 /**< Key / path type — one of the @c CW_SIGN_CURR_*, @c CW_SIGN_DERIVE_*, @c CW_SIGN_PINLESS_K1 constants. */
+    uint8_t signatureType;           /**< Signature format — one of @c CW_SIGN_SIG_ECDSA_LOW_S, @c CW_SIGN_SIG_ECDSA_EOSIO, @c CW_SIGN_SIG_SCHNORR_BIP340. */
+    uint8_t pin[CW_MAX_PIN_LENGTH];  /**< PIN bytes (4–9 ASCII digits). Zero-padded; cleared in the destructor. */
+    bool pinLessMode;                /**< false = PIN path, true = PIN-less path (requires @c keyType == @ref CW_SIGN_PINLESS_K1). */
+    const uint8_t* hash;             /**< Pointer to the hash to sign (typically 32 bytes — SHA-256 of the transaction). */
+    uint8_t hashLength;              /**< Length of @c hash in bytes (must be ≤ @ref CW_HASH_SIZE). */
+    const uint8_t* derivePath;       /**< BIP32 path bytes for DERIVE modes; @c NULL for CURR / PINLESS modes. */
+    uint8_t derivePathLength;        /**< Length of @c derivePath in bytes (must be a multiple of 4). */
 
+    /**
+     * @brief Construct a sign request with sensible defaults.
+     * @param[in] sess    Open secure session.
+     * @param[in] kType   Key type. Defaults to @ref CW_SIGN_CURR_K1.
+     * @param[in] sigType Signature type. Defaults to @ref CW_SIGN_SIG_ECDSA_LOW_S.
+     * @param[in] pinless PIN mode. Defaults to PIN required (@ref CW_SIGN_WITH_PIN).
+     */
     explicit CW_SignRequest(CW_SecureSession& sess,
                             uint8_t kType   = CW_SIGN_CURR_K1,
                             uint8_t sigType = CW_SIGN_SIG_ECDSA_LOW_S,
@@ -69,6 +99,7 @@ struct CW_SignRequest {
         memset(pin, 0U, sizeof(pin));
     }
 
+    /** @brief Securely wipes the PIN buffer. */
     ~CW_SignRequest() {
         CW_Utils::secure_wipe(pin, sizeof(pin));
     }
@@ -76,12 +107,17 @@ struct CW_SignRequest {
 
 /**
  * @struct CW_SignResult
- * @brief Result of the sign operation.
+ * @brief Result of @ref CryptnoxWallet::sign.
+ *
+ * The error code is checked first: when it is @ref CW_OK the signature is
+ * valid raw (r || s) on secp256k1 / secp256r1 (depending on the
+ * @c keyType used). On any other code @c signature is left zero.
  */
 struct CW_SignResult {
-    uint8_t signature[CW_RAW_SIGNATURE_SIZE]; /**< Raw signature (r[32] + s[32]) */
-    uint8_t errorCode;                        /**< Error code (CW_OK on success) */
+    uint8_t signature[CW_RAW_SIGNATURE_SIZE]; /**< Raw 64-byte signature: r[32] || s[32]. Zero on failure. */
+    uint8_t errorCode;                        /**< @ref CW_OK on success, otherwise a @c CW_SIGN_* / @c CW_INVALID_SESSION code. */
 
+    /** @brief Construct a default-failure result. */
     CW_SignResult() : errorCode(CW_NOK) {
         memset(signature, 0U, sizeof(signature));
     }
@@ -93,14 +129,33 @@ struct CW_SignResult {
 
 /**
  * @class CryptnoxWallet
- * @brief High-level interface for interacting with a Cryptnox smart card over NFC.
+ * @ingroup api
+ * @brief High-level interface for interacting with a Cryptnox Hardware Wallet over NFC.
  *
  * Manages card connection, secure channel establishment (delegated to
- * CW_SecureChannel), PIN verification, signing, and user data writing.
+ * @ref CW_SecureChannel), PIN verification, transaction signing, user-data
+ * writing, and card-info retrieval.
  *
- * Dependencies are injected by the caller. CryptnoxWallet interfaces
- * exclusively with CW_SecureChannel (Secure Stack) and CW_Logger (Logging),
- * keeping this class platform-independent.
+ * Dependencies are injected by the caller via the constructor. The class
+ * itself only talks to the four abstract adapters, keeping the
+ * implementation platform-independent.
+ *
+ * @par Typical lifecycle
+ * @code
+ * CryptnoxWallet wallet(transport, logger, crypto, platform);
+ * wallet.begin();
+ *
+ * CW_SecureSession session;
+ * if (wallet.connect(session)) {
+ *     wallet.verifyPin(session, pin, pinLen);
+ *     wallet.sign(req);
+ * }
+ * wallet.disconnect(session);   // mandatory — even on connect() failure
+ * @endcode
+ *
+ * @note Single-shot use — the class is non-copyable. Reuse the same
+ *       @ref CryptnoxWallet instance across multiple card sessions; do not
+ *       construct one per APDU.
  */
 class CryptnoxWallet {
 public:
@@ -127,27 +182,52 @@ public:
     /**
      * @brief Connect to the Cryptnox card and establish a secure channel.
      *
-     * Retries the full card activation sequence up to CW_CONNECT_MAX_ATTEMPTS times.
+     * Retries the full card activation sequence up to @c CW_CONNECT_MAX_ATTEMPTS
+     * times. On any failure (including transient transport errors) the session
+     * is securely wiped before the next attempt so no partial key material
+     * can survive a retry (CRIT-04).
      *
-     * @param[out] session Secure session to populate with keys and IV.
-     * @return true on success, false otherwise.
+     * @param[out] session Secure session to populate with derived keys and IV
+     *                     on success; left zero-wiped on failure.
+     * @return true if the secure channel was established and @p session is
+     *         ready for use, false otherwise.
+     *
+     * @post On true: @p session holds valid Kenc / Kmac / IV.
+     * @post On false: @p session is zero-wiped.
+     * @warning Always call @ref disconnect() after this — even on failure — to
+     *          release the reader for the next card cycle.
      */
     bool connect(CW_SecureSession& session);
 
     /**
      * @brief Establish a secure channel (SELECT → certificate → ECDH → mutual auth).
+     *
+     * Lower-level than @ref connect(): runs the full activation sequence once,
+     * without the retry loop. Used internally by @ref connect(); exposed for
+     * advanced callers that handle retry policy themselves.
+     *
      * @param[out] session Secure session to populate.
-     * @return true on success, false otherwise.
+     * @return true if mutual authentication succeeded, false if any step of
+     *         the activation sequence (SELECT, certificate chain verification,
+     *         ECDH, MAC check) failed.
+     *
+     * @warning All sensitive ephemeral key material is wiped from the stack
+     *          on every exit path (H-01, M-02).
      */
     bool establishSecureChannel(CW_SecureSession& session);
 
     /**
      * @brief Disconnect and securely clear the session.
      *
-     * MUST be called at the end of each card processing iteration,
-     * even if connect() failed, to reset the reader for next use.
+     * Wipes any session keys and resets the NFC reader so the next card
+     * detection cycle starts from a clean state.
      *
-     * @param[in,out] session Session to clear.
+     * @param[in,out] session Session to clear. Safe to pass a never-connected
+     *                        or partially-connected session.
+     *
+     * @pre Must be called at the end of every card-processing iteration —
+     *      including iterations where @ref connect() failed — otherwise the
+     *      NFC reader may remain in an unresponsive state.
      */
     void disconnect(CW_SecureSession& session);
 
@@ -165,21 +245,55 @@ public:
     bool getCardInfo(CW_SecureSession& session, CW_CardInfo* info = NULL);
 
     /**
-     * @brief Verify the PIN code on the smart card.
+     * @brief Verify the PIN code on the card.
+     *
+     * Sends an encrypted VERIFY PIN APDU. The card maintains a try counter:
+     * every wrong attempt decrements it, and reaching zero locks the PIN
+     * permanently until a successful PUK / re-initialisation flow.
      *
      * @param[in,out] session   Valid secure session.
      * @param[in]     pin       PIN bytes (ASCII digits, 4–9 characters).
-     * @param[in]     pinLength Length of the PIN.
-     * @return true if the card accepted the PIN (status word 0x9000), false on
-     *         wrong PIN, closed/invalid session, or transport/MAC failure.
+     * @param[in]     pinLength Length of the PIN (must be in
+     *                          [@ref CW_MIN_PIN_LENGTH, @ref CW_MAX_PIN_LENGTH]).
+     * @return true if the card accepted the PIN, false on wrong PIN, closed
+     *         or invalid session, length out of range, or transport / MAC
+     *         failure.
+     *
+     * @warning Each failed attempt decrements the card's PIN counter. Treat
+     *          a false return as "wrong PIN" only after confirming session
+     *          validity — a transport glitch should not be retried with a
+     *          new PIN.
      */
     bool verifyPin(CW_SecureSession& session, const uint8_t* pin, uint8_t pinLength);
 
     /**
-     * @brief Sign a hash using the card's stored key.
+     * @brief Sign a 32-byte digest using a card-resident key.
      *
-     * @param[in] request Sign parameters (session, keyType, signatureType, hash, PIN).
-     * @return CW_SignResult with signature[64] and errorCode.
+     * Builds the SIGN payload (hash || optional BIP32 path || optional PIN),
+     * sends it through the secure channel, parses the DER signature returned
+     * by the card, and unpacks it into the canonical 64-byte raw form
+     * (r[32] || s[32]).
+     *
+     * @param[in] request Sign parameters — must reference a valid secure
+     *                    session, a 32-byte hash, the desired key/signature
+     *                    type, and the PIN (unless @c pinLessMode is set).
+     * @return @ref CW_SignResult. On success @c errorCode is @ref CW_OK and
+     *         @c signature holds the 64-byte raw signature. On failure the
+     *         signature is zeroed and @c errorCode indicates the cause:
+     *
+     * @retval CW_OK                                  Signature valid.
+     * @retval CW_INVALID_SESSION                     Secure channel not open.
+     * @retval CW_SIGN_KEY_TOO_SHORT                  Bad hash buffer / length.
+     * @retval CW_SIGN_NO_KEY_LOADED                  Card rejected the SIGN APDU.
+     * @retval CW_SIGN_PIN_INCORRECT                  PIN length out of range.
+     * @retval CW_SIGN_KEY_TOO_SHORT_WITH_PINLESS_MODE
+     *                                                PIN-less mode requested but
+     *                                                @c keyType is not
+     *                                                @ref CW_SIGN_PINLESS_K1.
+     *
+     * @warning When @c pinLessMode is false the @c request.pin field must be
+     *          populated. The destructor of @ref CW_SignRequest securely
+     *          wipes the PIN, but the caller must zero any other copy.
      */
     CW_SignResult sign(CW_SignRequest& request);
 
