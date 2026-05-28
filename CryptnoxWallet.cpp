@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: LGPL-3.0-or-later
+ * Copyright (c) 2026 Cryptnox SA
+ */
+
 /* NOTE: Do NOT include <Arduino.h> here — this is a platform-independent file.
  * Arduino compatibility shims (F(), HEX, delay) are provided via
  * platform_compat.h which is pulled in transitively through CryptnoxWallet.h. */

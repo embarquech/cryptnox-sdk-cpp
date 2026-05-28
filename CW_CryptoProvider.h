@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: LGPL-3.0-or-later
+ * Copyright (c) 2026 Cryptnox SA
+ */
+
 #ifndef CW_CRYPTOPROVIDER_H
 #define CW_CRYPTOPROVIDER_H
 

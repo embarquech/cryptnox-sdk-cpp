@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: LGPL-3.0-or-later
+ * Copyright (c) 2026 Cryptnox SA
+ */
+
 #ifndef PLATFORM_COMPAT_H
 #define PLATFORM_COMPAT_H
 

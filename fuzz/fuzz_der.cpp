@@ -1,4 +1,9 @@
 /*
+ * SPDX-License-Identifier: LGPL-3.0-or-later
+ * Copyright (c) 2026 Cryptnox SA
+ */
+
+/*
  * fuzz_der.cpp — libFuzzer harness for the two DER parser paths in
  *                CW_SecureChannel (SEC-015).
  *
