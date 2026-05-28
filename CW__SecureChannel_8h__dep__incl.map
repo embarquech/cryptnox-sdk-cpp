@@ -1,9 +1,9 @@
 <map id="CW_SecureChannel.h" name="CW_SecureChannel.h">
-<area shape="rect" id="Node000001" title=" " alt="" coords="102,5,262,31"/>
-<area shape="rect" id="Node000002" href="$CW__SecureChannel_8cpp.html" title=" " alt="" coords="5,79,180,104"/>
+<area shape="rect" id="Node000001" title="Cryptnox secure channel protocol over NFC." alt="" coords="102,5,262,31"/>
+<area shape="rect" id="Node000002" href="$CW__SecureChannel_8cpp.html" title="Implementation of the Cryptnox secure channel protocol." alt="" coords="5,79,180,104"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="159,41,109,81,106,76,155,37"/>
-<area shape="rect" id="Node000003" href="$CryptnoxWallet_8h.html" title=" " alt="" coords="204,79,339,104"/>
+<area shape="rect" id="Node000003" href="$CryptnoxWallet_8h.html" title="High&#45;level API for interacting with a Cryptnox Hardware Wallet over NFC." alt="" coords="204,79,339,104"/>
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="209,37,258,76,255,81,205,41"/>
-<area shape="rect" id="Node000004" href="$CryptnoxWallet_8cpp.html" title=" " alt="" coords="197,152,346,177"/>
+<area shape="rect" id="Node000004" href="$CryptnoxWallet_8cpp.html" title="Implementation of the high&#45;level CryptnoxWallet API." alt="" coords="197,152,346,177"/>
 <area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="274,118,274,152,269,152,269,118"/>
 </map>

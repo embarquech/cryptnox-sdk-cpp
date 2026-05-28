@@ -96,6 +96,9 @@ $(document).ready(function(){initNavTree('CryptnoxWallet_8h.html',''); initResiz
   <div class="headertitle"><div class="title">CryptnoxWallet.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>High-level API for interacting with a Cryptnox Hardware Wallet over NFC.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="platform__compat_8h_source.html">platform_compat.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="CW__Logger_8h_source.html">CW_Logger.h</a>&quot;</code><br />
@@ -121,13 +124,13 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subset of the Cryptnox card info returned by APDU 0x80FA0000.  <a href="structCW__CardInfo.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCW__SignRequest.html">CW_SignRequest</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Request parameters for the sign operation.  <a href="structCW__SignRequest.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Request parameters for <a class="el" href="classCryptnoxWallet.html#a539f73749cce012f4a973840c76d1275">CryptnoxWallet::sign</a>.  <a href="structCW__SignRequest.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCW__SignResult.html">CW_SignResult</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Result of the sign operation.  <a href="structCW__SignResult.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Result of <a class="el" href="classCryptnoxWallet.html#a539f73749cce012f4a973840c76d1275">CryptnoxWallet::sign</a>.  <a href="structCW__SignResult.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCryptnoxWallet.html">CryptnoxWallet</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">High-level interface for interacting with a Cryptnox smart card over NFC.  <a href="classCryptnoxWallet.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">High-level interface for interacting with a Cryptnox Hardware Wallet over NFC.  <a href="classCryptnoxWallet.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
@@ -139,7 +142,19 @@ Macros</h2></td></tr>
 <tr class="memdesc:a8cce426f4a061c69ea2506d979893e38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Max email length stored on a Cryptnox card (per card spec).  <br /></td></tr>
 <tr class="separator:a8cce426f4a061c69ea2506d979893e38"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>High-level API for interacting with a Cryptnox Hardware Wallet over NFC. </p>
+<p>Declares <a class="el" href="classCryptnoxWallet.html">CryptnoxWallet</a>, the main entry point for application code. The class wires together the four abstract adapters supplied by the host integration (NFC transport, crypto provider, logger, platform) and exposes the wallet operations: card connection, secure channel establishment, card info retrieval, PIN verification, transaction signing, and user-data writing.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classCW__NfcTransport.html" title="Abstract interface for NFC transport operations.">CW_NfcTransport</a> </dd>
+<dd>
+<a class="el" href="classCW__CryptoProvider.html" title="Abstract interface for cryptographic operations used by CW_SecureChannel.">CW_CryptoProvider</a> </dd>
+<dd>
+<a class="el" href="classCW__Logger.html" title="Abstract interface for serial/debug output.">CW_Logger</a> </dd>
+<dd>
+<a class="el" href="classCW__Platform.html" title="Abstract interface for platform-specific operations used by the SDK.">CW_Platform</a> </dd></dl>
+
+<p class="definition">Definition in file <a class="el" href="CryptnoxWallet_8h_source.html">CryptnoxWallet.h</a>.</p>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a8cce426f4a061c69ea2506d979893e38" name="a8cce426f4a061c69ea2506d979893e38"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8cce426f4a061c69ea2506d979893e38">&#9670;&#160;</a></span>CW_CARD_EMAIL_MAX_LEN</h2>
 
@@ -154,7 +169,7 @@ Macros</h2></td></tr>
 
 <p>Max email length stored on a Cryptnox card (per card spec). </p>
 
-<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8h_source.html#l00028">28</a> of file <a class="el" href="CryptnoxWallet_8h_source.html">CryptnoxWallet.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8h_source.html#l00045">45</a> of file <a class="el" href="CryptnoxWallet_8h_source.html">CryptnoxWallet.h</a>.</p>
 
 </div>
 </div>
@@ -172,7 +187,7 @@ Macros</h2></td></tr>
 
 <p>Max name length stored on a Cryptnox card (per card spec). </p>
 
-<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8h_source.html#l00025">25</a> of file <a class="el" href="CryptnoxWallet_8h_source.html">CryptnoxWallet.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8h_source.html#l00042">42</a> of file <a class="el" href="CryptnoxWallet_8h_source.html">CryptnoxWallet.h</a>.</p>
 
 </div>
 </div>

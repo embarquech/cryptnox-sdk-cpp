@@ -95,6 +95,9 @@ $(document).ready(function(){initNavTree('CW__CryptoProvider_8h.html',''); initR
   <div class="headertitle"><div class="title">CW_CryptoProvider.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Abstract cryptographic primitives interface.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="platform__compat_8h_source.html">platform_compat.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
@@ -116,7 +119,14 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstract interface for cryptographic operations used by <a class="el" href="classCW__SecureChannel.html" title="Implements the Cryptnox secure channel protocol over NFC.">CW_SecureChannel</a>.  <a href="classCW__CryptoProvider.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Abstract cryptographic primitives interface. </p>
+<p>Declares <a class="el" href="classCW__CryptoProvider.html">CW_CryptoProvider</a>, the contract that any concrete cryptographic backend (mbedTLS, BearSSL, OpenSSL, ESP32 hardware crypto, micro-ecc + AESLib + SHA512, …) must implement so the secure channel remains decoupled from any specific crypto library.</p>
+<p>Provides: SHA-256/512, AES-CBC encrypt/decrypt, ECDH shared secret, EC key pair generation, and cryptographically secure RNG.</p>
+<p>One of the three adapter interfaces a host integration must provide. </p>
+
+<p class="definition">Definition in file <a class="el" href="CW__CryptoProvider_8h_source.html">CW_CryptoProvider.h</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

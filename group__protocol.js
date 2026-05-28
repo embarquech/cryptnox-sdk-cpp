@@ -1,0 +1,31 @@
+var group__protocol =
+[
+    [ "CW_SecureChannel", "classCW__SecureChannel.html", [
+      [ "CW_SecureChannel", "classCW__SecureChannel.html#a00f625c359bb036485ccdd5728a9b6f6", null ],
+      [ "CW_SecureChannel", "classCW__SecureChannel.html#a72d545800d6614545f37d80741e14628", null ],
+      [ "aesCbcDecrypt", "classCW__SecureChannel.html#a4199b486cfc6b91eb2d8290295a552b0", null ],
+      [ "aesCbcEncrypt", "classCW__SecureChannel.html#a272659530c5fdb5323296887484125f0", null ],
+      [ "begin", "classCW__SecureChannel.html#a4b42cf292b004dd3983bb3ef0732ec10", null ],
+      [ "checkStatusWord", "classCW__SecureChannel.html#a6519c02590facc1346b1a84882ddfd04", null ],
+      [ "extractCardEphemeralKey", "classCW__SecureChannel.html#aa8ec1e3ccb023a4fef012675d7fe9388", null ],
+      [ "getCardCertificate", "classCW__SecureChannel.html#a72983a22674a33744054095eb7e9d3f9", null ],
+      [ "getManufacturerCertificate", "classCW__SecureChannel.html#af4e64bd9c3acd51472c5e4cd5fccb1f2", null ],
+      [ "inListPassiveTarget", "classCW__SecureChannel.html#a2771258b760d6b1f4b4ba1bd56efa282", null ],
+      [ "mutuallyAuthenticate", "classCW__SecureChannel.html#a2561fd15dadb9c6cef938e344e645c22", null ],
+      [ "openSecureChannel", "classCW__SecureChannel.html#a1e8132bd74fe103ee41ab6c0e449b446", null ],
+      [ "operator=", "classCW__SecureChannel.html#a0954f7ac239499b82b72f5561c5bb2b8", null ],
+      [ "parseDerSigToRaw", "classCW__SecureChannel.html#a15eb104e979bb18997faf2d704683608", null ],
+      [ "preFetchManufacturerCert", "classCW__SecureChannel.html#a69db1ab1f96e51c248a6427684d02816", null ],
+      [ "printFirmwareVersion", "classCW__SecureChannel.html#afdfc840a2aff15d6fe41a3eb9a826cad", null ],
+      [ "resetReader", "classCW__SecureChannel.html#a8af37c9549a51edffcfb28ef6b15772b", null ],
+      [ "selectApdu", "classCW__SecureChannel.html#a7afa1f7bbd9c0e45069893b00883fd11", null ],
+      [ "verifyCertificateChain", "classCW__SecureChannel.html#a8368b07ac2f5885dbe68a4ac5e2973b9", null ],
+      [ "verifyEcdsaSha256", "classCW__SecureChannel.html#a4bf5fd741bbbd15e00f37d5362e4e1a5", null ],
+      [ "_cachedMfCertLen", "classCW__SecureChannel.html#a740f78dd7b634d1c4f1c707e3d463473", null ],
+      [ "_crypto", "classCW__SecureChannel.html#aac4780f24c18f75e7b1b304fe2445178", null ],
+      [ "_driver", "classCW__SecureChannel.html#a208b2d0ab6c3ba1a41b2b281719a8fb3", null ],
+      [ "_lastNonce", "classCW__SecureChannel.html#aa75e706991a8a9f0238fa953eecc78fd", null ],
+      [ "_logger", "classCW__SecureChannel.html#a1983ce0a00b012b7bde8547163c40444", null ],
+      [ "_platform", "classCW__SecureChannel.html#a7e1adb1e7b6c67020eca8af092711e44", null ]
+    ] ]
+];

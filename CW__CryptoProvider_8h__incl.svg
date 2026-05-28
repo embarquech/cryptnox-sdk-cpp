@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title=" ">
+<g id="a_Node000001"><a xlink:title="Abstract cryptographic primitives interface.">
 <polygon fill="#999999" stroke="#666666" points="188,-239 69,-239 69,-220 188,-220 188,-239"/>
 <text text-anchor="middle" x="128.5" y="-227" font-family="Helvetica,sans-Serif" font-size="10.00">CW_CryptoProvider.h</text>
 </a>
@@ -38,7 +38,7 @@
 <!-- Node7 -->
 <g id="Node000007" class="node">
 <title>Node7</title>
-<g id="a_Node000007"><a xlink:href="CW__Defs_8h.html" target="_top" xlink:title=" ">
+<g id="a_Node000007"><a xlink:href="CW__Defs_8h.html" target="_top" xlink:title="Shared constants, error codes, and session state for the SDK.">
 <polygon fill="white" stroke="#666666" points="195.5,-184 125.5,-184 125.5,-165 195.5,-165 195.5,-184"/>
 <text text-anchor="middle" x="160.5" y="-172" font-family="Helvetica,sans-Serif" font-size="10.00">CW_Defs.h</text>
 </a>
@@ -137,7 +137,7 @@
 <!-- Node8 -->
 <g id="Node000008" class="node">
 <title>Node8</title>
-<g id="a_Node000008"><a xlink:href="CW__Utils_8h.html" target="_top" xlink:title=" ">
+<g id="a_Node000008"><a xlink:href="CW__Utils_8h.html" target="_top" xlink:title="Platform&#45;independent security and memory utilities.">
 <polygon fill="white" stroke="#666666" points="233.5,-129 163.5,-129 163.5,-110 233.5,-110 233.5,-129"/>
 <text text-anchor="middle" x="198.5" y="-117" font-family="Helvetica,sans-Serif" font-size="10.00">CW_Utils.h</text>
 </a>

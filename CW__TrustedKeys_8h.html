@@ -96,6 +96,9 @@ $(document).ready(function(){initNavTree('CW__TrustedKeys_8h.html',''); initResi
   <div class="headertitle"><div class="title">CW_TrustedKeys.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Cryptnox CA public keys used for offline certificate verification.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="platform__compat_8h_source.html">platform_compat.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for CW_TrustedKeys.h:</div>
@@ -122,7 +125,17 @@ Variables</h2></td></tr>
 <tr class="memitem:a4af434523c372512f1b1da1f33863f4e" id="r_a4af434523c372512f1b1da1f33863f4e"><td class="memItemLeft" align="right" valign="top">static const uint8_t *const&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CW__TrustedKeys_8h.html#a4af434523c372512f1b1da1f33863f4e">CW_TRUSTED_CA_KEYS</a> [<a class="el" href="CW__TrustedKeys_8h.html#a9236ebe6bddc24060d3f945182f79185">CW_TRUSTED_CA_COUNT</a>]</td></tr>
 <tr class="separator:a4af434523c372512f1b1da1f33863f4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Cryptnox CA public keys used for offline certificate verification. </p>
+<p>Holds the trusted secp256r1 public keys that <a class="el" href="classCW__SecureChannel.html#a8368b07ac2f5885dbe68a4ac5e2973b9">CW_SecureChannel::verifyCertificateChain</a> checks the manufacturer certificate against. Each key is stored as 64 raw bytes (X[32] || Y[32], no 0x04 prefix) so it can be passed directly to <code>uECC_verify()</code>.</p>
+<p>Source: <a href="https://verify.cryptnox.tech/certificates/">https://verify.cryptnox.tech/certificates/</a></p>
+<p>To update a key: download the .crt file from the URL above and extract the EC public-key coordinates with: </p><div class="fragment"><div class="line">python -c &quot;from cryptography import x509; \</div>
+<div class="line">  c=x509.load_pem_x509_certificate(open(&#39;CERT.crt&#39;,&#39;rb&#39;).read()); \</div>
+<div class="line">  n=c.public_key().public_numbers(); \</div>
+<div class="line">  print(hex(n.x)); print(hex(n.y))&quot;</div>
+</div><!-- fragment --> 
+<p class="definition">Definition in file <a class="el" href="CW__TrustedKeys_8h_source.html">CW_TrustedKeys.h</a>.</p>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a9236ebe6bddc24060d3f945182f79185" name="a9236ebe6bddc24060d3f945182f79185"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9236ebe6bddc24060d3f945182f79185">&#9670;&#160;</a></span>CW_TRUSTED_CA_COUNT</h2>
 
@@ -135,7 +148,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="CW__TrustedKeys_8h_source.html#l00043">43</a> of file <a class="el" href="CW__TrustedKeys_8h_source.html">CW_TrustedKeys.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__TrustedKeys_8h_source.html#l00048">48</a> of file <a class="el" href="CW__TrustedKeys_8h_source.html">CW_TrustedKeys.h</a>.</p>
 
 </div>
 </div>
@@ -172,7 +185,7 @@ Variables</h2></td></tr>
 <div class="line">    0x11, 0xa4, 0x2b, 0x4c, 0xf5, 0x7d, 0x88, 0x61</div>
 <div class="line">}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="CW__TrustedKeys_8h_source.html#l00029">29</a> of file <a class="el" href="CW__TrustedKeys_8h_source.html">CW_TrustedKeys.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__TrustedKeys_8h_source.html#l00034">34</a> of file <a class="el" href="CW__TrustedKeys_8h_source.html">CW_TrustedKeys.h</a>.</p>
 
 </div>
 </div>
@@ -198,11 +211,11 @@ Variables</h2></td></tr>
 <b>Initial value:</b><div class="fragment"><div class="line">= {</div>
 <div class="line">    <a class="code hl_variable" href="CW__TrustedKeys_8h.html#aa6fa4a57da6c5d2b3e32aeece3ad6f54">CW_CA_DLT_PUBKEY</a></div>
 <div class="line">}</div>
-<div class="ttc" id="aCW__TrustedKeys_8h_html_aa6fa4a57da6c5d2b3e32aeece3ad6f54"><div class="ttname"><a href="CW__TrustedKeys_8h.html#aa6fa4a57da6c5d2b3e32aeece3ad6f54">CW_CA_DLT_PUBKEY</a></div><div class="ttdeci">static const uint8_t CW_CA_DLT_PUBKEY[64]</div><div class="ttdef"><b>Definition</b> <a href="CW__TrustedKeys_8h_source.html#l00029">CW_TrustedKeys.h:29</a></div></div>
+<div class="ttc" id="aCW__TrustedKeys_8h_html_aa6fa4a57da6c5d2b3e32aeece3ad6f54"><div class="ttname"><a href="CW__TrustedKeys_8h.html#aa6fa4a57da6c5d2b3e32aeece3ad6f54">CW_CA_DLT_PUBKEY</a></div><div class="ttdeci">static const uint8_t CW_CA_DLT_PUBKEY[64]</div><div class="ttdef"><b>Definition</b> <a href="CW__TrustedKeys_8h_source.html#l00034">CW_TrustedKeys.h:34</a></div></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="CW__TrustedKeys_8h_source.html#l00047">47</a> of file <a class="el" href="CW__TrustedKeys_8h_source.html">CW_TrustedKeys.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__TrustedKeys_8h_source.html#l00052">52</a> of file <a class="el" href="CW__TrustedKeys_8h_source.html">CW_TrustedKeys.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l01146">CW_SecureChannel::verifyCertificateChain()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l01227">CW_SecureChannel::verifyCertificateChain()</a>.</p>
 
 </div>
 </div>

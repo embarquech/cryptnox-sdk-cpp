@@ -95,6 +95,9 @@ $(document).ready(function(){initNavTree('CW__NfcTransport_8h.html',''); initRes
   <div class="headertitle"><div class="title">CW_NfcTransport.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Abstract NFC transport interface.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="platform__compat_8h_source.html">platform_compat.h</a>&quot;</code><br />
 <code>#include &lt;stdint.h&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
@@ -116,7 +119,13 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstract interface for NFC transport operations.  <a href="classCW__NfcTransport.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Abstract NFC transport interface. </p>
+<p>Declares <a class="el" href="classCW__NfcTransport.html">CW_NfcTransport</a>, the contract that any concrete NFC reader driver (PN532, PN7150, PC/SC, …) must implement so that <a class="el" href="classCW__SecureChannel.html">CW_SecureChannel</a> and <a class="el" href="classCryptnoxWallet.html">CryptnoxWallet</a> remain hardware-agnostic.</p>
+<p>One of the three adapter interfaces a host integration must provide. </p>
+
+<p class="definition">Definition in file <a class="el" href="CW__NfcTransport_8h_source.html">CW_NfcTransport.h</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title=" ">
+<g id="a_Node000001"><a xlink:title="Implementation of the high&#45;level CryptnoxWallet API.">
 <polygon fill="#999999" stroke="#666666" points="629.5,-404 517.5,-404 517.5,-385 629.5,-385 629.5,-404"/>
 <text text-anchor="middle" x="573.5" y="-392" font-family="Helvetica,sans-Serif" font-size="10.00">CryptnoxWallet.cpp</text>
 </a>
@@ -20,7 +20,7 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="CryptnoxWallet_8h.html" target="_top" xlink:title=" ">
+<g id="a_Node000002"><a xlink:href="CryptnoxWallet_8h.html" target="_top" xlink:title="High&#45;level API for interacting with a Cryptnox Hardware Wallet over NFC.">
 <polygon fill="white" stroke="#666666" points="567,-349 466,-349 466,-330 567,-330 567,-349"/>
 <text text-anchor="middle" x="516.5" y="-337" font-family="Helvetica,sans-Serif" font-size="10.00">CryptnoxWallet.h</text>
 </a>
@@ -38,7 +38,7 @@
 <!-- Node9 -->
 <g id="Node000009" class="node">
 <title>Node9</title>
-<g id="a_Node000009"><a xlink:href="CW__Utils_8h.html" target="_top" xlink:title=" ">
+<g id="a_Node000009"><a xlink:href="CW__Utils_8h.html" target="_top" xlink:title="Platform&#45;independent security and memory utilities.">
 <polygon fill="white" stroke="#666666" points="652.5,-129 582.5,-129 582.5,-110 652.5,-110 652.5,-129"/>
 <text text-anchor="middle" x="617.5" y="-117" font-family="Helvetica,sans-Serif" font-size="10.00">CW_Utils.h</text>
 </a>
@@ -74,7 +74,7 @@
 <!-- Node8 -->
 <g id="Node000008" class="node">
 <title>Node8</title>
-<g id="a_Node000008"><a xlink:href="CW__Defs_8h.html" target="_top" xlink:title=" ">
+<g id="a_Node000008"><a xlink:href="CW__Defs_8h.html" target="_top" xlink:title="Shared constants, error codes, and session state for the SDK.">
 <polygon fill="white" stroke="#666666" points="405.5,-184 335.5,-184 335.5,-165 405.5,-165 405.5,-184"/>
 <text text-anchor="middle" x="370.5" y="-172" font-family="Helvetica,sans-Serif" font-size="10.00">CW_Defs.h</text>
 </a>
@@ -101,7 +101,7 @@
 <!-- Node10 -->
 <g id="Node000010" class="node">
 <title>Node10</title>
-<g id="a_Node000010"><a xlink:href="CW__Logger_8h.html" target="_top" xlink:title=" ">
+<g id="a_Node000010"><a xlink:href="CW__Logger_8h.html" target="_top" xlink:title="Abstract logging interface.">
 <polygon fill="white" stroke="#666666" points="128.5,-239 48.5,-239 48.5,-220 128.5,-220 128.5,-239"/>
 <text text-anchor="middle" x="88.5" y="-227" font-family="Helvetica,sans-Serif" font-size="10.00">CW_Logger.h</text>
 </a>
@@ -119,7 +119,7 @@
 <!-- Node11 -->
 <g id="Node000011" class="node">
 <title>Node11</title>
-<g id="a_Node000011"><a xlink:href="CW__Platform_8h.html" target="_top" xlink:title=" ">
+<g id="a_Node000011"><a xlink:href="CW__Platform_8h.html" target="_top" xlink:title="Abstract platform interface for timing primitives.">
 <polygon fill="white" stroke="#666666" points="488,-239 399,-239 399,-220 488,-220 488,-239"/>
 <text text-anchor="middle" x="443.5" y="-227" font-family="Helvetica,sans-Serif" font-size="10.00">CW_Platform.h</text>
 </a>
@@ -137,7 +137,7 @@
 <!-- Node12 -->
 <g id="Node000012" class="node">
 <title>Node12</title>
-<g id="a_Node000012"><a xlink:href="CW__SecureChannel_8h.html" target="_top" xlink:title=" ">
+<g id="a_Node000012"><a xlink:href="CW__SecureChannel_8h.html" target="_top" xlink:title="Cryptnox secure channel protocol over NFC.">
 <polygon fill="white" stroke="#666666" points="342.5,-294 222.5,-294 222.5,-275 342.5,-275 342.5,-294"/>
 <text text-anchor="middle" x="282.5" y="-282" font-family="Helvetica,sans-Serif" font-size="10.00">CW_SecureChannel.h</text>
 </a>
@@ -308,7 +308,7 @@
 <!-- Node13 -->
 <g id="Node000013" class="node">
 <title>Node13</title>
-<g id="a_Node000013"><a xlink:href="CW__NfcTransport_8h.html" target="_top" xlink:title=" ">
+<g id="a_Node000013"><a xlink:href="CW__NfcTransport_8h.html" target="_top" xlink:title="Abstract NFC transport interface.">
 <polygon fill="white" stroke="#666666" points="109,-129 0,-129 0,-110 109,-110 109,-129"/>
 <text text-anchor="middle" x="54.5" y="-117" font-family="Helvetica,sans-Serif" font-size="10.00">CW_NfcTransport.h</text>
 </a>
@@ -326,7 +326,7 @@
 <!-- Node14 -->
 <g id="Node000014" class="node">
 <title>Node14</title>
-<g id="a_Node000014"><a xlink:href="CW__CryptoProvider_8h.html" target="_top" xlink:title=" ">
+<g id="a_Node000014"><a xlink:href="CW__CryptoProvider_8h.html" target="_top" xlink:title="Abstract cryptographic primitives interface.">
 <polygon fill="white" stroke="#666666" points="342,-239 223,-239 223,-220 342,-220 342,-239"/>
 <text text-anchor="middle" x="282.5" y="-227" font-family="Helvetica,sans-Serif" font-size="10.00">CW_CryptoProvider.h</text>
 </a>

@@ -93,6 +93,9 @@ $(document).ready(function(){initNavTree('CW__Utils_8cpp.html',''); initResizabl
   <div class="headertitle"><div class="title">CW_Utils.cpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Implementation of the platform-independent utility helpers.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="CW__Utils_8h_source.html">CW_Utils.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for CW_Utils.cpp:</div>
@@ -101,7 +104,12 @@ Include dependency graph for CW_Utils.cpp:</div>
 </div>
 </div>
 <p><a href="CW__Utils_8cpp_source.html">Go to the source code of this file.</a></p>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Implementation of the platform-independent utility helpers. </p>
+<p><a class="el" href="classCW__Utils.html#a588c6e8f57ce80d05bd8da87241afd26">CW_Utils::secure_compare</a> iterates over the full length to avoid leaking byte-position information through timing. <a class="el" href="classCW__Utils.html#a62a40b0e4577c7d716caf48016b40cb2">CW_Utils::secure_wipe</a> uses a volatile pointer so the writes cannot be optimised away. <a class="el" href="classCW__Utils.html#a06e3f240779c58e3cfdd0f1b97dc0ed6">CW_Utils::safe_memcpy</a> validates pointers, length, and source/destination overlap before delegating to memcpy. </p>
+
+<p class="definition">Definition in file <a class="el" href="CW__Utils_8cpp_source.html">CW_Utils.cpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

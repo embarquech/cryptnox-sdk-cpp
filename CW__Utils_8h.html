@@ -95,6 +95,9 @@ $(document).ready(function(){initNavTree('CW__Utils_8h.html',''); initResizable(
   <div class="headertitle"><div class="title">CW_Utils.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Platform-independent security and memory utilities.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="platform__compat_8h_source.html">platform_compat.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for CW_Utils.h:</div>
@@ -115,7 +118,18 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Portable utility functions for cryptographic and security operations.  <a href="classCW__Utils.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Platform-independent security and memory utilities. </p>
+<p>Declares <a class="el" href="classCW__Utils.html">CW_Utils</a>, a small collection of helpers used throughout the SDK that have no platform dependencies:</p><ul>
+<li>constant-time buffer comparison (timing-side-channel safe)</li>
+<li>guaranteed-not-elided secure wipe of sensitive buffers</li>
+<li>bounds-checked, overlap-checked memcpy</li>
+<li>secure random byte generation (delegated to a platform impl)</li>
+</ul>
+<p>Hardware-specific helpers (e.g. TRNG bring-up) live in the concrete crypto provider rather than here. </p>
+
+<p class="definition">Definition in file <a class="el" href="CW__Utils_8h_source.html">CW_Utils.h</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

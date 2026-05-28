@@ -1,6 +1,5 @@
 var CW__Defs_8h =
 [
-    [ "CW_SecureSession", "structCW__SecureSession.html", "structCW__SecureSession" ],
     [ "CW_AESKEY_SIZE", "CW__Defs_8h.html#ab2cbf807dca2732cdf52cc1f7ea7eed7", null ],
     [ "CW_CERT_CARD_SIG_INVALID", "CW__Defs_8h.html#abb774db673eea9ce68a71e18100fd41f", null ],
     [ "CW_CERT_FORMAT_ERROR", "CW__Defs_8h.html#a3c7163177e0aa80127ec2c2dba1295b0", null ],

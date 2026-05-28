@@ -96,6 +96,9 @@ $(document).ready(function(){initNavTree('CW__SecureChannel_8h.html',''); initRe
   <div class="headertitle"><div class="title">CW_SecureChannel.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Cryptnox secure channel protocol over NFC.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="platform__compat_8h_source.html">platform_compat.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="CW__NfcTransport_8h_source.html">CW_NfcTransport.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="CW__Logger_8h_source.html">CW_Logger.h</a>&quot;</code><br />
@@ -128,7 +131,19 @@ Macros</h2></td></tr>
 <tr class="memitem:abf5a53ce026e518623bae68cd74b181f" id="r_abf5a53ce026e518623bae68cd74b181f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CW__SecureChannel_8h.html#abf5a53ce026e518623bae68cd74b181f">CW_PAIRING_DATA_BYTES</a>&#160;&#160;&#160;(sizeof(<a class="el" href="CW__SecureChannel_8h.html#a30c65ae2571fc89d5a0e2ec6317bd65d">CW_PAIRING_DATA</a>) - 1U)</td></tr>
 <tr class="separator:abf5a53ce026e518623bae68cd74b181f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Cryptnox secure channel protocol over NFC. </p>
+<p>Declares <a class="el" href="classCW__SecureChannel.html">CW_SecureChannel</a>, responsible for every low-level APDU exchange required to establish and use an authenticated, encrypted session with a Cryptnox Hardware Wallet:</p><ul>
+<li>SELECT AID</li>
+<li>Manufacturer + card certificate retrieval and chain verification</li>
+<li>Ephemeral key extraction and ECDH session key derivation</li>
+<li>MUTUALLY AUTHENTICATE</li>
+<li>AES-CBC + MAC secure messaging (encrypt / decrypt / SW check)</li>
+</ul>
+<p>The class is composed inside <a class="el" href="classCryptnoxWallet.html">CryptnoxWallet</a> and is not normally used directly by application code. </p>
+
+<p class="definition">Definition in file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a30c65ae2571fc89d5a0e2ec6317bd65d" name="a30c65ae2571fc89d5a0e2ec6317bd65d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a30c65ae2571fc89d5a0e2ec6317bd65d">&#9670;&#160;</a></span>CW_PAIRING_DATA</h2>
 
@@ -141,7 +156,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00013">13</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00030">30</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
 
 </div>
 </div>
@@ -157,7 +172,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00014">14</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00031">31</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
 
 </div>
 </div>

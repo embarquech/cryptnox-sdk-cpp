@@ -96,7 +96,7 @@ $(document).ready(function(){initNavTree('classCW__SecureChannel.html',''); init
 <a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classCW__SecureChannel-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">CW_SecureChannel Class Reference</div></div>
+  <div class="headertitle"><div class="title">CW_SecureChannel Class Reference<div class="ingroups"><a class="el" href="group__protocol.html">Secure channel protocol</a></div></div></div>
 </div><!--header-->
 <div class="contents">
 
@@ -144,7 +144,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a1e8132bd74fe103ee41ab6c0e449b446"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send OPEN SECURE CHANNEL and retrieve the session salt.  <br /></td></tr>
 <tr class="separator:a1e8132bd74fe103ee41ab6c0e449b446"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2561fd15dadb9c6cef938e344e645c22" id="r_a2561fd15dadb9c6cef938e344e645c22"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCW__SecureChannel.html#a2561fd15dadb9c6cef938e344e645c22">mutuallyAuthenticate</a> (<a class="el" href="structCW__SecureSession.html">CW_SecureSession</a> &amp;session, const uint8_t *salt, uint8_t *clientPublicKey, const uint8_t *clientPrivateKey, <a class="el" href="CW__Defs_8h.html#a158c7b96043aa1683f003e9c17d9cf0d">CW_Curve</a> sessionCurve, const uint8_t *cardEphemeralPubKey)</td></tr>
-<tr class="memdesc:a2561fd15dadb9c6cef938e344e645c22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform ECDH key derivation and MUTUALLY AUTHENTICATE with the card.  <br /></td></tr>
+<tr class="memdesc:a2561fd15dadb9c6cef938e344e645c22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform ECDH derivation and MUTUALLY AUTHENTICATE with the card.  <br /></td></tr>
 <tr class="separator:a2561fd15dadb9c6cef938e344e645c22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af4e64bd9c3acd51472c5e4cd5fccb1f2" id="r_af4e64bd9c3acd51472c5e4cd5fccb1f2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCW__SecureChannel.html#af4e64bd9c3acd51472c5e4cd5fccb1f2">getManufacturerCertificate</a> (uint8_t *cert, uint16_t &amp;certLen)</td></tr>
 <tr class="memdesc:af4e64bd9c3acd51472c5e4cd5fccb1f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the manufacturer certificate stored in card flash.  <br /></td></tr>
@@ -153,10 +153,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a69db1ab1f96e51c248a6427684d02816"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fetch and cache the manufacturer certificate before <a class="el" href="classCW__SecureChannel.html#a72983a22674a33744054095eb7e9d3f9" title="Retrieve the card&#39;s ephemeral public key via GET CARD CERTIFICATE.">getCardCertificate()</a>.  <br /></td></tr>
 <tr class="separator:a69db1ab1f96e51c248a6427684d02816"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8368b07ac2f5885dbe68a4ac5e2973b9" id="r_a8368b07ac2f5885dbe68a4ac5e2973b9"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCW__SecureChannel.html#a8368b07ac2f5885dbe68a4ac5e2973b9">verifyCertificateChain</a> (const uint8_t *cardCert, uint8_t cardCertLen)</td></tr>
-<tr class="memdesc:a8368b07ac2f5885dbe68a4ac5e2973b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verify the full card certificate chain.  <br /></td></tr>
+<tr class="memdesc:a8368b07ac2f5885dbe68a4ac5e2973b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verify the full card certificate chain against the trusted CA.  <br /></td></tr>
 <tr class="separator:a8368b07ac2f5885dbe68a4ac5e2973b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a272659530c5fdb5323296887484125f0" id="r_a272659530c5fdb5323296887484125f0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCW__SecureChannel.html#a272659530c5fdb5323296887484125f0">aesCbcEncrypt</a> (<a class="el" href="structCW__SecureSession.html">CW_SecureSession</a> &amp;session, const uint8_t apdu[], uint16_t apduLength, const uint8_t data[], uint16_t dataLength, uint8_t *decryptedOutput=NULL, uint16_t *decryptedOutputLength=NULL)</td></tr>
-<tr class="memdesc:a272659530c5fdb5323296887484125f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">AES-CBC encrypt payload, compute MAC, send APDU, and decrypt response.  <br /></td></tr>
+<tr class="memdesc:a272659530c5fdb5323296887484125f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">AES-CBC encrypt + MAC, send APDU, and decrypt response.  <br /></td></tr>
 <tr class="separator:a272659530c5fdb5323296887484125f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4199b486cfc6b91eb2d8290295a552b0" id="r_a4199b486cfc6b91eb2d8290295a552b0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCW__SecureChannel.html#a4199b486cfc6b91eb2d8290295a552b0">aesCbcDecrypt</a> (const <a class="el" href="structCW__SecureSession.html">CW_SecureSession</a> &amp;session, uint8_t *response, size_t responseLen, uint8_t *macValue, uint8_t *decryptedOutput=NULL, uint16_t *decryptedOutputLength=NULL)</td></tr>
 <tr class="memdesc:a4199b486cfc6b91eb2d8290295a552b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verify MAC and decrypt an encrypted APDU response.  <br /></td></tr>
@@ -190,7 +190,7 @@ Private Attributes</h2></td></tr>
 <tr class="memdesc:a7e1adb1e7b6c67020eca8af092711e44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Platform abstraction (sleep_ms).  <br /></td></tr>
 <tr class="separator:a7e1adb1e7b6c67020eca8af092711e44"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa75e706991a8a9f0238fa953eecc78fd" id="r_aa75e706991a8a9f0238fa953eecc78fd"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCW__SecureChannel.html#aa75e706991a8a9f0238fa953eecc78fd">_lastNonce</a> [<a class="el" href="CW__Defs_8h.html#a9bd1c342a843f48ace5a8cadda6b7339">CW_CERT_NONCE_SIZE</a>]</td></tr>
-<tr class="memdesc:aa75e706991a8a9f0238fa953eecc78fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Nonce sent in the last <a class="el" href="classCW__SecureChannel.html#a72983a22674a33744054095eb7e9d3f9" title="Retrieve the card&#39;s ephemeral public key via GET CARD CERTIFICATE.">getCardCertificate()</a> call; checked in <a class="el" href="classCW__SecureChannel.html#a8368b07ac2f5885dbe68a4ac5e2973b9" title="Verify the full card certificate chain.">verifyCertificateChain()</a>.  <br /></td></tr>
+<tr class="memdesc:aa75e706991a8a9f0238fa953eecc78fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Nonce sent in the last <a class="el" href="classCW__SecureChannel.html#a72983a22674a33744054095eb7e9d3f9" title="Retrieve the card&#39;s ephemeral public key via GET CARD CERTIFICATE.">getCardCertificate()</a> call; checked in <a class="el" href="classCW__SecureChannel.html#a8368b07ac2f5885dbe68a4ac5e2973b9" title="Verify the full card certificate chain against the trusted CA.">verifyCertificateChain()</a>.  <br /></td></tr>
 <tr class="separator:aa75e706991a8a9f0238fa953eecc78fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a740f78dd7b634d1c4f1c707e3d463473" id="r_a740f78dd7b634d1c4f1c707e3d463473"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCW__SecureChannel.html#a740f78dd7b634d1c4f1c707e3d463473">_cachedMfCertLen</a></td></tr>
 <tr class="memdesc:a740f78dd7b634d1c4f1c707e3d463473"><td class="mdescLeft">&#160;</td><td class="mdescRight">Non-zero when s_mfCertBuf holds a valid pre-fetched manufacturer certificate.  <br /></td></tr>
@@ -205,9 +205,9 @@ Private Attributes</h2></td></tr>
 <li>AES-CBC-MAC secure messaging (encrypt / decrypt / MAC verify)</li>
 <li>Status word checking</li>
 </ul>
-<p><a class="el" href="classCW__SecureChannel.html" title="Implements the Cryptnox secure channel protocol over NFC.">CW_SecureChannel</a> is composed inside <a class="el" href="classCryptnoxWallet.html" title="High-level interface for interacting with a Cryptnox smart card over NFC.">CryptnoxWallet</a> and is not intended to be used directly by application code. </p>
+<p><a class="el" href="classCW__SecureChannel.html" title="Implements the Cryptnox secure channel protocol over NFC.">CW_SecureChannel</a> is composed inside <a class="el" href="classCryptnoxWallet.html" title="High-level interface for interacting with a Cryptnox Hardware Wallet over NFC.">CryptnoxWallet</a> and is not intended to be used directly by application code. </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00046">46</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00064">64</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a00f625c359bb036485ccdd5728a9b6f6" name="a00f625c359bb036485ccdd5728a9b6f6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a00f625c359bb036485ccdd5728a9b6f6">&#9670;&#160;</a></span>CW_SecureChannel() <span class="overload">[1/2]</span></h2>
@@ -258,9 +258,9 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00074">74</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00087">87</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00237">_lastNonce</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00319">_lastNonce</a>.</p>
 
 </div>
 </div>
@@ -342,24 +342,26 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Verify MAC and decrypt an encrypted APDU response. </p>
+<p>Internal helper called from <a class="el" href="classCW__SecureChannel.html#a272659530c5fdb5323296887484125f0">aesCbcEncrypt</a> — exposed for the fuzz harness. Verifies the response MAC against Kmac, then decrypts the payload with Kenc using the supplied IV (which is the MAC of the sent request, by protocol).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in,out]</td><td class="paramname">session</td><td>Secure session. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">response</td><td>Encrypted response buffer (MAC || cipher || SW). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">responseLen</td><td>Response length. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">macValue</td><td>MAC from the last sent message (used as decrypt IV). </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">decryptedOutput</td><td>Optional buffer for decrypted payload. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">decryptedOutputLength</td><td>Optional pointer to receive decrypted length. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">macValue</td><td>MAC of the request — used as decrypt IV. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">decryptedOutput</td><td>Optional plaintext output buffer. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">decryptedOutputLength</td><td>Optional plaintext output length. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true if MAC matches and decryption succeeds, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true if MAC matched and decryption succeeded, false otherwise.</dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>A false return indicates either tampering or a corrupted channel — the session must not be reused without renegotiation. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00568">568</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00625">625</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00233">_crypto</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00232">_logger</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00032">AES_BLOCK_SIZE</a>, <a class="el" href="classCW__CryptoProvider.html#a99a02c96ff6c90be6f225e7a4d25042b">CW_CryptoProvider::aesCbcDecrypt()</a>, <a class="el" href="classCW__CryptoProvider.html#ac2860bd7987aac5010bf1b38373e536a">CW_CryptoProvider::aesCbcEncrypt()</a>, <a class="el" href="CW__Defs_8h_source.html#l00113">CW_SecureSession::aesKey</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="platform__compat_8h_source.html#l00035">HEX</a>, <a class="el" href="CW__Defs_8h_source.html#l00114">CW_SecureSession::macKey</a>, <a class="el" href="classCW__Logger.html#ab081c091360d14c44bc379e3548b21f2">CW_Logger::print()</a>, <a class="el" href="classCW__Logger.html#a83cdd2db8e3f24895016bc985296848e">CW_Logger::println()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00047">s_apduBuf</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00049">s_dataBuf</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00048">s_macBuf</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00039">CW_Utils::safe_memcpy()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00011">CW_Utils::secure_compare()</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00026">CW_Utils::secure_wipe()</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00315">_crypto</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00314">_logger</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00045">AES_BLOCK_SIZE</a>, <a class="el" href="classCW__CryptoProvider.html#a99a02c96ff6c90be6f225e7a4d25042b">CW_CryptoProvider::aesCbcDecrypt()</a>, <a class="el" href="classCW__CryptoProvider.html#ac2860bd7987aac5010bf1b38373e536a">CW_CryptoProvider::aesCbcEncrypt()</a>, <a class="el" href="CW__Defs_8h_source.html#l00169">CW_SecureSession::aesKey</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="platform__compat_8h_source.html#l00035">HEX</a>, <a class="el" href="CW__Defs_8h_source.html#l00170">CW_SecureSession::macKey</a>, <a class="el" href="classCW__Logger.html#ab081c091360d14c44bc379e3548b21f2">CW_Logger::print()</a>, <a class="el" href="classCW__Logger.html#a83cdd2db8e3f24895016bc985296848e">CW_Logger::println()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00060">s_apduBuf</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00062">s_dataBuf</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00061">s_macBuf</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00022">CW_Utils::secure_compare()</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00444">aesCbcEncrypt()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00501">aesCbcEncrypt()</a>.</p>
 
 </div>
 </div>
@@ -419,26 +421,40 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>AES-CBC encrypt payload, compute MAC, send APDU, and decrypt response. </p>
+<p>AES-CBC encrypt + MAC, send APDU, and decrypt response. </p>
+<p>Performs one secure messaging round-trip: pads and encrypts <code>data</code> with Kenc using the current IV; computes a CMAC over (header || cipher) with Kmac; sends the wrapped APDU; on the response, verifies the MAC and decrypts the payload. The new IV for the next call is taken from the last cipher block (rolling IV).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">session</td><td>Secure session (keys + rolling IV). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">apdu</td><td>4-byte APDU header (CLA, INS, P1, P2). </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">session</td><td>Secure session (Kenc / Kmac / IV). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">apdu</td><td>APDU header (CLA, INS, P1, P2). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">apduLength</td><td>Header length (must be 4). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">data</td><td>Plaintext payload. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">dataLength</td><td>Plaintext length. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">decryptedOutput</td><td>Optional buffer for decrypted response. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">decryptedOutputLength</td><td>Optional pointer to receive decrypted length. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dataLength</td><td>Plaintext length (≤ <a class="el" href="CW__Defs_8h.html#a6085fa47786e4251e9d24e22bed82ba5">CW_USER_DATA_PAGE_SIZE</a>). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">decryptedOutput</td><td>Optional buffer for the decrypted response payload. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">decryptedOutputLength</td><td>Optional pointer to receive the decrypted payload length. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true if APDU sent and response verified/decrypted successfully. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the APDU was sent and the response MAC verified + decrypted successfully; false on bad parameters, transport failure, MAC mismatch, or unexpected status word.</dd></dl>
+<dl class="section pre"><dt>Precondition</dt><dd><code>session</code> must be the output of a successful <a class="el" href="classCW__SecureChannel.html#a2561fd15dadb9c6cef938e344e645c22">mutuallyAuthenticate</a> call. </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>Mutates <code>session.iv</code>. On any failure the IV may be left in an undefined state — treat the session as broken and tear it down with <a class="el" href="structCW__SecureSession.html#a4cc397558babedde4c0f070fb2763836">CW_SecureSession::clear</a>. </dd>
+<dd>
+Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</code>, <code>s_dataBuf</code>). Not safe to call concurrently from multiple tasks; serialise at the application level.</dd></dl>
+<p>One secure-messaging round-trip is built in five stages, reusing module- private scratch buffers (<code>s_apduBuf</code>, <code>s_macBuf</code>, <code>s_dataBuf</code>) to keep the call-site stack frame small:</p>
+<ol type="1">
+<li>Plaintext padding — ISO/IEC 9797-1 Method 2 (bit padding) is appended to <code>data</code> so the length is a multiple of the AES block size.</li>
+<li>Encryption — AES-256-CBC under Kenc with the current rolling IV.</li>
+<li>MAC computation — AES-CMAC over (APDU header || Lc || ciphertext) under Kmac. The MAC's last 8 bytes are prepended to the ciphertext in the outgoing APDU.</li>
+<li>Transport — the assembled APDU goes to the card; the response is structured as (MAC[8] || cipher || SW1 SW2).</li>
+<li>Response decryption — delegated to <a class="el" href="classCW__SecureChannel.html#a4199b486cfc6b91eb2d8290295a552b0">aesCbcDecrypt</a>, which verifies the response MAC against Kmac (using the request MAC as the IV per protocol) before decrypting under Kenc.</li>
+</ol>
+<p>IV update — on success, the last 16 bytes of the response ciphertext become the new session IV (rolling IV). On any failure path the IV is left in an undefined state, which is why the caller must treat a false return as a dead session. </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00444">444</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00501">501</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00233">_crypto</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00231">_driver</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00232">_logger</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00032">AES_BLOCK_SIZE</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00568">aesCbcDecrypt()</a>, <a class="el" href="classCW__CryptoProvider.html#ac2860bd7987aac5010bf1b38373e536a">CW_CryptoProvider::aesCbcEncrypt()</a>, <a class="el" href="CW__Defs_8h_source.html#l00113">CW_SecureSession::aesKey</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00034">APDU_LC_LEN</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00107">checkStatusWord()</a>, <a class="el" href="CW__Defs_8h_source.html#l00125">CW_SecureSession::clear()</a>, <a class="el" href="CW__Defs_8h_source.html#l00023">CW_IV_SIZE</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="platform__compat_8h_source.html#l00035">HEX</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00036">INPUT_BUFFER_LIMIT</a>, <a class="el" href="CW__Defs_8h_source.html#l00115">CW_SecureSession::iv</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00035">MAC_APDU_LEN</a>, <a class="el" href="CW__Defs_8h_source.html#l00114">CW_SecureSession::macKey</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00038">MAX_MAC_DATA_LEN</a>, <a class="el" href="classCW__Logger.html#ab081c091360d14c44bc379e3548b21f2">CW_Logger::print()</a>, <a class="el" href="classCW__Logger.html#a83cdd2db8e3f24895016bc985296848e">CW_Logger::println()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00047">s_apduBuf</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00049">s_dataBuf</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00048">s_macBuf</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00039">CW_Utils::safe_memcpy()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00026">CW_Utils::secure_wipe()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00039">SEND_APDU_MAX_LEN</a>, and <a class="el" href="classCW__NfcTransport.html#af7fb790081cc8742717f6ba3045bc202">CW_NfcTransport::sendAPDU()</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00315">_crypto</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00313">_driver</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00314">_logger</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00045">AES_BLOCK_SIZE</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00625">aesCbcDecrypt()</a>, <a class="el" href="classCW__CryptoProvider.html#ac2860bd7987aac5010bf1b38373e536a">CW_CryptoProvider::aesCbcEncrypt()</a>, <a class="el" href="CW__Defs_8h_source.html#l00169">CW_SecureSession::aesKey</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00047">APDU_LC_LEN</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00120">checkStatusWord()</a>, <a class="el" href="CW__Defs_8h_source.html#l00181">CW_SecureSession::clear()</a>, <a class="el" href="CW__Defs_8h_source.html#l00077">CW_IV_SIZE</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="platform__compat_8h_source.html#l00035">HEX</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00049">INPUT_BUFFER_LIMIT</a>, <a class="el" href="CW__Defs_8h_source.html#l00171">CW_SecureSession::iv</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00048">MAC_APDU_LEN</a>, <a class="el" href="CW__Defs_8h_source.html#l00170">CW_SecureSession::macKey</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00051">MAX_MAC_DATA_LEN</a>, <a class="el" href="classCW__Logger.html#ab081c091360d14c44bc379e3548b21f2">CW_Logger::print()</a>, <a class="el" href="classCW__Logger.html#a83cdd2db8e3f24895016bc985296848e">CW_Logger::println()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00060">s_apduBuf</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00062">s_dataBuf</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00061">s_macBuf</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00052">SEND_APDU_MAX_LEN</a>, and <a class="el" href="classCW__NfcTransport.html#af7fb790081cc8742717f6ba3045bc202">CW_NfcTransport::sendAPDU()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00155">CryptnoxWallet::getCardInfo()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00446">CryptnoxWallet::sendSignApdu()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00209">CryptnoxWallet::verifyPin()</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00231">CryptnoxWallet::writeUserData()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00165">CryptnoxWallet::getCardInfo()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00456">CryptnoxWallet::sendSignApdu()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00219">CryptnoxWallet::verifyPin()</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00241">CryptnoxWallet::writeUserData()</a>.</p>
 
 </div>
 </div>
@@ -460,11 +476,11 @@ Private Attributes</h2></td></tr>
 <p>Initialize the NFC transport module. </p>
 <dl class="section return"><dt>Returns</dt><dd>true if the module was successfully initialised, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00087">87</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00100">100</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00231">_driver</a>, and <a class="el" href="classCW__NfcTransport.html#afb1d7f164e9680780f3a482c9ae19c2c">CW_NfcTransport::begin()</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00313">_driver</a>, and <a class="el" href="classCW__NfcTransport.html#afb1d7f164e9680780f3a482c9ae19c2c">CW_NfcTransport::begin()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00026">CryptnoxWallet::begin()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00036">CryptnoxWallet::begin()</a>.</p>
 
 </div>
 </div>
@@ -518,11 +534,11 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if last two bytes match expectations, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00107">107</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00120">120</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00232">_logger</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="platform__compat_8h_source.html#l00035">HEX</a>, <a class="el" href="classCW__Logger.html#ab081c091360d14c44bc379e3548b21f2">CW_Logger::print()</a>, and <a class="el" href="classCW__Logger.html#a83cdd2db8e3f24895016bc985296848e">CW_Logger::println()</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00314">_logger</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="platform__compat_8h_source.html#l00035">HEX</a>, <a class="el" href="classCW__Logger.html#ab081c091360d14c44bc379e3548b21f2">CW_Logger::print()</a>, and <a class="el" href="classCW__Logger.html#a83cdd2db8e3f24895016bc985296848e">CW_Logger::println()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00444">aesCbcEncrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00171">getCardCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l01041">getManufacturerCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00300">mutuallyAuthenticate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00252">openSecureChannel()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00142">selectApdu()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00501">aesCbcEncrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00184">getCardCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l01098">getManufacturerCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00334">mutuallyAuthenticate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00265">openSecureChannel()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00155">selectApdu()</a>.</p>
 
 </div>
 </div>
@@ -569,9 +585,9 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true on success, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00219">219</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00232">232</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00065">CryptnoxWallet::establishSecureChannel()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00075">CryptnoxWallet::establishSecureChannel()</a>.</p>
 
 </div>
 </div>
@@ -602,7 +618,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Retrieve the card's ephemeral public key via GET CARD CERTIFICATE. </p>
-<p>Sends a random challenge nonce to the card and stores it internally. The nonce echo check is performed inside <a class="el" href="classCW__SecureChannel.html#a8368b07ac2f5885dbe68a4ac5e2973b9" title="Verify the full card certificate chain.">verifyCertificateChain()</a> to ensure replay protection is coupled with signature verification.</p>
+<p>Sends a random challenge nonce to the card and stores it internally. The nonce echo check is performed inside <a class="el" href="classCW__SecureChannel.html#a8368b07ac2f5885dbe68a4ac5e2973b9" title="Verify the full card certificate chain against the trusted CA.">verifyCertificateChain()</a> to ensure replay protection is coupled with signature verification.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[out]</td><td class="paramname">cardCertificate</td><td>Buffer to receive the raw certificate bytes. </td></tr>
@@ -612,11 +628,11 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true on success, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00171">171</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00184">184</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00233">_crypto</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00231">_driver</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00237">_lastNonce</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00232">_logger</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00107">checkStatusWord()</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00025">GETCARDCERTIFICATE_IN_BYTES</a>, <a class="el" href="classCW__Logger.html#a83cdd2db8e3f24895016bc985296848e">CW_Logger::println()</a>, <a class="el" href="classCW__CryptoProvider.html#a7977a12d897f47a8d3652c063ae6f056">CW_CryptoProvider::random()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00027">RANDOM_BYTES</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00014">RESPONSE_GETCARDCERTIFICATE_IN_BYTES</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00022">RESPONSE_STATUS_WORDS_IN_BYTES</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00039">CW_Utils::safe_memcpy()</a>, and <a class="el" href="classCW__NfcTransport.html#af7fb790081cc8742717f6ba3045bc202">CW_NfcTransport::sendAPDU()</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00315">_crypto</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00313">_driver</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00319">_lastNonce</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00314">_logger</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00120">checkStatusWord()</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00038">GETCARDCERTIFICATE_IN_BYTES</a>, <a class="el" href="classCW__Logger.html#a83cdd2db8e3f24895016bc985296848e">CW_Logger::println()</a>, <a class="el" href="classCW__CryptoProvider.html#a7977a12d897f47a8d3652c063ae6f056">CW_CryptoProvider::random()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00040">RANDOM_BYTES</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00027">RESPONSE_GETCARDCERTIFICATE_IN_BYTES</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00035">RESPONSE_STATUS_WORDS_IN_BYTES</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>, and <a class="el" href="classCW__NfcTransport.html#af7fb790081cc8742717f6ba3045bc202">CW_NfcTransport::sendAPDU()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00065">CryptnoxWallet::establishSecureChannel()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00075">CryptnoxWallet::establishSecureChannel()</a>.</p>
 
 </div>
 </div>
@@ -656,11 +672,11 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true on success, false if APDU fails or buffer too small. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l01041">1041</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l01098">1098</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00231">_driver</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00232">_logger</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00107">checkStatusWord()</a>, <a class="el" href="CW__Defs_8h_source.html#l00082">CW_MANUF_CERT_MAX_BYTES</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="classCW__Logger.html#a83cdd2db8e3f24895016bc985296848e">CW_Logger::println()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00018">RESPONSE_GETMANUFACTURERCERT_PAGE_IN_BYTES</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00022">RESPONSE_STATUS_WORDS_IN_BYTES</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00039">CW_Utils::safe_memcpy()</a>, and <a class="el" href="CW__NfcTransport_8h_source.html#l00069">CW_NfcTransport::sendAPDULarge()</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00313">_driver</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00314">_logger</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00120">checkStatusWord()</a>, <a class="el" href="CW__Defs_8h_source.html#l00136">CW_MANUF_CERT_MAX_BYTES</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="classCW__Logger.html#a83cdd2db8e3f24895016bc985296848e">CW_Logger::println()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00031">RESPONSE_GETMANUFACTURERCERT_PAGE_IN_BYTES</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00035">RESPONSE_STATUS_WORDS_IN_BYTES</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>, and <a class="el" href="CW__NfcTransport_8h_source.html#l00081">CW_NfcTransport::sendAPDULarge()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l01137">preFetchManufacturerCert()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l01146">verifyCertificateChain()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l01194">preFetchManufacturerCert()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l01227">verifyCertificateChain()</a>.</p>
 
 </div>
 </div>
@@ -682,11 +698,11 @@ Private Attributes</h2></td></tr>
 <p>Detect a passive NFC target (ISO-DEP card). </p>
 <dl class="section return"><dt>Returns</dt><dd>true if a card was found, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00091">91</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00104">104</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00231">_driver</a>, and <a class="el" href="classCW__NfcTransport.html#a1ae0d4dbdd797425d3f4f65188b5f470">CW_NfcTransport::inListPassiveTarget()</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00313">_driver</a>, and <a class="el" href="classCW__NfcTransport.html#a1ae0d4dbdd797425d3f4f65188b5f470">CW_NfcTransport::inListPassiveTarget()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00034">CryptnoxWallet::connect()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00044">CryptnoxWallet::connect()</a>.</p>
 
 </div>
 </div>
@@ -740,12 +756,17 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Perform ECDH key derivation and MUTUALLY AUTHENTICATE with the card. </p>
-<p>Derives Kenc and Kmac from the ECDH shared secret, encrypts a random challenge, sends MUTUALLY AUTHENTICATE, and sets the initial rolling IV.</p>
+<p>Perform ECDH derivation and MUTUALLY AUTHENTICATE with the card. </p>
+<p>Final step of the secure channel handshake:</p><ol type="1">
+<li>ECDH shared secret = clientPrivateKey · cardEphemeralPubKey</li>
+<li>(Kenc || Kmac || IV) ← SHA-512(salt || pairingKey || sharedSecret)</li>
+<li>Encrypts a 16-byte random challenge with the new Kenc and sends it inside the MUTUALLY AUTHENTICATE APDU</li>
+<li>Verifies the card returns the same plaintext when re-encrypting its own counter — this proves the card knows Kenc</li>
+</ol>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">session</td><td>Secure session to populate with keys and IV. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">salt</td><td>32-byte session salt. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">session</td><td>Secure session populated with derived keys + initial IV. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">salt</td><td>32-byte salt from <a class="el" href="classCW__SecureChannel.html#a1e8132bd74fe103ee41ab6c0e449b446">openSecureChannel</a>. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">clientPublicKey</td><td>64-byte client public key. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">clientPrivateKey</td><td>32-byte client private key. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">sessionCurve</td><td>ECC curve. </td></tr>
@@ -753,13 +774,33 @@ Private Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true on success, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true on success, false if ECDH failed, the card's challenge response did not match, or any APDU exchange failed.</dd></dl>
+<dl class="section pre"><dt>Precondition</dt><dd><a class="el" href="classCW__SecureChannel.html#a1e8132bd74fe103ee41ab6c0e449b446">openSecureChannel</a> must have been called and returned true. </dd></dl>
+<dl class="section post"><dt>Postcondition</dt><dd>On true: <code>session</code> has Kenc, Kmac, and rolling IV ready for <a class="el" href="classCW__SecureChannel.html#a272659530c5fdb5323296887484125f0">aesCbcEncrypt</a>. On false: <code>session</code> is left untouched and must not be used. </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>All ephemeral key material in the caller's stack (<code>clientPrivateKey</code>, <code>salt</code>) must be wiped after this call.</dd></dl>
+<p>Cryptographic flow:</p><ol type="1">
+<li>Compute the ECDH shared secret S = ECDH(clientPrivateKey,
+    cardEphemeralPubKey) on the negotiated curve.</li>
+<li>Derive 80 bytes of keying material via SHA-512 over (salt || S || pairingDataHash) and split into:<ul>
+<li>Kenc[32]: AES-256 session encryption key</li>
+<li>Kmac[32]: AES-256 session MAC key</li>
+<li>IV[16] : initial rolling IV</li>
+</ul>
+</li>
+<li>Send MUTUALLY AUTHENTICATE with a random 16-byte challenge encrypted under Kenc / IV. The card must answer with the same 16 bytes re-encrypted with the new IV — a verification that fails fast on any key-derivation mismatch.</li>
+<li>On success, populate <code>session</code> and wipe <code>sharedSecret</code> from the stack.</li>
+</ol>
+<p>Failure modes that cause an early-exit with a wiped session:</p><ul>
+<li>ECDH returned zero or invalid (curve mismatch)</li>
+<li>APDU transport failure</li>
+<li>Card challenge response mismatch (active attacker or wrong card) </li>
+</ul>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00300">300</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00334">334</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00233">_crypto</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00231">_driver</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00232">_logger</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00032">AES_BLOCK_SIZE</a>, <a class="el" href="classCW__CryptoProvider.html#ac2860bd7987aac5010bf1b38373e536a">CW_CryptoProvider::aesCbcEncrypt()</a>, <a class="el" href="CW__Defs_8h_source.html#l00113">CW_SecureSession::aesKey</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00033">APDU_HEADER_LEN</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00034">APDU_LC_LEN</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00107">checkStatusWord()</a>, <a class="el" href="CW__Defs_8h_source.html#l00125">CW_SecureSession::clear()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00028">COMMON_PAIRING_DATA</a>, <a class="el" href="CW__Defs_8h_source.html#l00021">CW_AESKEY_SIZE</a>, <a class="el" href="CW__Defs_8h_source.html#l00023">CW_IV_SIZE</a>, <a class="el" href="CW__Defs_8h_source.html#l00022">CW_MACKEY_SIZE</a>, <a class="el" href="classCW__CryptoProvider.html#aae68c4a93ee9045c5250b58744326cfd">CW_CryptoProvider::ecdh()</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CW__Defs_8h_source.html#l00115">CW_SecureSession::iv</a>, <a class="el" href="CW__Defs_8h_source.html#l00114">CW_SecureSession::macKey</a>, <a class="el" href="classCW__Logger.html#a83cdd2db8e3f24895016bc985296848e">CW_Logger::println()</a>, <a class="el" href="classCW__CryptoProvider.html#a7977a12d897f47a8d3652c063ae6f056">CW_CryptoProvider::random()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00020">REQUEST_MUTUALLYAUTHENTICATE_IN_BYTES</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00021">RESPONSE_MUTUALLYAUTHENTICATE_IN_BYTES</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00039">CW_Utils::safe_memcpy()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00026">CW_Utils::secure_wipe()</a>, <a class="el" href="classCW__NfcTransport.html#af7fb790081cc8742717f6ba3045bc202">CW_NfcTransport::sendAPDU()</a>, and <a class="el" href="classCW__CryptoProvider.html#a651c5581b03ab0227f591ade247ea753">CW_CryptoProvider::sha512()</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00315">_crypto</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00313">_driver</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00314">_logger</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00045">AES_BLOCK_SIZE</a>, <a class="el" href="classCW__CryptoProvider.html#ac2860bd7987aac5010bf1b38373e536a">CW_CryptoProvider::aesCbcEncrypt()</a>, <a class="el" href="CW__Defs_8h_source.html#l00169">CW_SecureSession::aesKey</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00046">APDU_HEADER_LEN</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00047">APDU_LC_LEN</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00120">checkStatusWord()</a>, <a class="el" href="CW__Defs_8h_source.html#l00181">CW_SecureSession::clear()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00041">COMMON_PAIRING_DATA</a>, <a class="el" href="CW__Defs_8h_source.html#l00075">CW_AESKEY_SIZE</a>, <a class="el" href="CW__Defs_8h_source.html#l00077">CW_IV_SIZE</a>, <a class="el" href="CW__Defs_8h_source.html#l00076">CW_MACKEY_SIZE</a>, <a class="el" href="classCW__CryptoProvider.html#aae68c4a93ee9045c5250b58744326cfd">CW_CryptoProvider::ecdh()</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CW__Defs_8h_source.html#l00171">CW_SecureSession::iv</a>, <a class="el" href="CW__Defs_8h_source.html#l00170">CW_SecureSession::macKey</a>, <a class="el" href="classCW__Logger.html#a83cdd2db8e3f24895016bc985296848e">CW_Logger::println()</a>, <a class="el" href="classCW__CryptoProvider.html#a7977a12d897f47a8d3652c063ae6f056">CW_CryptoProvider::random()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00033">REQUEST_MUTUALLYAUTHENTICATE_IN_BYTES</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00034">RESPONSE_MUTUALLYAUTHENTICATE_IN_BYTES</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>, <a class="el" href="classCW__NfcTransport.html#af7fb790081cc8742717f6ba3045bc202">CW_NfcTransport::sendAPDU()</a>, and <a class="el" href="classCW__CryptoProvider.html#a651c5581b03ab0227f591ade247ea753">CW_CryptoProvider::sha512()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00065">CryptnoxWallet::establishSecureChannel()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00075">CryptnoxWallet::establishSecureChannel()</a>.</p>
 
 </div>
 </div>
@@ -802,23 +843,25 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Send OPEN SECURE CHANNEL and retrieve the session salt. </p>
-<p>Generates a client EC key pair and sends the public key to the card.</p>
+<p>Generates a client EC key pair via the crypto provider and sends the public key to the card; the card responds with a 32-byte salt that later feeds into Kenc / Kmac derivation in <a class="el" href="classCW__SecureChannel.html#a2561fd15dadb9c6cef938e344e645c22">mutuallyAuthenticate</a>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">salt</td><td>32-byte session salt from the card. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">clientPublicKey</td><td>64-byte generated client public key. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">clientPrivateKey</td><td>32-byte generated client private key. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">salt</td><td>32-byte session salt returned by the card. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">clientPublicKey</td><td>64-byte freshly generated client public key. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">clientPrivateKey</td><td>32-byte freshly generated client private key. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">sessionCurve</td><td>ECC curve for key generation (secp256r1). </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true on success, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true on success, false otherwise.</dd></dl>
+<dl class="section pre"><dt>Precondition</dt><dd><a class="el" href="classCW__SecureChannel.html#a7afa1f7bbd9c0e45069893b00883fd11">selectApdu</a> must have been called successfully. </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd><code>clientPrivateKey</code> is sensitive — the caller MUST wipe it via <a class="el" href="classCW__Utils.html#a62a40b0e4577c7d716caf48016b40cb2">CW_Utils::secure_wipe</a> on every exit path. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00252">252</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00265">265</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00233">_crypto</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00231">_driver</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00232">_logger</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00107">checkStatusWord()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00030">CLIENT_PUBLIC_KEY_SIZE</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="classCW__CryptoProvider.html#adb0cb9fc0ee8264d09832d8992bae48c">CW_CryptoProvider::makeKey()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00024">OPENSECURECHANNEL_SALT_IN_BYTES</a>, <a class="el" href="classCW__Logger.html#a83cdd2db8e3f24895016bc985296848e">CW_Logger::println()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00019">RESPONSE_OPENSECURECHANNEL_IN_BYTES</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00039">CW_Utils::safe_memcpy()</a>, and <a class="el" href="classCW__NfcTransport.html#af7fb790081cc8742717f6ba3045bc202">CW_NfcTransport::sendAPDU()</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00315">_crypto</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00313">_driver</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00314">_logger</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00120">checkStatusWord()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00043">CLIENT_PUBLIC_KEY_SIZE</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="classCW__CryptoProvider.html#adb0cb9fc0ee8264d09832d8992bae48c">CW_CryptoProvider::makeKey()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00037">OPENSECURECHANNEL_SALT_IN_BYTES</a>, <a class="el" href="classCW__Logger.html#a83cdd2db8e3f24895016bc985296848e">CW_Logger::println()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00032">RESPONSE_OPENSECURECHANNEL_IN_BYTES</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>, and <a class="el" href="classCW__NfcTransport.html#af7fb790081cc8742717f6ba3045bc202">CW_NfcTransport::sendAPDU()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00065">CryptnoxWallet::establishSecureChannel()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00075">CryptnoxWallet::establishSecureChannel()</a>.</p>
 
 </div>
 </div>
@@ -888,11 +931,11 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00961">961</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l01018">1018</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__Utils_8cpp_source.html#l00039">CW_Utils::safe_memcpy()</a>.</p>
+<p class="reference">References <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l01025">verifyEcdsaSha256()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l01082">verifyEcdsaSha256()</a>.</p>
 
 </div>
 </div>
@@ -912,14 +955,14 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Fetch and cache the manufacturer certificate before <a class="el" href="classCW__SecureChannel.html#a72983a22674a33744054095eb7e9d3f9" title="Retrieve the card&#39;s ephemeral public key via GET CARD CERTIFICATE.">getCardCertificate()</a>. </p>
-<p>The Cryptnox card state machine advances after GET_CARD_CERTIFICATE (INS=F8) and will not respond to GET_MANUFACTURER_CERTIFICATE (INS=F7) after that point. Call this method immediately after <a class="el" href="classCW__SecureChannel.html#a7afa1f7bbd9c0e45069893b00883fd11" title="Send the SELECT APDU to activate the Cryptnox application.">selectApdu()</a> and before <a class="el" href="classCW__SecureChannel.html#a72983a22674a33744054095eb7e9d3f9" title="Retrieve the card&#39;s ephemeral public key via GET CARD CERTIFICATE.">getCardCertificate()</a> so that <a class="el" href="classCW__SecureChannel.html#a8368b07ac2f5885dbe68a4ac5e2973b9" title="Verify the full card certificate chain.">verifyCertificateChain()</a> can use the cached copy without an APDU.</p>
+<p>The Cryptnox card state machine advances after GET_CARD_CERTIFICATE (INS=F8) and will not respond to GET_MANUFACTURER_CERTIFICATE (INS=F7) after that point. Call this method immediately after <a class="el" href="classCW__SecureChannel.html#a7afa1f7bbd9c0e45069893b00883fd11" title="Send the SELECT APDU to activate the Cryptnox application.">selectApdu()</a> and before <a class="el" href="classCW__SecureChannel.html#a72983a22674a33744054095eb7e9d3f9" title="Retrieve the card&#39;s ephemeral public key via GET CARD CERTIFICATE.">getCardCertificate()</a> so that <a class="el" href="classCW__SecureChannel.html#a8368b07ac2f5885dbe68a4ac5e2973b9" title="Verify the full card certificate chain against the trusted CA.">verifyCertificateChain()</a> can use the cached copy without an APDU.</p>
 <dl class="section return"><dt>Returns</dt><dd>true if the certificate was fetched and cached, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l01137">1137</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l01194">1194</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00240">_cachedMfCertLen</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l01041">getManufacturerCertificate()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00052">s_mfCertBuf</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00322">_cachedMfCertLen</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l01098">getManufacturerCertificate()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00065">s_mfCertBuf</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00065">CryptnoxWallet::establishSecureChannel()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00075">CryptnoxWallet::establishSecureChannel()</a>.</p>
 
 </div>
 </div>
@@ -941,11 +984,11 @@ Private Attributes</h2></td></tr>
 <p>Print the NFC reader firmware version to the logger. </p>
 <dl class="section return"><dt>Returns</dt><dd>true on success, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00099">99</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00112">112</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00231">_driver</a>, and <a class="el" href="classCW__NfcTransport.html#ae19fdf987e3fd6dd3735766608dc8e65">CW_NfcTransport::printFirmwareVersion()</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00313">_driver</a>, and <a class="el" href="classCW__NfcTransport.html#ae19fdf987e3fd6dd3735766608dc8e65">CW_NfcTransport::printFirmwareVersion()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00368">CryptnoxWallet::printPN532FirmwareVersion()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00378">CryptnoxWallet::printPN532FirmwareVersion()</a>.</p>
 
 </div>
 </div>
@@ -966,11 +1009,11 @@ Private Attributes</h2></td></tr>
 
 <p>Reset the NFC reader hardware. </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00095">95</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00108">108</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00231">_driver</a>, and <a class="el" href="classCW__NfcTransport.html#ab44e3a5d098cd178ba4ca7891cac6ad5">CW_NfcTransport::resetReader()</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00313">_driver</a>, and <a class="el" href="classCW__NfcTransport.html#ab44e3a5d098cd178ba4ca7891cac6ad5">CW_NfcTransport::resetReader()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00034">CryptnoxWallet::connect()</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00148">CryptnoxWallet::disconnect()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00044">CryptnoxWallet::connect()</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00158">CryptnoxWallet::disconnect()</a>.</p>
 
 </div>
 </div>
@@ -992,11 +1035,11 @@ Private Attributes</h2></td></tr>
 <p>Send the SELECT APDU to activate the Cryptnox application. </p>
 <dl class="section return"><dt>Returns</dt><dd>true on success, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00142">142</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00155">155</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00231">_driver</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00232">_logger</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00107">checkStatusWord()</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="classCW__Logger.html#a83cdd2db8e3f24895016bc985296848e">CW_Logger::println()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00016">RESPONSE_SELECT_IN_BYTES</a>, and <a class="el" href="classCW__NfcTransport.html#af7fb790081cc8742717f6ba3045bc202">CW_NfcTransport::sendAPDU()</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00313">_driver</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00314">_logger</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00120">checkStatusWord()</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="classCW__Logger.html#a83cdd2db8e3f24895016bc985296848e">CW_Logger::println()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00029">RESPONSE_SELECT_IN_BYTES</a>, and <a class="el" href="classCW__NfcTransport.html#af7fb790081cc8742717f6ba3045bc202">CW_NfcTransport::sendAPDU()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00065">CryptnoxWallet::establishSecureChannel()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00075">CryptnoxWallet::establishSecureChannel()</a>.</p>
 
 </div>
 </div>
@@ -1026,21 +1069,42 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Verify the full card certificate chain. </p>
+<p>Verify the full card certificate chain against the trusted CA. </p>
+<p>Walks the cached manufacturer certificate (fetched earlier by <a class="el" href="classCW__SecureChannel.html#a69db1ab1f96e51c248a6427684d02816">preFetchManufacturerCert</a>), verifies its ECDSA signature against each entry in <a class="el" href="CW__TrustedKeys_8h.html#a4af434523c372512f1b1da1f33863f4e">CW_TRUSTED_CA_KEYS</a>, then verifies the card's ephemeral certificate against the manufacturer public key. Also checks that the challenge nonce sent in <a class="el" href="classCW__SecureChannel.html#a72983a22674a33744054095eb7e9d3f9">getCardCertificate</a> was echoed back inside the card certificate.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">cardCert</td><td>Raw card certificate bytes (146 bytes). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">cardCertLen</td><td>Length of cardCert. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">cardCert</td><td>Raw card certificate bytes (typically 146 bytes). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">cardCertLen</td><td>Length of <code>cardCert</code>. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>CW_CERT_OK (0) on success, or a CW_CERT_* error code otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>One of the <code>CW_CERT_*</code> result codes:</dd></dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">CW_CERT_OK</td><td>Chain verified end-to-end. </td></tr>
+    <tr><td class="paramname">CW_CERT_FORMAT_ERROR</td><td>Malformed certificate / unexpected TLV. </td></tr>
+    <tr><td class="paramname">CW_CERT_NONCE_MISMATCH</td><td>Card did not echo the challenge nonce. </td></tr>
+    <tr><td class="paramname">CW_CERT_CARD_SIG_INVALID</td><td>Card cert ECDSA signature failed verification. </td></tr>
+    <tr><td class="paramname">CW_CERT_MANUF_SIG_INVALID</td><td>Manufacturer cert signature does not match any trusted CA key. </td></tr>
+    <tr><td class="paramname">CW_CERT_KEY_NOT_FOUND</td><td>Device public-key OID not found in the certificate.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section pre"><dt>Precondition</dt><dd><a class="el" href="classCW__SecureChannel.html#a69db1ab1f96e51c248a6427684d02816">preFetchManufacturerCert</a> must have been called and returned true (the manufacturer certificate is cached internally and not re-fetchable after <a class="el" href="classCW__SecureChannel.html#a72983a22674a33744054095eb7e9d3f9">getCardCertificate</a>). </dd>
+<dd>
+<a class="el" href="classCW__SecureChannel.html#a72983a22674a33744054095eb7e9d3f9">getCardCertificate</a> must have been called so the challenge nonce is recorded internally.</dd></dl>
+<p>Two-step ECDSA chain walk against the pinned trusted CAs in <a class="el" href="CW__TrustedKeys_8h.html#a4af434523c372512f1b1da1f33863f4e">CW_TRUSTED_CA_KEYS</a> (currently a single secp256r1 key, <a class="el" href="CW__TrustedKeys_8h.html#aa6fa4a57da6c5d2b3e32aeece3ad6f54">CW_CA_DLT_PUBKEY</a>):</p>
+<ol type="1">
+<li>Manufacturer certificate — the cached DER blob fetched by <a class="el" href="classCW__SecureChannel.html#a69db1ab1f96e51c248a6427684d02816">preFetchManufacturerCert</a> is parsed to extract its EC public key and its ECDSA signature. The signature is verified against every entry in the trusted-CA table; the first match wins. The extracted manufacturer public key becomes the trusted issuer for step 2.</li>
+<li>Card certificate — <code>cardCert</code> is parsed for the device's ephemeral public key, the manufacturer ECDSA signature over that key, and the echoed challenge nonce. The nonce is compared (constant-time) against the value stored by <a class="el" href="classCW__SecureChannel.html#a72983a22674a33744054095eb7e9d3f9">getCardCertificate</a>; mismatch immediately returns <a class="el" href="CW__Defs_8h.html#ac76dea8db872a86b30bc9851632b7564">CW_CERT_NONCE_MISMATCH</a> to defeat replay. The signature is then verified against the manufacturer public key from step 1.</li>
+</ol>
+<p>Both signatures are SHA-256-then-ECDSA over the relevant TBS bytes. Any TLV parsing error short-circuits with <a class="el" href="CW__Defs_8h.html#a3c7163177e0aa80127ec2c2dba1295b0">CW_CERT_FORMAT_ERROR</a> rather than touching the verifier — DER parsing is the largest attack surface here and is independently fuzzed (see <code>fuzz/fuzz_der.cpp</code>). </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l01146">1146</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l01227">1227</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00240">_cachedMfCertLen</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00237">_lastNonce</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00232">_logger</a>, <a class="el" href="CW__Defs_8h_source.html#l00076">CW_CERT_CARD_SIG_INVALID</a>, <a class="el" href="CW__Defs_8h_source.html#l00074">CW_CERT_FORMAT_ERROR</a>, <a class="el" href="CW__Defs_8h_source.html#l00078">CW_CERT_KEY_NOT_FOUND</a>, <a class="el" href="CW__Defs_8h_source.html#l00077">CW_CERT_MANUF_SIG_INVALID</a>, <a class="el" href="CW__Defs_8h_source.html#l00075">CW_CERT_NONCE_MISMATCH</a>, <a class="el" href="CW__Defs_8h_source.html#l00070">CW_CERT_NONCE_SIZE</a>, <a class="el" href="CW__Defs_8h_source.html#l00073">CW_CERT_OK</a>, <a class="el" href="CW__TrustedKeys_8h_source.html#l00043">CW_TRUSTED_CA_COUNT</a>, <a class="el" href="CW__TrustedKeys_8h_source.html#l00047">CW_TRUSTED_CA_KEYS</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00734">derWalkMfCert()</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l01041">getManufacturerCertificate()</a>, <a class="el" href="classCW__Logger.html#a83cdd2db8e3f24895016bc985296848e">CW_Logger::println()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00052">s_mfCertBuf</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00011">CW_Utils::secure_compare()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00026">CW_Utils::secure_wipe()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l01025">verifyEcdsaSha256()</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00322">_cachedMfCertLen</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00319">_lastNonce</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00314">_logger</a>, <a class="el" href="CW__Defs_8h_source.html#l00130">CW_CERT_CARD_SIG_INVALID</a>, <a class="el" href="CW__Defs_8h_source.html#l00128">CW_CERT_FORMAT_ERROR</a>, <a class="el" href="CW__Defs_8h_source.html#l00132">CW_CERT_KEY_NOT_FOUND</a>, <a class="el" href="CW__Defs_8h_source.html#l00131">CW_CERT_MANUF_SIG_INVALID</a>, <a class="el" href="CW__Defs_8h_source.html#l00129">CW_CERT_NONCE_MISMATCH</a>, <a class="el" href="CW__Defs_8h_source.html#l00124">CW_CERT_NONCE_SIZE</a>, <a class="el" href="CW__Defs_8h_source.html#l00127">CW_CERT_OK</a>, <a class="el" href="CW__TrustedKeys_8h_source.html#l00048">CW_TRUSTED_CA_COUNT</a>, <a class="el" href="CW__TrustedKeys_8h_source.html#l00052">CW_TRUSTED_CA_KEYS</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00791">derWalkMfCert()</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l01098">getManufacturerCertificate()</a>, <a class="el" href="classCW__Logger.html#a83cdd2db8e3f24895016bc985296848e">CW_Logger::println()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00065">s_mfCertBuf</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00022">CW_Utils::secure_compare()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l01082">verifyEcdsaSha256()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00065">CryptnoxWallet::establishSecureChannel()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00075">CryptnoxWallet::establishSecureChannel()</a>.</p>
 
 </div>
 </div>
@@ -1096,11 +1160,11 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l01025">1025</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l01082">1082</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00233">_crypto</a>, <a class="el" href="CW__Defs_8h_source.html#l00097">CW_CURVE_SECP256R1</a>, <a class="el" href="classCW__CryptoProvider.html#a756db119bc97e5e36e7b24d260e4fab4">CW_CryptoProvider::ecdsaVerify()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00961">parseDerSigToRaw()</a>, and <a class="el" href="classCW__CryptoProvider.html#ab4a15aeabc457d53b07dcd9a9966bd02">CW_CryptoProvider::sha256()</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00315">_crypto</a>, <a class="el" href="CW__Defs_8h_source.html#l00152">CW_CURVE_SECP256R1</a>, <a class="el" href="classCW__CryptoProvider.html#a756db119bc97e5e36e7b24d260e4fab4">CW_CryptoProvider::ecdsaVerify()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l01018">parseDerSigToRaw()</a>, and <a class="el" href="classCW__CryptoProvider.html#ab4a15aeabc457d53b07dcd9a9966bd02">CW_CryptoProvider::sha256()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l01146">verifyCertificateChain()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l01227">verifyCertificateChain()</a>.</p>
 
 </div>
 </div>
@@ -1127,9 +1191,9 @@ Private Attributes</h2></td></tr>
 
 <p>Non-zero when s_mfCertBuf holds a valid pre-fetched manufacturer certificate. </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00240">240</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00322">322</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l01137">preFetchManufacturerCert()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l01146">verifyCertificateChain()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l01194">preFetchManufacturerCert()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l01227">verifyCertificateChain()</a>.</p>
 
 </div>
 </div>
@@ -1155,9 +1219,9 @@ Private Attributes</h2></td></tr>
 
 <p>Crypto operations (AES, SHA, ECDH, RNG). </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00233">233</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00315">315</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00568">aesCbcDecrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00444">aesCbcEncrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00171">getCardCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00300">mutuallyAuthenticate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00252">openSecureChannel()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l01025">verifyEcdsaSha256()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00625">aesCbcDecrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00501">aesCbcEncrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00184">getCardCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00334">mutuallyAuthenticate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00265">openSecureChannel()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l01082">verifyEcdsaSha256()</a>.</p>
 
 </div>
 </div>
@@ -1183,9 +1247,9 @@ Private Attributes</h2></td></tr>
 
 <p>NFC transport for APDU exchange. </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00231">231</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00313">313</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00444">aesCbcEncrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00087">begin()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00171">getCardCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l01041">getManufacturerCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00091">inListPassiveTarget()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00300">mutuallyAuthenticate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00252">openSecureChannel()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00099">printFirmwareVersion()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00095">resetReader()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00142">selectApdu()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00501">aesCbcEncrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00100">begin()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00184">getCardCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l01098">getManufacturerCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00104">inListPassiveTarget()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00334">mutuallyAuthenticate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00265">openSecureChannel()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00112">printFirmwareVersion()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00108">resetReader()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00155">selectApdu()</a>.</p>
 
 </div>
 </div>
@@ -1209,11 +1273,11 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Nonce sent in the last <a class="el" href="classCW__SecureChannel.html#a72983a22674a33744054095eb7e9d3f9" title="Retrieve the card&#39;s ephemeral public key via GET CARD CERTIFICATE.">getCardCertificate()</a> call; checked in <a class="el" href="classCW__SecureChannel.html#a8368b07ac2f5885dbe68a4ac5e2973b9" title="Verify the full card certificate chain.">verifyCertificateChain()</a>. </p>
+<p>Nonce sent in the last <a class="el" href="classCW__SecureChannel.html#a72983a22674a33744054095eb7e9d3f9" title="Retrieve the card&#39;s ephemeral public key via GET CARD CERTIFICATE.">getCardCertificate()</a> call; checked in <a class="el" href="classCW__SecureChannel.html#a8368b07ac2f5885dbe68a4ac5e2973b9" title="Verify the full card certificate chain against the trusted CA.">verifyCertificateChain()</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00237">237</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00319">319</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00074">CW_SecureChannel()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00171">getCardCertificate()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l01146">verifyCertificateChain()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00087">CW_SecureChannel()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00184">getCardCertificate()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l01227">verifyCertificateChain()</a>.</p>
 
 </div>
 </div>
@@ -1239,9 +1303,9 @@ Private Attributes</h2></td></tr>
 
 <p>Logging interface. </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00232">232</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00314">314</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00568">aesCbcDecrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00444">aesCbcEncrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00107">checkStatusWord()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00171">getCardCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l01041">getManufacturerCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00300">mutuallyAuthenticate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00252">openSecureChannel()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00142">selectApdu()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l01146">verifyCertificateChain()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00625">aesCbcDecrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00501">aesCbcEncrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00120">checkStatusWord()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00184">getCardCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l01098">getManufacturerCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00334">mutuallyAuthenticate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00265">openSecureChannel()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00155">selectApdu()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l01227">verifyCertificateChain()</a>.</p>
 
 </div>
 </div>
@@ -1267,7 +1331,7 @@ Private Attributes</h2></td></tr>
 
 <p>Platform abstraction (sleep_ms). </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00234">234</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00316">316</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
 
 </div>
 </div>

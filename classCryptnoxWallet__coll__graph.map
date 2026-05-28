@@ -1,5 +1,5 @@
 <map id="CryptnoxWallet" name="CryptnoxWallet">
-<area shape="rect" id="Node000001" title="High&#45;level interface for interacting with a Cryptnox smart card over NFC." alt="" coords="124,181,247,207"/>
+<area shape="rect" id="Node000001" title="High&#45;level interface for interacting with a Cryptnox Hardware Wallet over NFC." alt="" coords="124,181,247,207"/>
 <area shape="rect" id="Node000002" href="$classCW__Logger.html" title="Abstract interface for serial/debug output." alt="" coords="139,5,234,31"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="189,44,188,181,183,181,184,44"/>
 <area shape="rect" id="Node000004" href="$classCW__SecureChannel.html" title="Implements the Cryptnox secure channel protocol over NFC." alt="" coords="263,93,411,119"/>

@@ -95,6 +95,9 @@ $(document).ready(function(){initNavTree('CW__Platform_8h.html',''); initResizab
   <div class="headertitle"><div class="title">CW_Platform.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Abstract platform interface for timing primitives.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="platform__compat_8h_source.html">platform_compat.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for CW_Platform.h:</div>
@@ -115,7 +118,13 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstract interface for platform-specific operations used by the SDK.  <a href="classCW__Platform.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Abstract platform interface for timing primitives. </p>
+<p>Declares <a class="el" href="classCW__Platform.html">CW_Platform</a>, the contract that hosts implement so the SDK stays independent of any specific RTOS or bare-metal delay mechanism.</p>
+<p>Currently exposes a single operation (<a class="el" href="classCW__Platform.html#a35c85f735804035836a535c0d2fa8418">CW_Platform::sleep_ms</a>) used by <a class="el" href="classCW__SecureChannel.html">CW_SecureChannel</a> for inter-APDU spacing on slow NFC stacks. </p>
+
+<p class="definition">Definition in file <a class="el" href="CW__Platform_8h_source.html">CW_Platform.h</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

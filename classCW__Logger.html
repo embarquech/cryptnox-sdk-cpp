@@ -93,7 +93,7 @@ $(document).ready(function(){initNavTree('classCW__Logger.html',''); initResizab
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classCW__Logger-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">CW_Logger Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div></div>
+  <div class="headertitle"><div class="title">CW_Logger Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span><div class="ingroups"><a class="el" href="group__adapters.html">Adapter interfaces</a></div></div></div>
 </div><!--header-->
 <div class="contents">
 
@@ -144,10 +144,10 @@ Public Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Abstract interface for serial/debug output. </p>
-<p>Provides a hardware-agnostic logging contract so that higher-level components (<a class="el" href="classCryptnoxWallet.html" title="High-level interface for interacting with a Cryptnox smart card over NFC.">CryptnoxWallet</a>, <a class="el" href="classCW__SecureChannel.html" title="Implements the Cryptnox secure channel protocol over NFC.">CW_SecureChannel</a>) remain independent of the physical output device (UART, LCD, network, etc.).</p>
+<p>Provides a hardware-agnostic logging contract so that higher-level components (<a class="el" href="classCryptnoxWallet.html" title="High-level interface for interacting with a Cryptnox Hardware Wallet over NFC.">CryptnoxWallet</a>, <a class="el" href="classCW__SecureChannel.html" title="Implements the Cryptnox secure channel protocol over NFC.">CW_SecureChannel</a>) remain independent of the physical output device (UART, LCD, network, etc.).</p>
 <p>On Arduino, the <a class="el" href="platform__compat_8h.html#a2520eacecda4bdd7dafaf12b911626d6">F()</a> macro returns a __FlashStringHelper* so the dedicated overloads are called, keeping string literals in flash. On non-Arduino, <a class="el" href="platform__compat_8h.html#a2520eacecda4bdd7dafaf12b911626d6">F()</a> is the identity macro (returns const char*), so the <a class="el" href="classCW__Logger.html#a2677e9b91332cfbefdf1a50471eb1e0b">print(const char*)</a> overload is called instead. </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Logger_8h_source.html#l00032">32</a> of file <a class="el" href="CW__Logger_8h_source.html">CW_Logger.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Logger_8h_source.html#l00048">48</a> of file <a class="el" href="CW__Logger_8h_source.html">CW_Logger.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a548161cf7ce4ce2d16a94df115ceff52" name="a548161cf7ce4ce2d16a94df115ceff52"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a548161cf7ce4ce2d16a94df115ceff52">&#9670;&#160;</a></span>~CW_Logger()</h2>
@@ -172,7 +172,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="CW__Logger_8h_source.html#l00064">64</a> of file <a class="el" href="CW__Logger_8h_source.html">CW_Logger.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Logger_8h_source.html#l00080">80</a> of file <a class="el" href="CW__Logger_8h_source.html">CW_Logger.h</a>.</p>
 
 </div>
 </div>
@@ -262,7 +262,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00568">CW_SecureChannel::aesCbcDecrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00444">CW_SecureChannel::aesCbcEncrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00107">CW_SecureChannel::checkStatusWord()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00034">CryptnoxWallet::connect()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00533">CryptnoxWallet::debugPrintSignature()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00065">CryptnoxWallet::establishSecureChannel()</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00231">CryptnoxWallet::writeUserData()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00625">CW_SecureChannel::aesCbcDecrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00501">CW_SecureChannel::aesCbcEncrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00120">CW_SecureChannel::checkStatusWord()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00044">CryptnoxWallet::connect()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00543">CryptnoxWallet::debugPrintSignature()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00075">CryptnoxWallet::establishSecureChannel()</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00241">CryptnoxWallet::writeUserData()</a>.</p>
 
 </div>
 </div>
@@ -459,7 +459,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00568">CW_SecureChannel::aesCbcDecrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00444">CW_SecureChannel::aesCbcEncrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00107">CW_SecureChannel::checkStatusWord()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00034">CryptnoxWallet::connect()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00533">CryptnoxWallet::debugPrintSignature()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00065">CryptnoxWallet::establishSecureChannel()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00470">CryptnoxWallet::extractRawSignature()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00171">CW_SecureChannel::getCardCertificate()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00155">CryptnoxWallet::getCardInfo()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l01041">CW_SecureChannel::getManufacturerCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00300">CW_SecureChannel::mutuallyAuthenticate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00252">CW_SecureChannel::openSecureChannel()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00142">CW_SecureChannel::selectApdu()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00446">CryptnoxWallet::sendSignApdu()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00372">CryptnoxWallet::validateSignRequest()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l01146">CW_SecureChannel::verifyCertificateChain()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00209">CryptnoxWallet::verifyPin()</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00231">CryptnoxWallet::writeUserData()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00625">CW_SecureChannel::aesCbcDecrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00501">CW_SecureChannel::aesCbcEncrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00120">CW_SecureChannel::checkStatusWord()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00044">CryptnoxWallet::connect()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00543">CryptnoxWallet::debugPrintSignature()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00075">CryptnoxWallet::establishSecureChannel()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00480">CryptnoxWallet::extractRawSignature()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00184">CW_SecureChannel::getCardCertificate()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00165">CryptnoxWallet::getCardInfo()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l01098">CW_SecureChannel::getManufacturerCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00334">CW_SecureChannel::mutuallyAuthenticate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00265">CW_SecureChannel::openSecureChannel()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00155">CW_SecureChannel::selectApdu()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00456">CryptnoxWallet::sendSignApdu()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00382">CryptnoxWallet::validateSignRequest()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l01227">CW_SecureChannel::verifyCertificateChain()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00219">CryptnoxWallet::verifyPin()</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00241">CryptnoxWallet::writeUserData()</a>.</p>
 
 </div>
 </div>

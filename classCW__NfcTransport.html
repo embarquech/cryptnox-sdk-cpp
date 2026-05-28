@@ -93,7 +93,7 @@ $(document).ready(function(){initNavTree('classCW__NfcTransport.html',''); initR
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classCW__NfcTransport-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">CW_NfcTransport Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div></div>
+  <div class="headertitle"><div class="title">CW_NfcTransport Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span><div class="ingroups"><a class="el" href="group__adapters.html">Adapter interfaces</a></div></div></div>
 </div><!--header-->
 <div class="contents">
 
@@ -127,9 +127,9 @@ Public Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Abstract interface for NFC transport operations. </p>
-<p>Defines the hardware-agnostic contract for NFC communication so that <a class="el" href="classCW__SecureChannel.html" title="Implements the Cryptnox secure channel protocol over NFC.">CW_SecureChannel</a> and <a class="el" href="classCryptnoxWallet.html" title="High-level interface for interacting with a Cryptnox smart card over NFC.">CryptnoxWallet</a> remain independent of the physical NFC module (PN532, PN7150, etc.). </p>
+<p>Defines the hardware-agnostic contract for NFC communication so that <a class="el" href="classCW__SecureChannel.html" title="Implements the Cryptnox secure channel protocol over NFC.">CW_SecureChannel</a> and <a class="el" href="classCryptnoxWallet.html" title="High-level interface for interacting with a Cryptnox Hardware Wallet over NFC.">CryptnoxWallet</a> remain independent of the physical NFC module (PN532, PN7150, etc.). </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__NfcTransport_8h_source.html#l00028">28</a> of file <a class="el" href="CW__NfcTransport_8h_source.html">CW_NfcTransport.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__NfcTransport_8h_source.html#l00040">40</a> of file <a class="el" href="CW__NfcTransport_8h_source.html">CW_NfcTransport.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a1885aaaad6a75693a3119f7f1c1e74dd" name="a1885aaaad6a75693a3119f7f1c1e74dd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1885aaaad6a75693a3119f7f1c1e74dd">&#9670;&#160;</a></span>~CW_NfcTransport()</h2>
@@ -154,7 +154,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="CW__NfcTransport_8h_source.html#l00091">91</a> of file <a class="el" href="CW__NfcTransport_8h_source.html">CW_NfcTransport.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__NfcTransport_8h_source.html#l00103">103</a> of file <a class="el" href="CW__NfcTransport_8h_source.html">CW_NfcTransport.h</a>.</p>
 
 </div>
 </div>
@@ -185,7 +185,7 @@ Public Member Functions</h2></td></tr>
 <p>Initialize the NFC transport hardware. </p>
 <dl class="section return"><dt>Returns</dt><dd>true if initialization succeeded, false otherwise. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00087">CW_SecureChannel::begin()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00100">CW_SecureChannel::begin()</a>.</p>
 
 </div>
 </div>
@@ -215,7 +215,7 @@ Public Member Functions</h2></td></tr>
 <p>Detect the presence of a passive ISO-DEP NFC target. </p>
 <dl class="section return"><dt>Returns</dt><dd>true if a card is detected, false otherwise. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00091">CW_SecureChannel::inListPassiveTarget()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00104">CW_SecureChannel::inListPassiveTarget()</a>.</p>
 
 </div>
 </div>
@@ -245,7 +245,7 @@ Public Member Functions</h2></td></tr>
 <p>Print NFC module firmware version information to the logger. </p>
 <dl class="section return"><dt>Returns</dt><dd>true if firmware info was retrieved successfully, false otherwise. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00099">CW_SecureChannel::printFirmwareVersion()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00112">CW_SecureChannel::printFirmwareVersion()</a>.</p>
 
 </div>
 </div>
@@ -274,7 +274,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Reset the NFC reader/field for the next card detection cycle. </p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00095">CW_SecureChannel::resetReader()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00108">CW_SecureChannel::resetReader()</a>.</p>
 
 </div>
 </div>
@@ -336,7 +336,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if the exchange succeeded, false otherwise. </dd></dl>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00444">CW_SecureChannel::aesCbcEncrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00171">CW_SecureChannel::getCardCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00300">CW_SecureChannel::mutuallyAuthenticate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00252">CW_SecureChannel::openSecureChannel()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00142">CW_SecureChannel::selectApdu()</a>, and <a class="el" href="CW__NfcTransport_8h_source.html#l00069">sendAPDULarge()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00501">CW_SecureChannel::aesCbcEncrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00184">CW_SecureChannel::getCardCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00334">CW_SecureChannel::mutuallyAuthenticate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00265">CW_SecureChannel::openSecureChannel()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00155">CW_SecureChannel::selectApdu()</a>, and <a class="el" href="CW__NfcTransport_8h_source.html#l00081">sendAPDULarge()</a>.</p>
 
 </div>
 </div>
@@ -399,11 +399,11 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if the exchange succeeded, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CW__NfcTransport_8h_source.html#l00069">69</a> of file <a class="el" href="CW__NfcTransport_8h_source.html">CW_NfcTransport.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__NfcTransport_8h_source.html#l00081">81</a> of file <a class="el" href="CW__NfcTransport_8h_source.html">CW_NfcTransport.h</a>.</p>
 
 <p class="reference">References <a class="el" href="classCW__NfcTransport.html#af7fb790081cc8742717f6ba3045bc202">sendAPDU()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l01041">CW_SecureChannel::getManufacturerCertificate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l01098">CW_SecureChannel::getManufacturerCertificate()</a>.</p>
 
 </div>
 </div>

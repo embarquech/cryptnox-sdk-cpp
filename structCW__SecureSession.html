@@ -94,7 +94,7 @@ $(document).ready(function(){initNavTree('structCW__SecureSession.html',''); ini
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="structCW__SecureSession-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">CW_SecureSession Struct Reference</div></div>
+  <div class="headertitle"><div class="title">CW_SecureSession Struct Reference<div class="ingroups"><a class="el" href="group__api.html">Public API</a></div></div></div>
 </div><!--header-->
 <div class="contents">
 
@@ -125,7 +125,7 @@ Public Attributes</h2></td></tr>
 <div class="textblock"><p>Holds cryptographic session state for reentrant secure channel operations. </p>
 <p>Encapsulates all session-specific cryptographic material (Kenc, Kmac, rolling IV), allowing functions to be reentrant by passing session state as a parameter. </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00112">112</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00168">168</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a7159bf5062a3e31ac518f449738df46a" name="a7159bf5062a3e31ac518f449738df46a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7159bf5062a3e31ac518f449738df46a">&#9670;&#160;</a></span>CW_SecureSession()</h2>
@@ -152,9 +152,9 @@ Public Attributes</h2></td></tr>
 
 <p>Zero-initialise all session keys and IV. </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00118">118</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00174">174</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__Defs_8h_source.html#l00113">aesKey</a>, <a class="el" href="CW__Defs_8h_source.html#l00115">iv</a>, and <a class="el" href="CW__Defs_8h_source.html#l00114">macKey</a>.</p>
+<p class="reference">References <a class="el" href="CW__Defs_8h_source.html#l00169">aesKey</a>, <a class="el" href="CW__Defs_8h_source.html#l00171">iv</a>, and <a class="el" href="CW__Defs_8h_source.html#l00170">macKey</a>.</p>
 
 </div>
 </div>
@@ -184,11 +184,11 @@ Public Attributes</h2></td></tr>
 
 <p>Securely clear all session keys and IV. </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00125">125</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00181">181</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__Defs_8h_source.html#l00113">aesKey</a>, <a class="el" href="CW__Defs_8h_source.html#l00115">iv</a>, <a class="el" href="CW__Defs_8h_source.html#l00114">macKey</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00026">CW_Utils::secure_wipe()</a>.</p>
+<p class="reference">References <a class="el" href="CW__Defs_8h_source.html#l00169">aesKey</a>, <a class="el" href="CW__Defs_8h_source.html#l00171">iv</a>, <a class="el" href="CW__Defs_8h_source.html#l00170">macKey</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00444">CW_SecureChannel::aesCbcEncrypt()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00034">CryptnoxWallet::connect()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00148">CryptnoxWallet::disconnect()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00300">CW_SecureChannel::mutuallyAuthenticate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00501">CW_SecureChannel::aesCbcEncrypt()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00044">CryptnoxWallet::connect()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00158">CryptnoxWallet::disconnect()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00334">CW_SecureChannel::mutuallyAuthenticate()</a>.</p>
 
 </div>
 </div>
@@ -206,9 +206,9 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>AES-256 session encryption key (Kenc) </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00113">113</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00169">169</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00568">CW_SecureChannel::aesCbcDecrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00444">CW_SecureChannel::aesCbcEncrypt()</a>, <a class="el" href="CW__Defs_8h_source.html#l00125">clear()</a>, <a class="el" href="CW__Defs_8h_source.html#l00118">CW_SecureSession()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00360">CryptnoxWallet::isSecureChannelOpen()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00300">CW_SecureChannel::mutuallyAuthenticate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00625">CW_SecureChannel::aesCbcDecrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00501">CW_SecureChannel::aesCbcEncrypt()</a>, <a class="el" href="CW__Defs_8h_source.html#l00181">clear()</a>, <a class="el" href="CW__Defs_8h_source.html#l00174">CW_SecureSession()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00370">CryptnoxWallet::isSecureChannelOpen()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00334">CW_SecureChannel::mutuallyAuthenticate()</a>.</p>
 
 </div>
 </div>
@@ -225,9 +225,9 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>Current AES-CBC IV (rolling IV) </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00115">115</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00171">171</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00444">CW_SecureChannel::aesCbcEncrypt()</a>, <a class="el" href="CW__Defs_8h_source.html#l00125">clear()</a>, <a class="el" href="CW__Defs_8h_source.html#l00118">CW_SecureSession()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00300">CW_SecureChannel::mutuallyAuthenticate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00501">CW_SecureChannel::aesCbcEncrypt()</a>, <a class="el" href="CW__Defs_8h_source.html#l00181">clear()</a>, <a class="el" href="CW__Defs_8h_source.html#l00174">CW_SecureSession()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00334">CW_SecureChannel::mutuallyAuthenticate()</a>.</p>
 
 </div>
 </div>
@@ -244,9 +244,9 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>AES-256 session MAC key (Kmac) </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00114">114</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00170">170</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00568">CW_SecureChannel::aesCbcDecrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00444">CW_SecureChannel::aesCbcEncrypt()</a>, <a class="el" href="CW__Defs_8h_source.html#l00125">clear()</a>, <a class="el" href="CW__Defs_8h_source.html#l00118">CW_SecureSession()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00300">CW_SecureChannel::mutuallyAuthenticate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00625">CW_SecureChannel::aesCbcDecrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00501">CW_SecureChannel::aesCbcEncrypt()</a>, <a class="el" href="CW__Defs_8h_source.html#l00181">clear()</a>, <a class="el" href="CW__Defs_8h_source.html#l00174">CW_SecureSession()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00334">CW_SecureChannel::mutuallyAuthenticate()</a>.</p>
 
 </div>
 </div>

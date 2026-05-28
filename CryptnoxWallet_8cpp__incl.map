@@ -1,19 +1,19 @@
 <map id="CryptnoxWallet.cpp" name="CryptnoxWallet.cpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="695,5,845,31"/>
-<area shape="rect" id="Node000002" href="$CryptnoxWallet_8h.html" title=" " alt="" coords="627,79,761,104"/>
+<area shape="rect" id="Node000001" title="Implementation of the high&#45;level CryptnoxWallet API." alt="" coords="695,5,845,31"/>
+<area shape="rect" id="Node000002" href="$CryptnoxWallet_8h.html" title="High&#45;level API for interacting with a Cryptnox Hardware Wallet over NFC." alt="" coords="627,79,761,104"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="760,33,718,71,715,67,756,29"/>
-<area shape="rect" id="Node000009" href="$CW__Utils_8h.html" title=" " alt="" coords="782,372,875,397"/>
+<area shape="rect" id="Node000009" href="$CW__Utils_8h.html" title="Platform&#45;independent security and memory utilities." alt="" coords="782,372,875,397"/>
 <area shape="poly" id="edge27_Node000001_Node000009" title=" " alt="" coords="783,29,802,52,824,84,841,122,849,163,849,239,844,304,836,359,831,358,839,304,843,239,843,164,836,124,819,87,798,55,779,33"/>
 <area shape="rect" id="Node000003" href="$platform__compat_8h.html" title="Arduino compatibility shims for non&#45;Arduino (plain C++) builds." alt="" coords="309,445,455,471"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="703,103,731,159,742,197,747,237,747,313,739,336,716,358,683,377,642,395,548,424,458,445,457,440,546,419,640,390,681,373,713,354,734,333,742,312,742,237,737,198,726,161,699,105"/>
-<area shape="rect" id="Node000008" href="$CW__Defs_8h.html" title=" " alt="" coords="453,299,546,324"/>
+<area shape="rect" id="Node000008" href="$CW__Defs_8h.html" title="Shared constants, error codes, and session state for the SDK." alt="" coords="453,299,546,324"/>
 <area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="698,104,701,133,700,172,691,214,683,234,671,252,647,274,619,289,589,300,560,307,559,302,588,295,617,285,644,269,667,249,678,232,686,213,695,172,696,133,693,104"/>
 <area shape="poly" id="edge26_Node000002_Node000009" title=" " alt="" coords="714,102,741,122,766,151,793,205,812,263,823,316,829,358,824,359,818,317,806,264,788,207,761,153,737,126,711,106"/>
-<area shape="rect" id="Node000010" href="$CW__Logger_8h.html" title=" " alt="" coords="70,225,177,251"/>
+<area shape="rect" id="Node000010" href="$CW__Logger_8h.html" title="Abstract logging interface." alt="" coords="70,225,177,251"/>
 <area shape="poly" id="edge11_Node000002_Node000010" title=" " alt="" coords="627,99,471,115,380,131,291,155,216,186,154,220,151,216,213,181,289,149,379,126,470,110,626,93"/>
-<area shape="rect" id="Node000011" href="$CW__Platform_8h.html" title=" " alt="" coords="537,225,656,251"/>
+<area shape="rect" id="Node000011" href="$CW__Platform_8h.html" title="Abstract platform interface for timing primitives." alt="" coords="537,225,656,251"/>
 <area shape="poly" id="edge13_Node000002_Node000011" title=" " alt="" coords="688,106,614,215,610,212,684,103"/>
-<area shape="rect" id="Node000012" href="$CW__SecureChannel_8h.html" title=" " alt="" coords="302,152,462,177"/>
+<area shape="rect" id="Node000012" href="$CW__SecureChannel_8h.html" title="Cryptnox secure channel protocol over NFC." alt="" coords="302,152,462,177"/>
 <area shape="poly" id="edge15_Node000002_Node000012" title=" " alt="" coords="644,107,446,152,445,146,643,101"/>
 <area shape="rect" id="Node000004" title=" " alt="" coords="124,519,195,544"/>
 <area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="347,473,209,517,207,512,345,468"/>
@@ -32,9 +32,9 @@
 <area shape="poly" id="edge25_Node000012_Node000008" title=" " alt="" coords="410,175,444,195,475,224,491,254,499,284,493,286,486,256,471,227,441,199,408,180"/>
 <area shape="poly" id="edge20_Node000012_Node000010" title=" " alt="" coords="341,180,179,224,178,219,340,175"/>
 <area shape="poly" id="edge24_Node000012_Node000011" title=" " alt="" coords="417,175,550,218,548,223,416,180"/>
-<area shape="rect" id="Node000013" href="$CW__NfcTransport_8h.html" title=" " alt="" coords="5,372,151,397"/>
+<area shape="rect" id="Node000013" href="$CW__NfcTransport_8h.html" title="Abstract NFC transport interface." alt="" coords="5,372,151,397"/>
 <area shape="poly" id="edge17_Node000012_Node000013" title=" " alt="" coords="348,180,299,200,247,228,203,261,161,298,98,364,95,360,157,294,199,257,245,223,297,195,346,175"/>
-<area shape="rect" id="Node000014" href="$CW__CryptoProvider_8h.html" title=" " alt="" coords="303,225,461,251"/>
+<area shape="rect" id="Node000014" href="$CW__CryptoProvider_8h.html" title="Abstract cryptographic primitives interface." alt="" coords="303,225,461,251"/>
 <area shape="poly" id="edge21_Node000012_Node000014" title=" " alt="" coords="385,178,385,212,379,212,379,178"/>
 <area shape="poly" id="edge18_Node000013_Node000003" title=" " alt="" coords="127,395,320,440,319,445,126,400"/>
 <area shape="poly" id="edge19_Node000013_Node000004" title=" " alt="" coords="87,396,148,505,144,508,82,399"/>

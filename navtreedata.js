@@ -25,15 +25,8 @@
 var NAVTREE =
 [
   [ "cryptnox-sdk-cpp", "index.html", [
+    [ "Topics", "topics.html", "topics" ],
     [ "Classes", "annotated.html", [
-      [ "</blockquote>", "index.html#autotoc_md1", null ],
-      [ "Used by", "index.html#autotoc_md2", null ],
-      [ "Porting to a new platform", "index.html#autotoc_md4", null ],
-      [ "What's inside", "index.html#autotoc_md6", null ],
-      [ "Integrating the core", "index.html#autotoc_md8", null ],
-      [ "Building standalone", "index.html#autotoc_md10", null ],
-      [ "Documentation", "index.html#autotoc_md12", null ],
-      [ "License", "index.html#autotoc_md14", null ],
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
       [ "Class Members", "functions.html", [
@@ -59,7 +52,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "CW__CryptoProvider_8h.html",
-"structCW__SignRequest.html#a1d476a99b8e774bf475ca524a4d0c6c6"
+"structCW__SecureSession.html#ace70404b860b19c6a961c993eedd469b"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

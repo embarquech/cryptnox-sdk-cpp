@@ -93,6 +93,9 @@ $(document).ready(function(){initNavTree('CryptnoxWallet_8cpp.html',''); initRes
   <div class="headertitle"><div class="title">CryptnoxWallet.cpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Implementation of the high-level <a class="el" href="classCryptnoxWallet.html" title="High-level interface for interacting with a Cryptnox Hardware Wallet over NFC.">CryptnoxWallet</a> API.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="CryptnoxWallet_8h_source.html">CryptnoxWallet.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="CW__Utils_8h_source.html">CW_Utils.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
@@ -102,7 +105,12 @@ Include dependency graph for CryptnoxWallet.cpp:</div>
 </div>
 </div>
 <p><a href="CryptnoxWallet_8cpp_source.html">Go to the source code of this file.</a></p>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Implementation of the high-level <a class="el" href="classCryptnoxWallet.html" title="High-level interface for interacting with a Cryptnox Hardware Wallet over NFC.">CryptnoxWallet</a> API. </p>
+<p>Coordinates the secure channel layer (<a class="el" href="classCW__SecureChannel.html">CW_SecureChannel</a>) with the higher-level wallet operations declared in <a class="el" href="CryptnoxWallet_8h.html">CryptnoxWallet.h</a>. Handles connection retries, sensitive buffer wiping on every exit path, PIN/sign payload assembly, and DER signature parsing. </p>
+
+<p class="definition">Definition in file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

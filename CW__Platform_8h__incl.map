@@ -1,5 +1,5 @@
 <map id="CW_Platform.h" name="CW_Platform.h">
-<area shape="rect" id="Node000001" title=" " alt="" coords="127,5,245,31"/>
+<area shape="rect" id="Node000001" title="Abstract platform interface for timing primitives." alt="" coords="127,5,245,31"/>
 <area shape="rect" id="Node000002" href="$platform__compat_8h.html" title="Arduino compatibility shims for non&#45;Arduino (plain C++) builds." alt="" coords="113,79,259,104"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="189,31,189,65,183,65,183,31"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="5,152,76,177"/>

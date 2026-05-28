@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title=" ">
+<g id="a_Node000001"><a xlink:title="Platform&#45;independent security and memory utilities.">
 <polygon fill="#999999" stroke="#666666" points="249,-294 179,-294 179,-275 249,-275 249,-294"/>
 <text text-anchor="middle" x="214" y="-282" font-family="Helvetica,sans-Serif" font-size="10.00">CW_Utils.h</text>
 </a>
@@ -20,7 +20,7 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="CW__Defs_8h.html" target="_top" xlink:title=" ">
+<g id="a_Node000002"><a xlink:href="CW__Defs_8h.html" target="_top" xlink:title="Shared constants, error codes, and session state for the SDK.">
 <polygon fill="white" stroke="#666666" points="249,-239 179,-239 179,-220 249,-220 249,-239"/>
 <text text-anchor="middle" x="214" y="-227" font-family="Helvetica,sans-Serif" font-size="10.00">CW_Defs.h</text>
 </a>
@@ -38,7 +38,7 @@
 <!-- Node5 -->
 <g id="Node000005" class="node">
 <title>Node5</title>
-<g id="a_Node000005"><a xlink:href="CW__SecureChannel_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000005"><a xlink:href="CW__SecureChannel_8cpp.html" target="_top" xlink:title="Implementation of the Cryptnox secure channel protocol.">
 <polygon fill="white" stroke="#666666" points="165.5,-74 34.5,-74 34.5,-55 165.5,-55 165.5,-74"/>
 <text text-anchor="middle" x="100" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">CW_SecureChannel.cpp</text>
 </a>
@@ -56,7 +56,7 @@
 <!-- Node6 -->
 <g id="Node000006" class="node">
 <title>Node6</title>
-<g id="a_Node000006"><a xlink:href="CryptnoxWallet_8h.html" target="_top" xlink:title=" ">
+<g id="a_Node000006"><a xlink:href="CryptnoxWallet_8h.html" target="_top" xlink:title="High&#45;level API for interacting with a Cryptnox Hardware Wallet over NFC.">
 <polygon fill="white" stroke="#666666" points="296.5,-74 195.5,-74 195.5,-55 296.5,-55 296.5,-74"/>
 <text text-anchor="middle" x="246" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">CryptnoxWallet.h</text>
 </a>
@@ -74,7 +74,7 @@
 <!-- Node7 -->
 <g id="Node000007" class="node">
 <title>Node7</title>
-<g id="a_Node000007"><a xlink:href="CryptnoxWallet_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000007"><a xlink:href="CryptnoxWallet_8cpp.html" target="_top" xlink:title="Implementation of the high&#45;level CryptnoxWallet API.">
 <polygon fill="white" stroke="#666666" points="182,-19 70,-19 70,0 182,0 182,-19"/>
 <text text-anchor="middle" x="126" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">CryptnoxWallet.cpp</text>
 </a>
@@ -92,7 +92,7 @@
 <!-- Node8 -->
 <g id="Node000008" class="node">
 <title>Node8</title>
-<g id="a_Node000008"><a xlink:href="CW__Utils_8cpp.html" target="_top" xlink:title=" ">
+<g id="a_Node000008"><a xlink:href="CW__Utils_8cpp.html" target="_top" xlink:title="Implementation of the platform&#45;independent utility helpers.">
 <polygon fill="white" stroke="#666666" points="399.5,-239 318.5,-239 318.5,-220 399.5,-220 399.5,-239"/>
 <text text-anchor="middle" x="359" y="-227" font-family="Helvetica,sans-Serif" font-size="10.00">CW_Utils.cpp</text>
 </a>
@@ -110,7 +110,7 @@
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="CW__CryptoProvider_8h.html" target="_top" xlink:title=" ">
+<g id="a_Node000003"><a xlink:href="CW__CryptoProvider_8h.html" target="_top" xlink:title="Abstract cryptographic primitives interface.">
 <polygon fill="white" stroke="#666666" points="185.5,-184 66.5,-184 66.5,-165 185.5,-165 185.5,-184"/>
 <text text-anchor="middle" x="126" y="-172" font-family="Helvetica,sans-Serif" font-size="10.00">CW_CryptoProvider.h</text>
 </a>
@@ -128,7 +128,7 @@
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:href="CW__SecureChannel_8h.html" target="_top" xlink:title=" ">
+<g id="a_Node000004"><a xlink:href="CW__SecureChannel_8h.html" target="_top" xlink:title="Cryptnox secure channel protocol over NFC.">
 <polygon fill="white" stroke="#666666" points="205,-129 85,-129 85,-110 205,-110 205,-129"/>
 <text text-anchor="middle" x="145" y="-117" font-family="Helvetica,sans-Serif" font-size="10.00">CW_SecureChannel.h</text>
 </a>

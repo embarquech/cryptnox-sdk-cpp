@@ -97,6 +97,9 @@ $(document).ready(function(){initNavTree('CW__Defs_8h.html',''); initResizable()
   <div class="headertitle"><div class="title">CW_Defs.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Shared constants, error codes, and session state for the SDK.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="platform__compat_8h_source.html">platform_compat.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="CW__Utils_8h_source.html">CW_Utils.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
@@ -208,10 +211,23 @@ Enumerations</h2></td></tr>
 <tr class="memitem:a158c7b96043aa1683f003e9c17d9cf0d" id="r_a158c7b96043aa1683f003e9c17d9cf0d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CW__Defs_8h.html#a158c7b96043aa1683f003e9c17d9cf0d">CW_Curve</a> { <a class="el" href="CW__Defs_8h.html#a158c7b96043aa1683f003e9c17d9cf0daf9a9b71f2effc87e771dd0377cbb43d9">CW_CURVE_SECP256R1</a> = 0
 , <a class="el" href="CW__Defs_8h.html#a158c7b96043aa1683f003e9c17d9cf0da0c3193fa885aff99c8d8bb4343292b7a">CW_CURVE_SECP256K1</a> = 1
  }</td></tr>
-<tr class="memdesc:a158c7b96043aa1683f003e9c17d9cf0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Portable curve identifier used throughout the SDK.  <a href="CW__Defs_8h.html#a158c7b96043aa1683f003e9c17d9cf0d">More...</a><br /></td></tr>
 <tr class="separator:a158c7b96043aa1683f003e9c17d9cf0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Shared constants, error codes, and session state for the SDK. </p>
+<p>Defines:</p><ul>
+<li>AES session key / IV sizes</li>
+<li>Generic and SIGN-specific error codes (<code>CW_OK</code>, <code>CW_NOK</code>, <code>CW_SIGN_*</code>)</li>
+<li>SIGN APDU parameter values (key types, signature types, PIN/PIN-less)</li>
+<li>Buffer and protocol size limits</li>
+<li>Certificate verification result codes (<code>CW_CERT_*</code>)</li>
+<li><a class="el" href="CW__Defs_8h.html#a158c7b96043aa1683f003e9c17d9cf0d">CW_Curve</a> enum (portable curve identifier)</li>
+<li><a class="el" href="structCW__SecureSession.html">CW_SecureSession</a> (encryption + MAC keys + rolling IV)</li>
+<li>Compile-time security gates: <code>CW_VERIFY_CERT</code>, <code>CW_DEBUG_LOGGING</code> </li>
+</ul>
+
+<p class="definition">Definition in file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="ab2cbf807dca2732cdf52cc1f7ea7eed7" name="ab2cbf807dca2732cdf52cc1f7ea7eed7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab2cbf807dca2732cdf52cc1f7ea7eed7">&#9670;&#160;</a></span>CW_AESKEY_SIZE</h2>
 
@@ -225,7 +241,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>AES-256 session encryption key size in bytes </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00021">21</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00075">75</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -242,7 +258,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>Card cert ECDSA sig failed </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00076">76</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00130">130</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -259,7 +275,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>Malformed certificate data </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00074">74</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00128">128</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -276,7 +292,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>Device public key OID not found </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00078">78</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00132">132</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -293,7 +309,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>Manufacturer cert ECDSA sig failed </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00077">77</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00131">131</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -310,7 +326,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>Challenge nonce not echoed </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00075">75</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00129">129</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -327,7 +343,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>Challenge nonce length in bytes </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00070">70</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00124">124</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -344,7 +360,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>Certificate chain verified </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00073">73</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00127">127</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -361,7 +377,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>Max NFC connection retry attempts </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00059">59</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00113">113</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -378,7 +394,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>Set to 1 to enable library-internal debug logging via <a class="el" href="classCW__Logger.html" title="Abstract interface for serial/debug output.">CW_Logger</a>. Disabled by default to preserve Flash on resource-constrained boards. Must never be enabled in release/optimised builds — doing so leaks session state over UART (SEC-012). </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00154">154</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00210">210</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -394,7 +410,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00067">67</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00121">121</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -410,7 +426,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00066">66</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00120">120</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -427,7 +443,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>Standard hash size </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00054">54</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00108">108</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -444,7 +460,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>Invalid session </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00028">28</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00082">82</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -461,7 +477,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>AES-CBC IV size in bytes </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00023">23</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00077">77</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -478,7 +494,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>AES-256 session MAC key size in bytes </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00022">22</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00076">76</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -494,7 +510,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00082">82</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00136">136</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -511,7 +527,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>Max BIP32 path bytes </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00055">55</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00109">109</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -528,7 +544,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>Maximum PIN length </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00057">57</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00111">111</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -545,7 +561,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>Minimum PIN length </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00056">56</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00110">110</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -562,7 +578,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>NOK </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00027">27</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00081">81</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -579,7 +595,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>OK </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00026">26</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00080">80</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -596,7 +612,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>Raw signature (r[32] + s[32]) </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00053">53</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00107">107</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -613,7 +629,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>Byte offset of the r component </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00062">62</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00116">116</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -630,7 +646,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>Byte offset of the s component </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00063">63</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00117">117</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -647,7 +663,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>Current key (k1) </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00031">31</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00085">85</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -664,7 +680,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>Current key (r1) </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00032">32</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00086">86</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -681,7 +697,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>Derive with k1 curve </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00033">33</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00087">87</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -698,7 +714,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>Derive with r1 curve </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00034">34</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00088">88</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -714,7 +730,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00047">47</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00101">101</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -730,7 +746,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00050">50</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00104">104</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -746,7 +762,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00048">48</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00102">102</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -762,7 +778,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00049">49</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00103">103</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -779,7 +795,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>PIN-less path </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00039">39</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00093">93</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -796,7 +812,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>PIN-less path (k1 only) </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00035">35</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00089">89</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -813,7 +829,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>ECDSA EOSIO format </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00043">43</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00097">97</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -830,7 +846,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>ECDSA with canonical low S </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00042">42</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00096">96</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -847,7 +863,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>Schnorr BIP340 </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00044">44</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00098">98</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -864,7 +880,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>PIN path </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00038">38</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00092">92</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -881,7 +897,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>Max plaintext bytes per write user data page </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00058">58</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00112">112</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -898,7 +914,7 @@ Enumerations</h2></td></tr>
 </div><div class="memdoc">
 <p>Certificate chain verification is always enabled (SEC-004 / H-07). Building with -DCW_VERIFY_CERT=0 is a hard error — it disables the card authenticity gate and allows any forged key to be accepted. </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00140">140</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00196">196</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
@@ -914,9 +930,6 @@ Enumerations</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Portable curve identifier used throughout the SDK. </p>
-<p>Replaces direct references to uECC_Curve_t at every API boundary so the abstract interfaces (<a class="el" href="classCW__CryptoProvider.html" title="Abstract interface for cryptographic operations used by CW_SecureChannel.">CW_CryptoProvider</a>, <a class="el" href="classCW__SecureChannel.html" title="Implements the Cryptnox secure channel protocol over NFC.">CW_SecureChannel</a>) remain decoupled from any specific ECC back-end. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a158c7b96043aa1683f003e9c17d9cf0daf9a9b71f2effc87e771dd0377cbb43d9" name="a158c7b96043aa1683f003e9c17d9cf0daf9a9b71f2effc87e771dd0377cbb43d9"></a>CW_CURVE_SECP256R1&#160;</td><td class="fielddoc"><p>NIST P-256 / secp256r1 </p>
 </td></tr>
@@ -924,7 +937,7 @@ Enumerations</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00096">96</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00151">151</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
 </div>
 </div>
