@@ -46,6 +46,7 @@
 
 /**
  * @struct CW_CardInfo
+ * @ingroup api
  * @brief Subset of the Cryptnox card info returned by APDU 0x80FA0000.
  *
  * Mirrors the fields the Python SDK exposes as @c card._owner: ASCII name
@@ -63,6 +64,7 @@ struct CW_CardInfo {
 
 /**
  * @struct CW_SignRequest
+ * @ingroup api
  * @brief Request parameters for @ref CryptnoxWallet::sign.
  *
  * Owns the PIN buffer for the lifetime of the request — the destructor
@@ -127,6 +129,7 @@ struct CW_SignResult {
 
 /**
  * @class CryptnoxWallet
+ * @ingroup api
  * @brief High-level interface for interacting with a Cryptnox Hardware Wallet over NFC.
  *
  * Manages card connection, secure channel establishment (delegated to

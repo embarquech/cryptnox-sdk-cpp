@@ -30,6 +30,7 @@
 
 /**
  * @class CW_NfcTransport
+ * @ingroup adapters
  * @brief Abstract interface for NFC transport operations.
  *
  * Defines the hardware-agnostic contract for NFC communication so

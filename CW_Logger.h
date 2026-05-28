@@ -33,6 +33,7 @@
 
 /**
  * @class CW_Logger
+ * @ingroup adapters
  * @brief Abstract interface for serial/debug output.
  *
  * Provides a hardware-agnostic logging contract so that higher-level

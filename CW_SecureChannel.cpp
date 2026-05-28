@@ -310,6 +310,27 @@ bool CW_SecureChannel::openSecureChannel(uint8_t* salt,
     return ret;
 }
 
+/**
+ * @details
+ * Cryptographic flow:
+ *  1. Compute the ECDH shared secret S = ECDH(clientPrivateKey,
+ *     cardEphemeralPubKey) on the negotiated curve.
+ *  2. Derive 80 bytes of keying material via SHA-512 over
+ *     (salt || S || pairingDataHash) and split into:
+ *       - Kenc[32]: AES-256 session encryption key
+ *       - Kmac[32]: AES-256 session MAC key
+ *       - IV[16]  : initial rolling IV
+ *  3. Send MUTUALLY AUTHENTICATE with a random 16-byte challenge encrypted
+ *     under Kenc / IV. The card must answer with the same 16 bytes
+ *     re-encrypted with the new IV — a verification that fails fast on
+ *     any key-derivation mismatch.
+ *  4. On success, populate @p session and wipe @p sharedSecret from the stack.
+ *
+ * Failure modes that cause an early-exit with a wiped session:
+ *  - ECDH returned zero or invalid (curve mismatch)
+ *  - APDU transport failure
+ *  - Card challenge response mismatch (active attacker or wrong card)
+ */
 bool CW_SecureChannel::mutuallyAuthenticate(CW_SecureSession& session,
                                             const uint8_t* salt,
                                             uint8_t* clientPublicKey,
@@ -454,6 +475,29 @@ bool CW_SecureChannel::mutuallyAuthenticate(CW_SecureSession& session,
     return ret;
 }
 
+/**
+ * @details
+ * One secure-messaging round-trip is built in five stages, reusing module-
+ * private scratch buffers (@c s_apduBuf, @c s_macBuf, @c s_dataBuf) to keep
+ * the call-site stack frame small:
+ *
+ *   1. Plaintext padding — ISO/IEC 9797-1 Method 2 (bit padding) is appended
+ *      to @p data so the length is a multiple of the AES block size.
+ *   2. Encryption — AES-256-CBC under Kenc with the current rolling IV.
+ *   3. MAC computation — AES-CMAC over (APDU header || Lc || ciphertext)
+ *      under Kmac. The MAC's last 8 bytes are prepended to the ciphertext
+ *      in the outgoing APDU.
+ *   4. Transport — the assembled APDU goes to the card; the response is
+ *      structured as (MAC[8] || cipher || SW1 SW2).
+ *   5. Response decryption — delegated to @ref aesCbcDecrypt, which verifies
+ *      the response MAC against Kmac (using the request MAC as the IV per
+ *      protocol) before decrypting under Kenc.
+ *
+ * IV update — on success, the last 16 bytes of the response ciphertext become
+ * the new session IV (rolling IV). On any failure path the IV is left in an
+ * undefined state, which is why the caller must treat a false return as a
+ * dead session.
+ */
 bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
                                      const uint8_t apdu[], uint16_t apduLength,
                                      const uint8_t data[], uint16_t dataLength,
@@ -1156,6 +1200,30 @@ bool CW_SecureChannel::preFetchManufacturerCert() {
     return result;
 }
 
+/**
+ * @details
+ * Two-step ECDSA chain walk against the pinned trusted CAs in
+ * @ref CW_TRUSTED_CA_KEYS (currently a single secp256r1 key,
+ * @ref CW_CA_DLT_PUBKEY):
+ *
+ *   1. Manufacturer certificate — the cached DER blob fetched by
+ *      @ref preFetchManufacturerCert is parsed to extract its EC public key
+ *      and its ECDSA signature. The signature is verified against every
+ *      entry in the trusted-CA table; the first match wins. The extracted
+ *      manufacturer public key becomes the trusted issuer for step 2.
+ *
+ *   2. Card certificate — @p cardCert is parsed for the device's ephemeral
+ *      public key, the manufacturer ECDSA signature over that key, and the
+ *      echoed challenge nonce. The nonce is compared (constant-time) against
+ *      the value stored by @ref getCardCertificate; mismatch immediately
+ *      returns @ref CW_CERT_NONCE_MISMATCH to defeat replay. The signature
+ *      is then verified against the manufacturer public key from step 1.
+ *
+ * Both signatures are SHA-256-then-ECDSA over the relevant TBS bytes.
+ * Any TLV parsing error short-circuits with @ref CW_CERT_FORMAT_ERROR
+ * rather than touching the verifier — DER parsing is the largest attack
+ * surface here and is independently fuzzed (see `fuzz/fuzz_der.cpp`).
+ */
 uint8_t CW_SecureChannel::verifyCertificateChain(const uint8_t* cardCert,
                                                   uint8_t cardCertLen) {
     uint8_t result = CW_CERT_OK;

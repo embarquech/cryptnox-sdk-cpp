@@ -22,6 +22,45 @@
 #define CW_DEFS_H
 
 /******************************************************************
+ * 0. Doxygen module groups (used by @ingroup throughout the SDK)
+ ******************************************************************/
+
+/**
+ * @defgroup api Public API
+ * @brief Types and classes application code interacts with directly.
+ *
+ * Includes @ref CryptnoxWallet (the main entry point), the sign request /
+ * result structs, @ref CW_CardInfo, and @ref CW_SecureSession.
+ */
+
+/**
+ * @defgroup protocol Secure channel protocol
+ * @brief Low-level secure messaging implementation.
+ *
+ * @ref CW_SecureChannel is composed inside @ref CryptnoxWallet and is not
+ * normally used directly. Documented here for callers that need to drive
+ * the activation sequence manually (e.g. custom retry policies, fuzzing).
+ */
+
+/**
+ * @defgroup adapters Adapter interfaces
+ * @brief Abstract contracts a host integration must implement.
+ *
+ * Provide concrete implementations of @ref CW_NfcTransport,
+ * @ref CW_CryptoProvider, @ref CW_Logger, and @ref CW_Platform when porting
+ * the SDK to a new MCU or operating system.
+ */
+
+/**
+ * @defgroup util Utilities & shared definitions
+ * @brief Platform-independent helpers and shared constants.
+ *
+ * Includes @ref CW_Utils (constant-time compare, secure wipe, safe memcpy,
+ * RNG), the @c CW_CERT_* / @c CW_SIGN_* error codes, and the trusted-CA
+ * key table (@ref CW_TrustedKeys.h).
+ */
+
+/******************************************************************
  * 1. Included files
  ******************************************************************/
 
@@ -102,6 +141,7 @@
 
 /**
  * @enum CW_Curve
+ * @ingroup util
  * @brief Portable curve identifier used throughout the SDK.
  *
  * Replaces direct references to uECC_Curve_t at every API boundary so the
@@ -119,6 +159,7 @@ enum CW_Curve {
 
 /**
  * @struct CW_SecureSession
+ * @ingroup api
  * @brief Holds cryptographic session state for reentrant secure channel operations.
  *
  * Encapsulates all session-specific cryptographic material (Kenc, Kmac, rolling IV),

@@ -47,6 +47,7 @@
 
 /**
  * @class CW_SecureChannel
+ * @ingroup protocol
  * @brief Implements the Cryptnox secure channel protocol over NFC.
  *
  * Handles all low-level APDU exchanges required to establish and use
@@ -133,13 +134,19 @@ public:
     /**
      * @brief Send OPEN SECURE CHANNEL and retrieve the session salt.
      *
-     * Generates a client EC key pair and sends the public key to the card.
+     * Generates a client EC key pair via the crypto provider and sends the
+     * public key to the card; the card responds with a 32-byte salt that
+     * later feeds into Kenc / Kmac derivation in @ref mutuallyAuthenticate.
      *
-     * @param[out] salt            32-byte session salt from the card.
-     * @param[out] clientPublicKey 64-byte generated client public key.
-     * @param[out] clientPrivateKey 32-byte generated client private key.
-     * @param[in]  sessionCurve   ECC curve for key generation (secp256r1).
+     * @param[out] salt             32-byte session salt returned by the card.
+     * @param[out] clientPublicKey  64-byte freshly generated client public key.
+     * @param[out] clientPrivateKey 32-byte freshly generated client private key.
+     * @param[in]  sessionCurve     ECC curve for key generation (secp256r1).
      * @return true on success, false otherwise.
+     *
+     * @pre @ref selectApdu must have been called successfully.
+     * @warning @p clientPrivateKey is sensitive — the caller MUST wipe it
+     *          via @ref CW_Utils::secure_wipe on every exit path.
      */
     bool openSecureChannel(uint8_t* salt,
                            uint8_t* clientPublicKey,
@@ -147,18 +154,31 @@ public:
                            CW_Curve sessionCurve);
 
     /**
-     * @brief Perform ECDH key derivation and MUTUALLY AUTHENTICATE with the card.
+     * @brief Perform ECDH derivation and MUTUALLY AUTHENTICATE with the card.
      *
-     * Derives Kenc and Kmac from the ECDH shared secret, encrypts a random
-     * challenge, sends MUTUALLY AUTHENTICATE, and sets the initial rolling IV.
+     * Final step of the secure channel handshake:
+     *  1. ECDH shared secret = clientPrivateKey · cardEphemeralPubKey
+     *  2. (Kenc || Kmac || IV) ← SHA-512(salt || pairingKey || sharedSecret)
+     *  3. Encrypts a 16-byte random challenge with the new Kenc and sends
+     *     it inside the MUTUALLY AUTHENTICATE APDU
+     *  4. Verifies the card returns the same plaintext when re-encrypting
+     *     its own counter — this proves the card knows Kenc
      *
-     * @param[out] session          Secure session to populate with keys and IV.
-     * @param[in]  salt             32-byte session salt.
-     * @param[in]  clientPublicKey  64-byte client public key.
-     * @param[in]  clientPrivateKey 32-byte client private key.
-     * @param[in]  sessionCurve    ECC curve.
+     * @param[out] session             Secure session populated with derived keys + initial IV.
+     * @param[in]  salt                32-byte salt from @ref openSecureChannel.
+     * @param[in]  clientPublicKey     64-byte client public key.
+     * @param[in]  clientPrivateKey    32-byte client private key.
+     * @param[in]  sessionCurve        ECC curve.
      * @param[in]  cardEphemeralPubKey 64-byte card ephemeral public key.
-     * @return true on success, false otherwise.
+     * @return true on success, false if ECDH failed, the card's challenge
+     *         response did not match, or any APDU exchange failed.
+     *
+     * @pre @ref openSecureChannel must have been called and returned true.
+     * @post On true: @p session has Kenc, Kmac, and rolling IV ready for
+     *       @ref aesCbcEncrypt. On false: @p session is left untouched and
+     *       must not be used.
+     * @warning All ephemeral key material in the caller's stack
+     *          (@p clientPrivateKey, @p salt) must be wiped after this call.
      */
     bool mutuallyAuthenticate(CW_SecureSession& session,
                               const uint8_t* salt,
@@ -189,25 +209,62 @@ public:
     bool preFetchManufacturerCert();
 
     /**
-     * @brief Verify the full card certificate chain.
+     * @brief Verify the full card certificate chain against the trusted CA.
      *
-     * @param[in] cardCert    Raw card certificate bytes (146 bytes).
-     * @param[in] cardCertLen Length of cardCert.
-     * @return CW_CERT_OK (0) on success, or a CW_CERT_* error code otherwise.
+     * Walks the cached manufacturer certificate (fetched earlier by
+     * @ref preFetchManufacturerCert), verifies its ECDSA signature against
+     * each entry in @ref CW_TRUSTED_CA_KEYS, then verifies the card's
+     * ephemeral certificate against the manufacturer public key. Also
+     * checks that the challenge nonce sent in @ref getCardCertificate was
+     * echoed back inside the card certificate.
+     *
+     * @param[in] cardCert    Raw card certificate bytes (typically 146 bytes).
+     * @param[in] cardCertLen Length of @p cardCert.
+     * @return One of the @c CW_CERT_* result codes:
+     *
+     * @retval CW_CERT_OK                 Chain verified end-to-end.
+     * @retval CW_CERT_FORMAT_ERROR       Malformed certificate / unexpected TLV.
+     * @retval CW_CERT_NONCE_MISMATCH     Card did not echo the challenge nonce.
+     * @retval CW_CERT_CARD_SIG_INVALID   Card cert ECDSA signature failed verification.
+     * @retval CW_CERT_MANUF_SIG_INVALID  Manufacturer cert signature does not match any trusted CA key.
+     * @retval CW_CERT_KEY_NOT_FOUND      Device public-key OID not found in the certificate.
+     *
+     * @pre @ref preFetchManufacturerCert must have been called and returned
+     *      true (the manufacturer certificate is cached internally and not
+     *      re-fetchable after @ref getCardCertificate).
+     * @pre @ref getCardCertificate must have been called so the challenge
+     *      nonce is recorded internally.
      */
     uint8_t verifyCertificateChain(const uint8_t* cardCert, uint8_t cardCertLen);
 
     /**
-     * @brief AES-CBC encrypt payload, compute MAC, send APDU, and decrypt response.
+     * @brief AES-CBC encrypt + MAC, send APDU, and decrypt response.
      *
-     * @param[in,out] session               Secure session (keys + rolling IV).
-     * @param[in]     apdu                  4-byte APDU header (CLA, INS, P1, P2).
+     * Performs one secure messaging round-trip: pads and encrypts @p data
+     * with Kenc using the current IV; computes a CMAC over (header || cipher)
+     * with Kmac; sends the wrapped APDU; on the response, verifies the MAC
+     * and decrypts the payload. The new IV for the next call is taken from
+     * the last cipher block (rolling IV).
+     *
+     * @param[in,out] session               Secure session (Kenc / Kmac / IV).
+     * @param[in]     apdu                  APDU header (CLA, INS, P1, P2).
      * @param[in]     apduLength            Header length (must be 4).
      * @param[in]     data                  Plaintext payload.
-     * @param[in]     dataLength            Plaintext length.
-     * @param[out]    decryptedOutput       Optional buffer for decrypted response.
-     * @param[out]    decryptedOutputLength Optional pointer to receive decrypted length.
-     * @return true if APDU sent and response verified/decrypted successfully.
+     * @param[in]     dataLength            Plaintext length (≤ @ref CW_USER_DATA_PAGE_SIZE).
+     * @param[out]    decryptedOutput       Optional buffer for the decrypted response payload.
+     * @param[out]    decryptedOutputLength Optional pointer to receive the decrypted payload length.
+     * @return true if the APDU was sent and the response MAC verified +
+     *         decrypted successfully; false on bad parameters, transport
+     *         failure, MAC mismatch, or unexpected status word.
+     *
+     * @pre @p session must be the output of a successful
+     *      @ref mutuallyAuthenticate call.
+     * @warning Mutates @c session.iv. On any failure the IV may be left in
+     *          an undefined state — treat the session as broken and tear it
+     *          down with @ref CW_SecureSession::clear.
+     * @warning Reuses module-private static buffers (@c s_apduBuf, @c s_macBuf,
+     *          @c s_dataBuf). Not safe to call concurrently from multiple
+     *          tasks; serialise at the application level.
      */
     bool aesCbcEncrypt(CW_SecureSession& session,
                        const uint8_t apdu[], uint16_t apduLength,
@@ -218,13 +275,21 @@ public:
     /**
      * @brief Verify MAC and decrypt an encrypted APDU response.
      *
+     * Internal helper called from @ref aesCbcEncrypt — exposed for the fuzz
+     * harness. Verifies the response MAC against Kmac, then decrypts the
+     * payload with Kenc using the supplied IV (which is the MAC of the
+     * sent request, by protocol).
+     *
      * @param[in,out] session               Secure session.
      * @param[in]     response              Encrypted response buffer (MAC || cipher || SW).
      * @param[in]     responseLen           Response length.
-     * @param[in]     macValue              MAC from the last sent message (used as decrypt IV).
-     * @param[out]    decryptedOutput       Optional buffer for decrypted payload.
-     * @param[out]    decryptedOutputLength Optional pointer to receive decrypted length.
-     * @return true if MAC matches and decryption succeeds, false otherwise.
+     * @param[in]     macValue              MAC of the request — used as decrypt IV.
+     * @param[out]    decryptedOutput       Optional plaintext output buffer.
+     * @param[out]    decryptedOutputLength Optional plaintext output length.
+     * @return true if MAC matched and decryption succeeded, false otherwise.
+     *
+     * @warning A false return indicates either tampering or a corrupted
+     *          channel — the session must not be reused without renegotiation.
      */
     bool aesCbcDecrypt(const CW_SecureSession& session,
                        uint8_t* response, size_t responseLen,

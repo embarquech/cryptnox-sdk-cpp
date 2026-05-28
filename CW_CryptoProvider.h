@@ -34,6 +34,7 @@
 
 /**
  * @class CW_CryptoProvider
+ * @ingroup adapters
  * @brief Abstract interface for cryptographic operations used by CW_SecureChannel.
  *
  * Decouples the secure channel protocol from any specific crypto library.

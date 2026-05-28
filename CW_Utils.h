@@ -33,6 +33,7 @@
 
 /**
  * @class CW_Utils
+ * @ingroup util
  * @brief Portable utility functions for cryptographic and security operations.
  *
  * All methods here are platform-independent pure C++ with no dependency

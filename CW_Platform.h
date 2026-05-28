@@ -29,6 +29,7 @@
 
 /**
  * @class CW_Platform
+ * @ingroup adapters
  * @brief Abstract interface for platform-specific operations used by the SDK.
  *
  * Decouples the SDK core from any specific RTOS or bare-metal delay
