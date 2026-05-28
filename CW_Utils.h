@@ -3,6 +3,21 @@
  * Copyright (c) 2026 Cryptnox SA
  */
 
+/**
+ * @file CW_Utils.h
+ * @brief Platform-independent security and memory utilities.
+ *
+ * Declares @ref CW_Utils, a small collection of helpers used throughout the
+ * SDK that have no platform dependencies:
+ *  - constant-time buffer comparison (timing-side-channel safe)
+ *  - guaranteed-not-elided secure wipe of sensitive buffers
+ *  - bounds-checked, overlap-checked memcpy
+ *  - secure random byte generation (delegated to a platform impl)
+ *
+ * Hardware-specific helpers (e.g. TRNG bring-up) live in the concrete
+ * crypto provider rather than here.
+ */
+
 #ifndef CW_UTILS_H
 #define CW_UTILS_H
 

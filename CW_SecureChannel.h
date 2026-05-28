@@ -3,6 +3,23 @@
  * Copyright (c) 2026 Cryptnox SA
  */
 
+/**
+ * @file CW_SecureChannel.h
+ * @brief Cryptnox secure channel protocol over NFC.
+ *
+ * Declares @ref CW_SecureChannel, responsible for every low-level APDU
+ * exchange required to establish and use an authenticated, encrypted
+ * session with a Cryptnox Hardware Wallet:
+ *  - SELECT AID
+ *  - Manufacturer + card certificate retrieval and chain verification
+ *  - Ephemeral key extraction and ECDH session key derivation
+ *  - MUTUALLY AUTHENTICATE
+ *  - AES-CBC + MAC secure messaging (encrypt / decrypt / SW check)
+ *
+ * The class is composed inside @ref CryptnoxWallet and is not normally used
+ * directly by application code.
+ */
+
 #ifndef CW_SECURECHANNEL_H
 #define CW_SECURECHANNEL_H
 

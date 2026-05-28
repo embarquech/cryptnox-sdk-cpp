@@ -3,24 +3,29 @@
  * Copyright (c) 2026 Cryptnox SA
  */
 
-#ifndef CW_TRUSTEDKEYS_H
-#define CW_TRUSTEDKEYS_H
-
-/******************************************************************
- * Cryptnox trusted CA public keys for offline certificate verification.
+/**
+ * @file CW_TrustedKeys.h
+ * @brief Cryptnox CA public keys used for offline certificate verification.
+ *
+ * Holds the trusted secp256r1 public keys that @ref
+ * CW_SecureChannel::verifyCertificateChain checks the manufacturer
+ * certificate against. Each key is stored as 64 raw bytes (X[32] || Y[32],
+ * no 0x04 prefix) so it can be passed directly to `uECC_verify()`.
  *
  * Source: https://verify.cryptnox.tech/certificates/
  *
- * Each key is stored as 64 raw bytes: X[32] || Y[32] (secp256r1,
- * no 0x04 prefix), suitable for direct use with uECC_verify().
- *
- * To update a key: download the .crt file from the URL above and
- * extract the EC public key coordinates with:
- *   python -c "from cryptography import x509; \
- *     c=x509.load_pem_x509_certificate(open('CERT.crt','rb').read()); \
- *     n=c.public_key().public_numbers(); \
- *     print(hex(n.x)); print(hex(n.y))"
- ******************************************************************/
+ * To update a key: download the .crt file from the URL above and extract
+ * the EC public-key coordinates with:
+ * @code{.sh}
+ * python -c "from cryptography import x509; \
+ *   c=x509.load_pem_x509_certificate(open('CERT.crt','rb').read()); \
+ *   n=c.public_key().public_numbers(); \
+ *   print(hex(n.x)); print(hex(n.y))"
+ * @endcode
+ */
+
+#ifndef CW_TRUSTEDKEYS_H
+#define CW_TRUSTEDKEYS_H
 
 #include "platform_compat.h"
 

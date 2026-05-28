@@ -3,6 +3,19 @@
  * Copyright (c) 2026 Cryptnox SA
  */
 
+/**
+ * @file CW_SecureChannel.cpp
+ * @brief Implementation of the Cryptnox secure channel protocol.
+ *
+ * Implements the methods declared in CW_SecureChannel.h:
+ * APDU framing, certificate chain verification against the trusted CA keys
+ * (@ref CW_TrustedKeys.h), ECDH session key derivation, AES-CBC encrypted
+ * messaging with rolling IV, and MAC verification on every response.
+ *
+ * Module-level static scratch buffers are reused across calls to keep the
+ * stack footprint small; secret material is wiped after use.
+ */
+
 #include "CW_SecureChannel.h"
 #include "CW_Utils.h"
 #include "CW_TrustedKeys.h"

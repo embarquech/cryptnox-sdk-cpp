@@ -3,6 +3,17 @@
  * Copyright (c) 2026 Cryptnox SA
  */
 
+/**
+ * @file CW_Utils.cpp
+ * @brief Implementation of the platform-independent utility helpers.
+ *
+ * @ref CW_Utils::secure_compare iterates over the full length to avoid
+ * leaking byte-position information through timing. @ref CW_Utils::secure_wipe
+ * uses a volatile pointer so the writes cannot be optimised away.
+ * @ref CW_Utils::safe_memcpy validates pointers, length, and source/destination
+ * overlap before delegating to memcpy.
+ */
+
 #include "CW_Utils.h"
 
 /**

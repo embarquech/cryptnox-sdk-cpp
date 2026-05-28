@@ -3,6 +3,21 @@
  * Copyright (c) 2026 Cryptnox SA
  */
 
+/**
+ * @file CW_Defs.h
+ * @brief Shared constants, error codes, and session state for the SDK.
+ *
+ * Defines:
+ *  - AES session key / IV sizes
+ *  - Generic and SIGN-specific error codes (@c CW_OK, @c CW_NOK, @c CW_SIGN_*)
+ *  - SIGN APDU parameter values (key types, signature types, PIN/PIN-less)
+ *  - Buffer and protocol size limits
+ *  - Certificate verification result codes (@c CW_CERT_*)
+ *  - @ref CW_Curve enum (portable curve identifier)
+ *  - @ref CW_SecureSession (encryption + MAC keys + rolling IV)
+ *  - Compile-time security gates: @c CW_VERIFY_CERT, @c CW_DEBUG_LOGGING
+ */
+
 #ifndef CW_DEFS_H
 #define CW_DEFS_H
 

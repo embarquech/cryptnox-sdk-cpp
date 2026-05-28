@@ -3,6 +3,17 @@
  * Copyright (c) 2026 Cryptnox SA
  */
 
+/**
+ * @file CW_NfcTransport.h
+ * @brief Abstract NFC transport interface.
+ *
+ * Declares @ref CW_NfcTransport, the contract that any concrete NFC reader
+ * driver (PN532, PN7150, PC/SC, …) must implement so that
+ * @ref CW_SecureChannel and @ref CryptnoxWallet remain hardware-agnostic.
+ *
+ * One of the three adapter interfaces a host integration must provide.
+ */
+
 #ifndef CW_NFCTRANSPORT_H
 #define CW_NFCTRANSPORT_H
 

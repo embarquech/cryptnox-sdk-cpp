@@ -3,6 +3,21 @@
  * Copyright (c) 2026 Cryptnox SA
  */
 
+/**
+ * @file CW_CryptoProvider.h
+ * @brief Abstract cryptographic primitives interface.
+ *
+ * Declares @ref CW_CryptoProvider, the contract that any concrete
+ * cryptographic backend (mbedTLS, BearSSL, OpenSSL, ESP32 hardware crypto,
+ * micro-ecc + AESLib + SHA512, …) must implement so the secure channel
+ * remains decoupled from any specific crypto library.
+ *
+ * Provides: SHA-256/512, AES-CBC encrypt/decrypt, ECDH shared secret,
+ * EC key pair generation, and cryptographically secure RNG.
+ *
+ * One of the three adapter interfaces a host integration must provide.
+ */
+
 #ifndef CW_CRYPTOPROVIDER_H
 #define CW_CRYPTOPROVIDER_H
 
