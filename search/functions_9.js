@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['makekey_0',['makekey',['../classCW__CryptoProvider.html#adb0cb9fc0ee8264d09832d8992bae48c',1,'CW_CryptoProvider::makeKey()'],['../classStubCrypto.html#a912885fa0f54067a80ec389561ca2f86',1,'StubCrypto::makeKey()']]],
-  ['mutuallyauthenticate_1',['mutuallyAuthenticate',['../classCW__SecureChannel.html#a2561fd15dadb9c6cef938e344e645c22',1,'CW_SecureChannel']]]
+  ['opensecurechannel_0',['openSecureChannel',['../classCW__SecureChannel.html#a1e8132bd74fe103ee41ab6c0e449b446',1,'CW_SecureChannel']]],
+  ['operator_3d_1',['operator=',['../classCryptnoxWallet.html#a58a42d63ad36000234d879e44f28fd8b',1,'CryptnoxWallet::operator=()'],['../classCW__SecureChannel.html#a0954f7ac239499b82b72f5561c5bb2b8',1,'CW_SecureChannel::operator=()']]]
 ];

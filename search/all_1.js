@@ -1,11 +1,10 @@
 var searchData=
 [
-  ['_5f_5fflashstringhelper_0',['__FlashStringHelper',['../class____FlashStringHelper.html',1,'']]],
-  ['_5fcachedmfcertlen_1',['_cachedMfCertLen',['../classCW__SecureChannel.html#a740f78dd7b634d1c4f1c707e3d463473',1,'CW_SecureChannel']]],
-  ['_5fcrypto_2',['_crypto',['../classCW__SecureChannel.html#aac4780f24c18f75e7b1b304fe2445178',1,'CW_SecureChannel']]],
-  ['_5fdriver_3',['_driver',['../classCW__SecureChannel.html#a208b2d0ab6c3ba1a41b2b281719a8fb3',1,'CW_SecureChannel']]],
-  ['_5flastnonce_4',['_lastNonce',['../classCW__SecureChannel.html#aa75e706991a8a9f0238fa953eecc78fd',1,'CW_SecureChannel']]],
-  ['_5flogger_5',['_logger',['../classCryptnoxWallet.html#a538b17a2655f1ad640cc37e806f01a70',1,'CryptnoxWallet::_logger'],['../classCW__SecureChannel.html#a1983ce0a00b012b7bde8547163c40444',1,'CW_SecureChannel::_logger']]],
-  ['_5fplatform_6',['_platform',['../classCryptnoxWallet.html#a055dbbf78dfdf00fa5a4fab36857de6f',1,'CryptnoxWallet::_platform'],['../classCW__SecureChannel.html#a7e1adb1e7b6c67020eca8af092711e44',1,'CW_SecureChannel::_platform']]],
-  ['_5fsecure_7',['_secure',['../classCryptnoxWallet.html#a0e62a45d25b98c3b0b48c8060d684908',1,'CryptnoxWallet']]]
+  ['a_20new_20platform_0',['Porting to a new platform',['../index.html#autotoc_md4',1,'']]],
+  ['aes_5fblock_5fsize_1',['AES_BLOCK_SIZE',['../CW__SecureChannel_8cpp.html#af19ab913a847ad1e91c5291215116de1',1,'CW_SecureChannel.cpp']]],
+  ['aescbcdecrypt_2',['aescbcdecrypt',['../classCW__CryptoProvider.html#a99a02c96ff6c90be6f225e7a4d25042b',1,'CW_CryptoProvider::aesCbcDecrypt()'],['../classCW__SecureChannel.html#a4199b486cfc6b91eb2d8290295a552b0',1,'CW_SecureChannel::aesCbcDecrypt()']]],
+  ['aescbcencrypt_3',['aescbcencrypt',['../classCW__CryptoProvider.html#ac2860bd7987aac5010bf1b38373e536a',1,'CW_CryptoProvider::aesCbcEncrypt()'],['../classCW__SecureChannel.html#a272659530c5fdb5323296887484125f0',1,'CW_SecureChannel::aesCbcEncrypt()']]],
+  ['aeskey_4',['aesKey',['../structCW__SecureSession.html#a7f5784e87376b41e263a187709ae9208',1,'CW_SecureSession']]],
+  ['apdu_5fheader_5flen_5',['APDU_HEADER_LEN',['../CW__SecureChannel_8cpp.html#a70b35c86e614c88ec439c71088d326bb',1,'CW_SecureChannel.cpp']]],
+  ['apdu_5flc_5flen_6',['APDU_LC_LEN',['../CW__SecureChannel_8cpp.html#a719b105508d88a18dc17bd5c240bdcf6',1,'CW_SecureChannel.cpp']]]
 ];

@@ -11,10 +11,5 @@ var annotated_dup =
     [ "CW_SecureSession", "structCW__SecureSession.html", "structCW__SecureSession" ],
     [ "CW_SignRequest", "structCW__SignRequest.html", "structCW__SignRequest" ],
     [ "CW_SignResult", "structCW__SignResult.html", "structCW__SignResult" ],
-    [ "CW_Utils", "classCW__Utils.html", "classCW__Utils" ],
-    [ "DerFuzzTarget", "structDerFuzzTarget.html", "structDerFuzzTarget" ],
-    [ "StubCrypto", "classStubCrypto.html", "classStubCrypto" ],
-    [ "StubLogger", "classStubLogger.html", "classStubLogger" ],
-    [ "StubNfc", "classStubNfc.html", "classStubNfc" ],
-    [ "StubPlatform", "classStubPlatform.html", "classStubPlatform" ]
+    [ "CW_Utils", "classCW__Utils.html", "classCW__Utils" ]
 ];

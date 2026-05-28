@@ -1,6 +1,5 @@
 var files_dup =
 [
-    [ "fuzz", "dir_b05962af846a36bbc52d05dfc046b2b4.html", "dir_b05962af846a36bbc52d05dfc046b2b4" ],
     [ "CryptnoxWallet.cpp", "CryptnoxWallet_8cpp.html", null ],
     [ "CryptnoxWallet.h", "CryptnoxWallet_8h.html", "CryptnoxWallet_8h" ],
     [ "CW_CryptoProvider.h", "CW__CryptoProvider_8h.html", "CW__CryptoProvider_8h" ],

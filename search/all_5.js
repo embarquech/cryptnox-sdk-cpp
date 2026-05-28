@@ -1,24 +1,11 @@
 var searchData=
 [
-  ['debugprintsignature_0',['debugPrintSignature',['../classCryptnoxWallet.html#a09ae01d0438dc615ebc0ff23e2fb6b64',1,'CryptnoxWallet']]],
-  ['dec_1',['DEC',['../platform__compat_8h.html#afe38ec6126e35e40049e27fdf4586ba5',1,'platform_compat.h']]],
-  ['der_20ecdsa_20signatures_20tt_20selector_200x00_20tt_2',['DER ECDSA signatures (&lt;tt&gt;selector = 0x00&lt;/tt&gt;)',['../index.html#autotoc_md2',1,'']]],
-  ['der_20parser_20seeds_3',['Fuzz corpus — DER parser seeds',['../index.html',1,'']]],
-  ['der_5fbit_5funused_5fzero_4',['DER_BIT_UNUSED_ZERO',['../CW__SecureChannel_8cpp.html#a82fef0fcd7acde7567ebf53f386df19c',1,'CW_SecureChannel.cpp']]],
-  ['der_5fec_5fpoint_5fbytes_5',['DER_EC_POINT_BYTES',['../CW__SecureChannel_8cpp.html#a29f4118ccea314123b4d3e8191410c23',1,'CW_SecureChannel.cpp']]],
-  ['der_5fec_5funcompressed_6',['DER_EC_UNCOMPRESSED',['../CW__SecureChannel_8cpp.html#abd1d3338b0cc21578d588018aa633946',1,'CW_SecureChannel.cpp']]],
-  ['der_5flen_5flong_5f1_7',['DER_LEN_LONG_1',['../CW__SecureChannel_8cpp.html#a6ed8197218bca99b0565ff75044bc4de',1,'CW_SecureChannel.cpp']]],
-  ['der_5flen_5flong_5f2_8',['DER_LEN_LONG_2',['../CW__SecureChannel_8cpp.html#a49ef309ce70ab7763850a28426e7937a',1,'CW_SecureChannel.cpp']]],
-  ['der_5flen_5flong_5fflag_9',['DER_LEN_LONG_FLAG',['../CW__SecureChannel_8cpp.html#af51cfb454722f79ffebfaadaaff240f4',1,'CW_SecureChannel.cpp']]],
-  ['der_5ftag_5fbit_5fstring_10',['DER_TAG_BIT_STRING',['../CW__SecureChannel_8cpp.html#ac1cbcbc9c291e0104fd58e4cb20a861c',1,'CW_SecureChannel.cpp']]],
-  ['der_5ftag_5fctx0_11',['DER_TAG_CTX0',['../CW__SecureChannel_8cpp.html#a4237368e5d1e72ea643be62209e9f027',1,'CW_SecureChannel.cpp']]],
-  ['der_5ftag_5fsequence_12',['DER_TAG_SEQUENCE',['../CW__SecureChannel_8cpp.html#a0d9d9957eb72fe5128f636b20ca7dad9',1,'CW_SecureChannel.cpp']]],
-  ['derfuzztarget_13',['DerFuzzTarget',['../structDerFuzzTarget.html',1,'']]],
-  ['derivepath_14',['derivePath',['../structCW__SignRequest.html#ab1205bbd93729d6f6a3e3ef4ce1e09cd',1,'CW_SignRequest']]],
-  ['derivepathlength_15',['derivePathLength',['../structCW__SignRequest.html#a6454fa5a9d55d1a2e2450a00425a42ac',1,'CW_SignRequest']]],
-  ['derreadlength_16',['derReadLength',['../CW__SecureChannel_8cpp.html#acdd54e4da856f1f72ecab50c0dcdd980',1,'CW_SecureChannel.cpp']]],
-  ['derskipfield_17',['derSkipField',['../CW__SecureChannel_8cpp.html#a094702c16ed427969d63c68bf8ece2d1',1,'CW_SecureChannel.cpp']]],
-  ['derwalkmfcert_18',['derWalkMfCert',['../CW__SecureChannel_8cpp.html#a09eb00e9790709b7ca33c49b28be30c7',1,'CW_SecureChannel.cpp']]],
-  ['disconnect_19',['disconnect',['../classCryptnoxWallet.html#a5e52a31fba0f21862e588e1546ad1898',1,'CryptnoxWallet']]],
-  ['documentation_20',['Documentation',['..//home/runner/work/cryptnox-sdk-cpp/cryptnox-sdk-cpp/README.md#autotoc_md18',1,'']]]
+  ['ecdh_0',['ecdh',['../classCW__CryptoProvider.html#aae68c4a93ee9045c5250b58744326cfd',1,'CW_CryptoProvider']]],
+  ['ecdsaverify_1',['ecdsaVerify',['../classCW__CryptoProvider.html#a756db119bc97e5e36e7b24d260e4fab4',1,'CW_CryptoProvider']]],
+  ['email_2',['email',['../structCW__CardInfo.html#a590f9b4badd408ac548437381e497cf9',1,'CW_CardInfo']]],
+  ['enc_5fbuf_5fmax_5flen_3',['ENC_BUF_MAX_LEN',['../CW__SecureChannel_8cpp.html#aed7638aad5cb447691c51f0d6c48a14f',1,'CW_SecureChannel.cpp']]],
+  ['errorcode_4',['errorCode',['../structCW__SignResult.html#a75988aa74d72c0d8923e8b30765f251c',1,'CW_SignResult']]],
+  ['establishsecurechannel_5',['establishSecureChannel',['../classCryptnoxWallet.html#a8584e36b3c8c088ad1ee18358246262e',1,'CryptnoxWallet']]],
+  ['extractcardephemeralkey_6',['extractCardEphemeralKey',['../classCW__SecureChannel.html#aa8ec1e3ccb023a4fef012675d7fe9388',1,'CW_SecureChannel']]],
+  ['extractrawsignature_7',['extractRawSignature',['../classCryptnoxWallet.html#a6a683e324d4e03eda442248a5a0d4fd0',1,'CryptnoxWallet']]]
 ];

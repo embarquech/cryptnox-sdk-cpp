@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['corpus_20—_20der_20parser_20seeds_0',['Fuzz corpus — DER parser seeds',['../index.html',1,'']]]
+  ['cpp_0',['cryptnox-sdk-cpp',['../index.html',1,'']]],
+  ['cryptnox_20sdk_20cpp_1',['cryptnox-sdk-cpp',['../index.html',1,'']]]
 ];

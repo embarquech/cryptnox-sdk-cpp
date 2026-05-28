@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>cryptnox-sdk-cpp: Fuzz corpus — DER parser seeds</title>
+<title>cryptnox-sdk-cpp: cryptnox-sdk-cpp</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -90,34 +90,119 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </div>
 
 <div><div class="header">
-  <div class="headertitle"><div class="title">Fuzz corpus — DER parser seeds </div></div>
+  <div class="headertitle"><div class="title">cryptnox-sdk-cpp </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="md_fuzz_2corpus_2README"></a> Place binary seed files in this directory before running <code>fuzz_der</code>.</p>
-<h1><a class="anchor" id="autotoc_md1"></a>
-Recommended seeds</h1>
+<div class="textblock"><p><a class="anchor" id="md_README"></a> </p><div align="center"></div><div align="center"><img src="https://github.com/user-attachments/assets/6ce54a27-8fb6-48e6-9d1f-da144f43425a" alt="" class="inline"/></div><div align="center"></div><h3><a class="anchor" id="autotoc_md0"></a>
+cryptnox-sdk-cpp</h3>
+<div align="center"></div><div align="center">Platform-independent C++ core SDK for Cryptnox Hardware Wallet</div><div align="center"></div><p><br  />
+ <br  />
+</p>
+<p><a href="https://github.com/embarquech/cryptnox-sdk-cpp/actions/workflows/static_analysis.yml"><img src="https://github.com/embarquech/cryptnox-sdk-cpp/actions/workflows/static_analysis.yml/badge.svg" alt="Static analysis" style="pointer-events: none;" class="inline"/></a> <a href="https://en.cppreference.com/w/cpp/17"><img src="https://img.shields.io/badge/Standard-C%2B%2B17-blue.svg" alt="Standard: C++17" style="pointer-events: none;" class="inline"/></a> <a href="https://www.gnu.org/licenses/lgpl-3.0"><img src="https://img.shields.io/badge/License-LGPLv3-blue.svg" alt="License: LGPLv3" style="pointer-events: none;" class="inline"/></a></p>
+<p><code>cryptnox-sdk-cpp</code> is the <b>shared C++ core SDK</b> for <b>Cryptnox Smart cards</b>. It implements the card-side protocol — secure channel establishment (SELECT → certificate → ECDH → mutual auth), APDU framing, PIN verification, signing, and user-data writing — independently of any target platform, NFC reader, or crypto library.</p>
+<blockquote class="doxtable">
+<p>&zwj;[!IMPORTANT] <b>This SDK is not usable on its own.</b> It exposes three abstract interfaces (<code><a class="el" href="classCW__NfcTransport.html" title="Abstract interface for NFC transport operations.">CW_NfcTransport</a></code>, <code><a class="el" href="classCW__CryptoProvider.html" title="Abstract interface for cryptographic operations used by CW_SecureChannel.">CW_CryptoProvider</a></code>, <code><a class="el" href="classCW__Logger.html" title="Abstract interface for serial/debug output.">CW_Logger</a></code>) that <b>must be implemented by a host integration</b>. It ships no transport driver, no crypto backend, and no logging output. </p>
+</blockquote>
+<h2><a class="anchor" id="autotoc_md1"></a>
+&lt;/blockquote&gt;</h2>
 <h2><a class="anchor" id="autotoc_md2"></a>
-DER ECDSA signatures (&lt;tt&gt;selector = 0x00&lt;/tt&gt;)</h2>
-<p>Files must start with <code>0x00</code>, followed by a raw DER ECDSA signature. A minimal valid P-256 DER signature (70–72 bytes) looks like: <code>30 44 02 20 &lt;r[32]&gt; 02 20 &lt;s[32]&gt;</code></p>
-<p>Extract a real signature from any Cryptnox transaction and prepend <code>0x00</code>.</p>
-<h2><a class="anchor" id="autotoc_md3"></a>
-Manufacturer certificate blobs (&lt;tt&gt;selector = 0x01&lt;/tt&gt;)</h2>
-<p>Files must start with <code>0x01</code>, followed by a raw DER X.509 certificate. Obtain a real Cryptnox manufacturer certificate via <code><a class="el" href="classCW__SecureChannel.html#af4e64bd9c3acd51472c5e4cd5fccb1f2" title="Retrieve the manufacturer certificate stored in card flash.">CW_SecureChannel::getManufacturerCertificate()</a></code> and prepend <code>0x01</code>.</p>
-<h1><a class="anchor" id="autotoc_md4"></a>
-Example (Linux/macOS)</h1>
-<div class="fragment"><div class="line"># Prepend selector byte 0x01 to an existing DER cert</div>
-<div class="line">printf &#39;\x01&#39; | cat - mfr_cert.der &gt; corpus/cert_01.bin</div>
+Used by</h2>
+<p>This core is consumed as a submodule by the platform-specific SDKs:</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Integration   </th><th class="markdownTableHeadNone">Repository    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">ESP32-S3 (ESP-IDF v5.5)   </td><td class="markdownTableBodyNone"><a href="https://github.com/embarquech/cryptnox-sdk-esp32"><code>embarquech/cryptnox-sdk-esp32</code></a>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Arduino R4 (Renesas RA4M1)   </td><td class="markdownTableBodyNone"><a href="https://github.com/embarquech/cryptnox-sdk-arduino"><code>embarquech/cryptnox-sdk-arduino</code></a>   </td></tr>
+</table>
+<p>If you want to talk to a Cryptnox card on real hardware, <b>start from one of those repositories</b>.</p>
+<hr  />
+<h2><a class="anchor" id="autotoc_md4"></a>
+Porting to a new platform</h2>
+<p>This repository is intended as the <b>starting point for porting the SDK to a new platform</b> (another MCU family, a desktop OS, a different NFC reader, a different crypto backend, etc.).</p>
+<p>A port consists of providing concrete implementations of the three adapter interfaces:</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Interface   </th><th class="markdownTableHeadNone">What you must provide    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code><a class="el" href="classCW__NfcTransport.html" title="Abstract interface for NFC transport operations.">CW_NfcTransport</a></code>   </td><td class="markdownTableBodyNone">Driver for your NFC reader (PN532, PN7150, PC/SC, …)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code><a class="el" href="classCW__CryptoProvider.html" title="Abstract interface for cryptographic operations used by CW_SecureChannel.">CW_CryptoProvider</a></code>   </td><td class="markdownTableBodyNone">SHA-256/512, AES-CBC, ECDH, EC key generation, RNG (mbedTLS, BearSSL, OpenSSL, hardware peripheral, …)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code><a class="el" href="classCW__Logger.html" title="Abstract interface for serial/debug output.">CW_Logger</a></code>   </td><td class="markdownTableBodyNone">Output sink (UART, stdout, syslog, network, …)   </td></tr>
+</table>
+<p>Then drop this repository in as a submodule (or copy of its sources) inside your project, build it together with your adapters, and instantiate <code><a class="el" href="classCryptnoxWallet.html" title="High-level interface for interacting with a Cryptnox smart card over NFC.">CryptnoxWallet</a></code> with the three injected dependencies. The existing platform SDKs (<code>cryptnox-sdk-esp32</code>, <code>cryptnox-sdk-arduino</code>) are useful references for a complete port.</p>
+<hr  />
+<h2><a class="anchor" id="autotoc_md6"></a>
+What's inside</h2>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">File   </th><th class="markdownTableHeadNone">Role    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code><a class="el" href="classCryptnoxWallet.html" title="High-level interface for interacting with a Cryptnox smart card over NFC.">CryptnoxWallet</a>.{h,cpp}</code>   </td><td class="markdownTableBodyNone">High-level API: <code>begin</code>, <code>connect</code>, <code>verifyPin</code>, <code>sign</code>, <code>writeUserData</code>, <code>disconnect</code>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code><a class="el" href="classCW__SecureChannel.html" title="Implements the Cryptnox secure channel protocol over NFC.">CW_SecureChannel</a>.{h,cpp}</code>   </td><td class="markdownTableBodyNone">Secure channel protocol (mutual auth, session keys, encrypted APDU exchange)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code><a class="el" href="CW__NfcTransport_8h.html">CW_NfcTransport.h</a></code>   </td><td class="markdownTableBodyNone"><b>Adapter interface</b> — NFC reader contract    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code><a class="el" href="CW__CryptoProvider_8h.html">CW_CryptoProvider.h</a></code>   </td><td class="markdownTableBodyNone"><b>Adapter interface</b> — SHA-256/512, AES-CBC, ECDH, EC keygen, RNG    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code><a class="el" href="CW__Logger_8h.html">CW_Logger.h</a></code>   </td><td class="markdownTableBodyNone"><b>Adapter interface</b> — debug/serial output    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code><a class="el" href="CW__TrustedKeys_8h.html">CW_TrustedKeys.h</a></code>   </td><td class="markdownTableBodyNone">Cryptnox CA public keys used to verify card certificates    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code><a class="el" href="CW__Defs_8h.html">CW_Defs.h</a></code>, <code><a class="el" href="classCW__Utils.html" title="Portable utility functions for cryptographic and security operations.">CW_Utils</a>.{h,cpp}</code>   </td><td class="markdownTableBodyNone">Constants, error codes, small helpers    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code><a class="el" href="platform__compat_8h.html" title="Arduino compatibility shims for non-Arduino (plain C++) builds.">platform_compat.h</a></code>   </td><td class="markdownTableBodyNone">Shim for non-Arduino targets   </td></tr>
+</table>
+<p>The three adapter interfaces are the only contract a host must satisfy. Everything else is self-contained.</p>
+<hr  />
+<h2><a class="anchor" id="autotoc_md8"></a>
+Integrating the core</h2>
+<p>A host integration injects its three adapters into <code><a class="el" href="classCryptnoxWallet.html" title="High-level interface for interacting with a Cryptnox smart card over NFC.">CryptnoxWallet</a></code>:</p>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &quot;<a class="code" href="CryptnoxWallet_8h.html">CryptnoxWallet.h</a>&quot;</span></div>
 <div class="line"> </div>
-<div class="line"># Prepend selector byte 0x00 to an existing DER signature</div>
-<div class="line">printf &#39;\x00&#39; | cat - sig.der &gt; corpus/sig_00.bin</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md5"></a>
-Running the fuzzer</h1>
-<div class="fragment"><div class="line">cd cryptnox-sdk-cpp/fuzz</div>
-<div class="line">mkdir build &amp;&amp; cd build</div>
-<div class="line">cmake .. -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++</div>
-<div class="line">make</div>
-<div class="line">./fuzz_der ../corpus/ -max_len=512 -jobs=4</div>
-</div><!-- fragment --> </div></div><!-- PageDoc -->
+<div class="line"><span class="comment">// MyXxx = concrete adapters provided by the platform SDK:</span></div>
+<div class="line"><span class="comment">//   - MyNfcTransport   : public CW_NfcTransport</span></div>
+<div class="line"><span class="comment">//   - MyCryptoProvider : public CW_CryptoProvider</span></div>
+<div class="line"><span class="comment">//   - MyLogger         : public CW_Logger</span></div>
+<div class="line"> </div>
+<div class="line">MyLogger          logger;</div>
+<div class="line">MyCryptoProvider  crypto;</div>
+<div class="line">MyNfcTransport    transport(<span class="comment">/* platform-specific args */</span>);</div>
+<div class="line"><a class="code hl_class" href="classCryptnoxWallet.html">CryptnoxWallet</a>    wallet(transport, logger, crypto);</div>
+<div class="line"> </div>
+<div class="line"><span class="keywordflow">if</span> (!wallet.begin()) { <span class="comment">/* reader init failed */</span> }</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_struct" href="structCW__SecureSession.html">CW_SecureSession</a> session;</div>
+<div class="line"><span class="keywordflow">if</span> (wallet.connect(session)) {</div>
+<div class="line">    <span class="comment">// wallet.verifyPin(...), wallet.sign(...), wallet.writeUserData(...)</span></div>
+<div class="line">    wallet.disconnect(session);</div>
+<div class="line">}</div>
+<div class="ttc" id="aCryptnoxWallet_8h_html"><div class="ttname"><a href="CryptnoxWallet_8h.html">CryptnoxWallet.h</a></div></div>
+<div class="ttc" id="aclassCryptnoxWallet_html"><div class="ttname"><a href="classCryptnoxWallet.html">CryptnoxWallet</a></div><div class="ttdoc">High-level interface for interacting with a Cryptnox smart card over NFC.</div><div class="ttdef"><b>Definition</b> <a href="CryptnoxWallet_8h_source.html#l00105">CryptnoxWallet.h:105</a></div></div>
+<div class="ttc" id="astructCW__SecureSession_html"><div class="ttname"><a href="structCW__SecureSession.html">CW_SecureSession</a></div><div class="ttdoc">Holds cryptographic session state for reentrant secure channel operations.</div><div class="ttdef"><b>Definition</b> <a href="CW__Defs_8h_source.html#l00112">CW_Defs.h:112</a></div></div>
+</div><!-- fragment --><p>Full runnable examples (PIN verify, transaction signing, full ESP-IDF / Arduino boilerplate) live in the platform SDKs linked above.</p>
+<hr  />
+<h2><a class="anchor" id="autotoc_md10"></a>
+Building standalone</h2>
+<p>There is <b>no standalone build target</b> in this repository. The CI workflow runs <code>cppcheck</code> static analysis only (<code>.github/workflows/static_analysis.yml</code>); host-supplied headers (<code>uECC.h</code>, <code>mbedtls/*</code>, platform logger) are not vendored, so <code>missingInclude</code> is suppressed.</p>
+<p>To compile and exercise the code, use one of the platform SDKs.</p>
+<hr  />
+<h2><a class="anchor" id="autotoc_md12"></a>
+Documentation</h2>
+<p>The generated documentation for this project is available <a href="https://embarquech.github.io/cryptnox-sdk-cpp/">here</a>.</p>
+<hr  />
+<h2><a class="anchor" id="autotoc_md14"></a>
+License</h2>
+<p><code>cryptnox-sdk-cpp</code> is dual-licensed:</p>
+<ul>
+<li><b>LGPL-3.0</b> for open-source projects and proprietary projects that comply with LGPL requirements</li>
+<li><b>Commercial license</b> for projects that require a proprietary license without LGPL obligations</li>
+</ul>
+<p>For commercial inquiries, contact: <a href="#" onclick="location.href='mai'+'lto:'+'con'+'ta'+'ct@'+'cr'+'ypt'+'no'+'x.c'+'om'; return false;">conta<span class="obfuscator">.nosp@m.</span>ct@c<span class="obfuscator">.nosp@m.</span>ryptn<span class="obfuscator">.nosp@m.</span>ox.c<span class="obfuscator">.nosp@m.</span>om</a> </p>
+</div></div><!-- PageDoc -->
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

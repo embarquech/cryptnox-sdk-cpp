@@ -1,4 +1,0 @@
-var searchData=
-[
-  ['seeds_0',['Fuzz corpus — DER parser seeds',['../index.html',1,'']]]
-];

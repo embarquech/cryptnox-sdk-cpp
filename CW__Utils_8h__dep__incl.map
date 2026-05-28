@@ -1,27 +1,22 @@
 <map id="CW_Utils.h" name="CW_Utils.h">
-<area shape="rect" id="Node000001" title=" " alt="" coords="374,5,467,31"/>
-<area shape="rect" id="Node000002" href="$CW__Defs_8h.html" title=" " alt="" coords="374,79,467,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="423,44,423,79,418,79,418,44"/>
-<area shape="rect" id="Node000005" href="$CW__SecureChannel_8cpp.html" title=" " alt="" coords="63,299,237,324"/>
-<area shape="poly" id="edge12_Node000001_Node000005" title=" " alt="" coords="380,38,341,57,296,83,252,115,213,154,189,192,172,233,154,299,149,298,167,231,184,189,209,150,249,111,293,79,338,53,378,34"/>
-<area shape="rect" id="Node000007" href="$CryptnoxWallet_8h.html" title=" " alt="" coords="419,299,553,324"/>
-<area shape="poly" id="edge16_Node000001_Node000007" title=" " alt="" coords="450,37,468,55,482,78,492,108,499,140,502,204,498,260,491,299,486,298,492,260,497,204,493,141,487,110,477,80,463,59,446,41"/>
-<area shape="rect" id="Node000008" href="$CryptnoxWallet_8cpp.html" title=" " alt="" coords="419,372,569,397"/>
-<area shape="poly" id="edge15_Node000001_Node000008" title=" " alt="" coords="469,34,510,53,550,81,568,98,582,118,591,139,594,163,594,239,589,285,568,326,543,353,515,374,512,370,539,349,564,322,584,283,589,239,589,164,586,141,577,120,564,102,547,85,507,58,467,38"/>
-<area shape="rect" id="Node000009" href="$CW__Utils_8cpp.html" title=" " alt="" coords="5,152,113,177"/>
-<area shape="poly" id="edge13_Node000001_Node000009" title=" " alt="" coords="361,26,259,42,203,58,150,81,125,97,102,117,70,154,66,150,99,113,122,93,147,76,201,53,258,37,360,21"/>
-<area shape="rect" id="Node000003" href="$CW__CryptoProvider_8h.html" title=" " alt="" coords="224,152,383,177"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="391,113,324,154,321,149,389,109"/>
-<area shape="rect" id="Node000004" href="$CW__SecureChannel_8h.html" title=" " alt="" coords="291,225,451,251"/>
-<area shape="poly" id="edge10_Node000002_Node000004" title=" " alt="" coords="416,118,397,178,379,226,374,224,391,176,411,117"/>
-<area shape="poly" id="edge11_Node000002_Node000007" title=" " alt="" coords="431,116,466,225,486,298,481,299,461,226,426,118"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="326,185,362,223,358,227,322,189"/>
-<area shape="rect" id="Node000006" href="$fuzz__der_8cpp.html" title=" " alt="" coords="199,372,333,397"/>
-<area shape="poly" id="edge9_Node000003_Node000006" title=" " alt="" coords="294,191,282,226,270,309,268,372,263,372,265,308,277,225,289,189"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="324,257,187,301,185,296,322,252"/>
-<area shape="poly" id="edge8_Node000004_Node000006" title=" " alt="" coords="357,264,277,373,272,370,352,261"/>
-<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="403,255,469,296,466,301,400,260"/>
-<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="182,329,248,369,246,374,179,333"/>
-<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="491,337,495,372,490,372,486,338"/>
-<area shape="poly" id="edge14_Node000009_Node000006" title=" " alt="" coords="52,191,42,220,36,255,38,291,43,307,52,322,74,338,111,352,199,371,198,376,109,357,72,343,48,326,38,309,33,292,31,255,37,219,47,189"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="244,5,337,31"/>
+<area shape="rect" id="Node000002" href="$CW__Defs_8h.html" title=" " alt="" coords="244,79,337,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="293,44,293,79,288,79,288,44"/>
+<area shape="rect" id="Node000005" href="$CW__SecureChannel_8cpp.html" title=" " alt="" coords="51,299,226,324"/>
+<area shape="poly" id="edge9_Node000001_Node000005" title=" " alt="" coords="241,38,199,56,156,80,115,113,84,153,77,172,76,193,80,213,88,233,109,270,130,297,126,300,105,273,83,236,75,215,71,193,72,171,79,151,111,109,153,76,197,51,238,33"/>
+<area shape="rect" id="Node000006" href="$CryptnoxWallet_8h.html" title=" " alt="" coords="266,299,401,324"/>
+<area shape="poly" id="edge12_Node000001_Node000006" title=" " alt="" coords="320,37,338,55,352,78,361,109,366,141,363,205,352,261,340,299,335,298,347,260,358,205,360,141,356,110,347,80,334,59,316,41"/>
+<area shape="rect" id="Node000007" href="$CryptnoxWallet_8cpp.html" title=" " alt="" coords="99,372,248,397"/>
+<area shape="poly" id="edge11_Node000001_Node000007" title=" " alt="" coords="231,26,160,38,123,48,87,62,56,80,31,102,14,130,8,164,8,239,9,265,14,285,24,303,41,322,60,338,81,351,126,369,124,374,79,356,56,343,37,326,19,306,9,287,4,266,3,239,3,163,9,128,27,99,53,76,85,57,121,43,159,33,230,21"/>
+<area shape="rect" id="Node000008" href="$CW__Utils_8cpp.html" title=" " alt="" coords="430,79,538,104"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="335,33,453,76,451,81,333,38"/>
+<area shape="rect" id="Node000003" href="$CW__CryptoProvider_8h.html" title=" " alt="" coords="94,152,253,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="261,113,194,154,191,149,259,109"/>
+<area shape="rect" id="Node000004" href="$CW__SecureChannel_8h.html" title=" " alt="" coords="119,225,279,251"/>
+<area shape="poly" id="edge7_Node000002_Node000004" title=" " alt="" coords="289,118,281,148,266,179,243,206,218,227,214,223,239,203,262,176,276,146,284,117"/>
+<area shape="poly" id="edge8_Node000002_Node000006" title=" " alt="" coords="298,117,334,298,328,299,293,118"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="185,189,197,224,192,226,180,191"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="182,263,150,300,146,297,178,260"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="234,255,313,296,310,301,231,259"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="296,332,201,374,198,369,294,327"/>
 </map>

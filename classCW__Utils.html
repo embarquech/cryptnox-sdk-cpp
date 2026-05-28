@@ -113,9 +113,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a06e3f240779c58e3cfdd0f1b97dc0ed6" id="r_a06e3f240779c58e3cfdd0f1b97dc0ed6"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCW__Utils.html#a06e3f240779c58e3cfdd0f1b97dc0ed6">safe_memcpy</a> (uint8_t *dst, size_t dstSize, const uint8_t *src, size_t count)</td></tr>
 <tr class="memdesc:a06e3f240779c58e3cfdd0f1b97dc0ed6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Safe memcpy — validates pointers, sizes, and checks for overlap.  <br /></td></tr>
 <tr class="separator:a06e3f240779c58e3cfdd0f1b97dc0ed6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae86b55119f227df98eee22cb2bb1cf79" id="r_ae86b55119f227df98eee22cb2bb1cf79"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCW__Utils.html#ae86b55119f227df98eee22cb2bb1cf79">fill_secure_random</a> (uint8_t *dest, size_t len)</td></tr>
-<tr class="memdesc:ae86b55119f227df98eee22cb2bb1cf79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fill <code>len</code> bytes at <code>dest</code> with cryptographically random data.  <br /></td></tr>
-<tr class="separator:ae86b55119f227df98eee22cb2bb1cf79"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07157e08522eedee4641be4973afdf4e" id="r_a07157e08522eedee4641be4973afdf4e"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCW__Utils.html#a07157e08522eedee4641be4973afdf4e">fill_secure_random</a> (uint8_t *dest, size_t len)</td></tr>
+<tr class="memdesc:a07157e08522eedee4641be4973afdf4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fill <code>len</code> bytes at <code>dest</code> with cryptographically random data.  <br /></td></tr>
+<tr class="separator:a07157e08522eedee4641be4973afdf4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Portable utility functions for cryptographic and security operations. </p>
@@ -124,8 +124,8 @@ Static Public Member Functions</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="CW__Utils_8h_source.html#l00029">29</a> of file <a class="el" href="CW__Utils_8h_source.html">CW_Utils.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ae86b55119f227df98eee22cb2bb1cf79" name="ae86b55119f227df98eee22cb2bb1cf79"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae86b55119f227df98eee22cb2bb1cf79">&#9670;&#160;</a></span>fill_secure_random()</h2>
+<a id="a07157e08522eedee4641be4973afdf4e" name="a07157e08522eedee4641be4973afdf4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07157e08522eedee4641be4973afdf4e">&#9670;&#160;</a></span>fill_secure_random()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -134,7 +134,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool CW_Utils::fill_secure_random </td>
+          <td class="memname">static bool CW_Utils::fill_secure_random </td>
           <td>(</td>
           <td class="paramtype">uint8_t *&#160;</td>
           <td class="paramname"><em>dest</em>, </td>
@@ -168,8 +168,6 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true on success, false if dest is NULL, len is zero, or no radio is active. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="fuzz__der_8cpp_source.html#l00109">109</a> of file <a class="el" href="fuzz__der_8cpp_source.html">fuzz_der.cpp</a>.</p>
 
 </div>
 </div>
@@ -351,7 +349,6 @@ true if copy succeeded, false otherwise. </dd></dl>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="CW__Utils_8h_source.html">CW_Utils.h</a></li>
 <li><a class="el" href="CW__Utils_8cpp_source.html">CW_Utils.cpp</a></li>
-<li>fuzz/<a class="el" href="fuzz__der_8cpp_source.html">fuzz_der.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
