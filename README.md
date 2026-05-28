@@ -4,7 +4,7 @@
 
 ### cryptnox-sdk-cpp
 
-Platform-independent C++ core SDK for Cryptnox smart card wallets
+Platform-independent C++ core SDK for Cryptnox Hardware Wallet
 
 </div>
 
@@ -116,6 +116,12 @@ static analysis only (`.github/workflows/static_analysis.yml`); host-supplied he
 (`uECC.h`, `mbedtls/*`, platform logger) are not vendored, so `missingInclude` is suppressed.
 
 To compile and exercise the code, use one of the platform SDKs.
+
+---
+
+## Documentation
+
+The generated documentation for this project is available [here](https://embarquech.github.io/cryptnox-sdk-cpp/).
 
 ---
 
