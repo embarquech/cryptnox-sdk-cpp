@@ -202,9 +202,14 @@ struct CW_SecureSession {
 
 /**
  * Set to 1 to enable library-internal debug logging via CW_Logger.
- * Disabled by default to preserve Flash on resource-constrained boards.
- * Must never be enabled in release/optimised builds — doing so leaks
- * session state over UART (SEC-012).
+ *
+ * Off by default. Enabling it kills flash optimisation — measured on
+ * Arduino UNO R4 (Renesas RA4M1): +149 KB flash, +6 KB SRAM (31 % → 88 %
+ * of a 256 KB image on the Sign example). Same order of magnitude on
+ * every constrained MCU.
+ *
+ * Also leaks session state over UART (SEC-012). Bring-up only, never in
+ * release builds.
  */
 #ifndef CW_DEBUG_LOGGING
 #  define CW_DEBUG_LOGGING 0
