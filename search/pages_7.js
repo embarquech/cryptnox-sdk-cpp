@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['license_0',['License',['../index.html#autotoc_md14',1,'']]],
-  ['list_1',['Bug List',['../bug.html',1,'']]]
+  ['platform_0',['Porting to a new platform',['../index.html#autotoc_md4',1,'']]],
+  ['porting_20to_20a_20new_20platform_1',['Porting to a new platform',['../index.html#autotoc_md4',1,'']]]
 ];

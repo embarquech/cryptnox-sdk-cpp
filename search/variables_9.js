@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['keytype_0',['keyType',['../structCW__SignRequest.html#aa43fe32473403cb51580f80629bcc32a',1,'CW_SignRequest']]]
+  ['name_0',['name',['../structCW__CardInfo.html#a127fbcca2102755f6d494330e6897ebf',1,'CW_CardInfo']]]
 ];

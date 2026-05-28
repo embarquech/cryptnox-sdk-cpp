@@ -1,16 +1,8 @@
 var searchData=
 [
-  ['safe_5fmemcpy_0',['safe_memcpy',['../classCW__Utils.html#a06e3f240779c58e3cfdd0f1b97dc0ed6',1,'CW_Utils']]],
-  ['secure_5fcompare_1',['secure_compare',['../classCW__Utils.html#a588c6e8f57ce80d05bd8da87241afd26',1,'CW_Utils']]],
-  ['secure_5fwipe_2',['secure_wipe',['../classCW__Utils.html#a62a40b0e4577c7d716caf48016b40cb2',1,'CW_Utils']]],
-  ['selectapdu_3',['selectApdu',['../classCW__SecureChannel.html#a7afa1f7bbd9c0e45069893b00883fd11',1,'CW_SecureChannel']]],
-  ['sendapdu_4',['sendAPDU',['../classCW__NfcTransport.html#af7fb790081cc8742717f6ba3045bc202',1,'CW_NfcTransport']]],
-  ['sendapdularge_5',['sendAPDULarge',['../classCW__NfcTransport.html#a3fd8677a82ff50b7cbcdc31f4c67eb00',1,'CW_NfcTransport']]],
-  ['sendsignapdu_6',['sendSignApdu',['../classCryptnoxWallet.html#aacd6bbaf21d650b9eb17762d8934cc92',1,'CryptnoxWallet']]],
-  ['sha256_7',['sha256',['../classCW__CryptoProvider.html#ab4a15aeabc457d53b07dcd9a9966bd02',1,'CW_CryptoProvider']]],
-  ['sha512_8',['sha512',['../classCW__CryptoProvider.html#a651c5581b03ab0227f591ade247ea753',1,'CW_CryptoProvider']]],
-  ['sign_9',['sign',['../classCryptnoxWallet.html#a539f73749cce012f4a973840c76d1275',1,'CryptnoxWallet']]],
-  ['sleep_5fms_10',['sleep_ms',['../classCW__Platform.html#a35c85f735804035836a535c0d2fa8418',1,'CW_Platform']]],
-  ['strcmp_11',['strcmp',['../relates_8cpp.html#a7ceb7d379a52f7e26418e7a446b4a41a',1,'relates.cpp']]],
-  ['stringdebug_12',['stringDebug',['../classString.html#a5c07384b505d25ae6f61fc7abf0b0e61',1,'String']]]
+  ['_7ecw_5fcryptoprovider_0',['~CW_CryptoProvider',['../classCW__CryptoProvider.html#a153c05ffbc045f5ced6ef3f48763e2e2',1,'CW_CryptoProvider']]],
+  ['_7ecw_5flogger_1',['~CW_Logger',['../classCW__Logger.html#a548161cf7ce4ce2d16a94df115ceff52',1,'CW_Logger']]],
+  ['_7ecw_5fnfctransport_2',['~CW_NfcTransport',['../classCW__NfcTransport.html#a1885aaaad6a75693a3119f7f1c1e74dd',1,'CW_NfcTransport']]],
+  ['_7ecw_5fplatform_3',['~CW_Platform',['../classCW__Platform.html#a50f9fafadde0ec7058c7af2271545b82',1,'CW_Platform']]],
+  ['_7ecw_5fsignrequest_4',['~CW_SignRequest',['../structCW__SignRequest.html#a90e634dc8a82f51113073aa9ba6c4b48',1,'CW_SignRequest']]]
 ];

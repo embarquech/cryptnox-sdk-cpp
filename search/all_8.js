@@ -1,16 +1,6 @@
 var searchData=
 [
-  ['getcardcertificate_0',['getCardCertificate',['../classCW__SecureChannel.html#a72983a22674a33744054095eb7e9d3f9',1,'CW_SecureChannel']]],
-  ['getcardcertificate_5fin_5fbytes_1',['GETCARDCERTIFICATE_IN_BYTES',['../CW__SecureChannel_8cpp.html#add6226a3b0f8dde62724922f00f0333a',1,'CW_SecureChannel.cpp']]],
-  ['getcardinfo_2',['getCardInfo',['../classCryptnoxWallet.html#a8331fe2f662397916749769e17d68ecd',1,'CryptnoxWallet']]],
-  ['getmanufacturercertificate_3',['getManufacturerCertificate',['../classCW__SecureChannel.html#af4e64bd9c3acd51472c5e4cd5fccb1f2',1,'CW_SecureChannel']]],
-  ['glob_5ffunc_4',['glob_func',['../memgrp_8cpp.html#a36cb413747454fcdba9dd7b8f972fcf3',1,'memgrp.cpp']]],
-  ['globalvalue_5',['globalValue',['../file_8h.html#a4a86bef4b6181cb3f53bd0461a9a511b',1,'file.h']]],
-  ['globenum_6',['GlobEnum',['../autolink_8cpp.html#a656d63cf384d2a6f23c2c18523a7bc5e',1,'autolink.cpp']]],
-  ['globvar_7',['globVar',['../autolink_8cpp.html#a88d0bae800d600a11d7bd60f0bc4b858',1,'autolink.cpp']]],
-  ['group_8',['Group',['../group__group5.html',1,'The Fifth Group'],['../group__group1.html',1,'The First Group'],['../group__group4.html',1,'The Fourth Group'],['../group__group2.html',1,'The Second Group'],['../group__group3.html',1,'The Third Group']]],
-  ['group_205_9',['group 5',['../group__group5.html',1,'This is a section in group 5'],['../group__group5.html',1,'This is another section in group 5']]],
-  ['group_2ecpp_10',['group.cpp',['../group_8cpp.html',1,'']]],
-  ['gval1_11',['GVal1',['../autolink_8cpp.html#a656d63cf384d2a6f23c2c18523a7bc5ea0f016f49e4f3bcd072319b9d68bc927d',1,'autolink.cpp']]],
-  ['gval2_12',['GVal2',['../autolink_8cpp.html#a656d63cf384d2a6f23c2c18523a7bc5ea811876e2eea5c16ae0594a95d98fbd55',1,'autolink.cpp']]]
+  ['hash_0',['hash',['../structCW__SignRequest.html#a76ad3bbaf6808649883e60297aedd8ab',1,'CW_SignRequest']]],
+  ['hashlength_1',['hashLength',['../structCW__SignRequest.html#a60f7cef1c6aa6d327a678ae554365164',1,'CW_SignRequest']]],
+  ['hex_2',['HEX',['../platform__compat_8h.html#a9075d93e0ab26ccd6e059fa06aa4e3de',1,'platform_compat.h']]]
 ];
