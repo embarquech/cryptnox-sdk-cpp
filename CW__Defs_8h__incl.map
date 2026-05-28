@@ -1,0 +1,16 @@
+<map id="CW_Defs.h" name="CW_Defs.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="139,5,233,31"/>
+<area shape="rect" id="Node000002" href="$platform__compat_8h.html" title="Arduino compatibility shims for non&#45;Arduino (plain C++) builds." alt="" coords="113,152,259,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="184,32,173,79,173,110,180,138,175,139,168,110,167,78,179,30"/>
+<area shape="rect" id="Node000007" href="$CW__Utils_8h.html" title=" " alt="" coords="182,79,275,104"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="195,30,217,66,213,68,191,32"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,225,76,251"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="164,180,78,222,75,217,161,175"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="101,225,175,251"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="180,179,156,216,151,213,176,176"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="200,225,271,251"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="196,176,222,213,217,216,192,179"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="295,225,378,251"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="211,175,301,217,298,222,209,180"/>
+<area shape="poly" id="edge7_Node000007_Node000002" title=" " alt="" coords="224,106,202,142,198,139,219,103"/>
+</map>

@@ -1,0 +1,25 @@
+var classCryptnoxWallet =
+[
+    [ "CryptnoxWallet", "classCryptnoxWallet.html#a440a5e156f543891a23f2e9668ddad91", null ],
+    [ "CryptnoxWallet", "classCryptnoxWallet.html#a4cfad878f6d5c649b83d30b5ecf23527", null ],
+    [ "begin", "classCryptnoxWallet.html#aa394fe6bc19d57c4a9d89a303f7e664d", null ],
+    [ "buildSignPayload", "classCryptnoxWallet.html#afb4cedb5fd1c5616d8a3be343d97d9ac", null ],
+    [ "connect", "classCryptnoxWallet.html#a9231d6ed6a0634a8ab7c2a2710224a49", null ],
+    [ "debugPrintSignature", "classCryptnoxWallet.html#a09ae01d0438dc615ebc0ff23e2fb6b64", null ],
+    [ "disconnect", "classCryptnoxWallet.html#a5e52a31fba0f21862e588e1546ad1898", null ],
+    [ "establishSecureChannel", "classCryptnoxWallet.html#a8584e36b3c8c088ad1ee18358246262e", null ],
+    [ "extractRawSignature", "classCryptnoxWallet.html#a6a683e324d4e03eda442248a5a0d4fd0", null ],
+    [ "getCardInfo", "classCryptnoxWallet.html#a8331fe2f662397916749769e17d68ecd", null ],
+    [ "isSecureChannelOpen", "classCryptnoxWallet.html#a08c6fa72f255be4cff6113187f8e3218", null ],
+    [ "operator=", "classCryptnoxWallet.html#a58a42d63ad36000234d879e44f28fd8b", null ],
+    [ "parseDerSignature", "classCryptnoxWallet.html#a03e08d9bb6e9e5af10a886e715c05237", null ],
+    [ "printPN532FirmwareVersion", "classCryptnoxWallet.html#a9342637fe7352965de1aefb74f082a6c", null ],
+    [ "sendSignApdu", "classCryptnoxWallet.html#aacd6bbaf21d650b9eb17762d8934cc92", null ],
+    [ "sign", "classCryptnoxWallet.html#a539f73749cce012f4a973840c76d1275", null ],
+    [ "validateSignRequest", "classCryptnoxWallet.html#a9a4781470793bc69b62150894e10d301", null ],
+    [ "verifyPin", "classCryptnoxWallet.html#acfae75a7be8662c18d2e6af829ef77a0", null ],
+    [ "writeUserData", "classCryptnoxWallet.html#a4ec22fccb95ebf3ad536fa0fb50577d1", null ],
+    [ "_logger", "classCryptnoxWallet.html#a538b17a2655f1ad640cc37e806f01a70", null ],
+    [ "_platform", "classCryptnoxWallet.html#a055dbbf78dfdf00fa5a4fab36857de6f", null ],
+    [ "_secure", "classCryptnoxWallet.html#a0e62a45d25b98c3b0b48c8060d684908", null ]
+];

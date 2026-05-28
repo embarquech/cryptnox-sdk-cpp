@@ -1,0 +1,5 @@
+<map id="CW_SignRequest" name="CW_SignRequest">
+<area shape="rect" id="Node000001" title="Request parameters for the sign operation." alt="" coords="12,93,144,119"/>
+<area shape="rect" id="Node000002" href="$structCW__SecureSession.html" title="Holds cryptographic session state for reentrant secure channel operations." alt="" coords="5,5,151,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="81,45,81,93,75,93,75,45"/>
+</map>
