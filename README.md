@@ -15,7 +15,7 @@ Platform-independent C++ core SDK for Cryptnox Hardware Wallet
 [![Standard: C++17](https://img.shields.io/badge/Standard-C%2B%2B17-blue.svg)](https://en.cppreference.com/w/cpp/17)
 [![License: LGPLv3](https://img.shields.io/badge/License-LGPLv3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
 
-`cryptnox-sdk-cpp` is the **shared C++ core SDK** for **Cryptnox Smart cards**. It implements the
+`cryptnox-sdk-cpp` is the **shared C++ core SDK** for the **Cryptnox Hardware Wallet**. It implements the
 card-side protocol — secure channel establishment (SELECT → certificate → ECDH → mutual auth),
 APDU framing, PIN verification, signing, and user-data writing — independently of any target
 platform, NFC reader, or crypto library.
