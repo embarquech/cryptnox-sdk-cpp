@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['begin_0',['begin',['../classCryptnoxWallet.html#aa394fe6bc19d57c4a9d89a303f7e664d',1,'CryptnoxWallet::begin()'],['../classCW__Logger.html#a2134716e183c565d82e2fce6d3743fb3',1,'CW_Logger::begin()'],['../classCW__NfcTransport.html#afb1d7f164e9680780f3a482c9ae19c2c',1,'CW_NfcTransport::begin()'],['../classCW__SecureChannel.html#a4b42cf292b004dd3983bb3ef0732ec10',1,'CW_SecureChannel::begin()']]],
-  ['buildsignpayload_1',['buildSignPayload',['../classCryptnoxWallet.html#afb4cedb5fd1c5616d8a3be343d97d9ac',1,'CryptnoxWallet']]]
+  ['add_0',['add',['../restypedef_8cpp.html#a102acaaa258e937adf910898c6133545',1,'restypedef.cpp']]],
+  ['aescbcdecrypt_1',['aesCbcDecrypt',['../classCW__CryptoProvider.html#a99a02c96ff6c90be6f225e7a4d25042b',1,'CW_CryptoProvider::aesCbcDecrypt()'],['../classCW__SecureChannel.html#a4199b486cfc6b91eb2d8290295a552b0',1,'CW_SecureChannel::aesCbcDecrypt()']]],
+  ['aescbcencrypt_2',['aesCbcEncrypt',['../classCW__CryptoProvider.html#ac2860bd7987aac5010bf1b38373e536a',1,'CW_CryptoProvider::aesCbcEncrypt()'],['../classCW__SecureChannel.html#a272659530c5fdb5323296887484125f0',1,'CW_SecureChannel::aesCbcEncrypt()']]],
+  ['autolink_5ftest_3',['Autolink_Test',['../classAutolink__Test.html#a278d631f9943428c05b17d78f14488e2',1,'Autolink_Test']]]
 ];

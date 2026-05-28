@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['protocol_0',['Secure channel protocol',['../group__protocol.html',1,'']]],
-  ['public_20api_1',['Public API',['../group__api.html',1,'']]]
+  ['group_0',['Group',['../group__group5.html',1,'The Fifth Group'],['../group__group1.html',1,'The First Group'],['../group__group4.html',1,'The Fourth Group'],['../group__group2.html',1,'The Second Group'],['../group__group3.html',1,'The Third Group']]]
 ];

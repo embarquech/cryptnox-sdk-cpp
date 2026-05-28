@@ -41,8 +41,8 @@ var CW__Defs_8h =
     [ "CW_SIGN_WITH_PIN", "CW__Defs_8h.html#a8169464dc341135c728565e19852ee42", null ],
     [ "CW_USER_DATA_PAGE_SIZE", "CW__Defs_8h.html#a6085fa47786e4251e9d24e22bed82ba5", null ],
     [ "CW_VERIFY_CERT", "CW__Defs_8h.html#aa42903386adfc7674fc4bfbc17fee5e2", null ],
-    [ "CW_Curve", "CW__Defs_8h.html#a158c7b96043aa1683f003e9c17d9cf0d", [
-      [ "CW_CURVE_SECP256R1", "CW__Defs_8h.html#a158c7b96043aa1683f003e9c17d9cf0daf9a9b71f2effc87e771dd0377cbb43d9", null ],
-      [ "CW_CURVE_SECP256K1", "CW__Defs_8h.html#a158c7b96043aa1683f003e9c17d9cf0da0c3193fa885aff99c8d8bb4343292b7a", null ]
+    [ "CW_Curve", "group__util.html#ga158c7b96043aa1683f003e9c17d9cf0d", [
+      [ "CW_CURVE_SECP256R1", "CW__Defs_8h.html#ga158c7b96043aa1683f003e9c17d9cf0daf9a9b71f2effc87e771dd0377cbb43d9", null ],
+      [ "CW_CURVE_SECP256K1", "CW__Defs_8h.html#ga158c7b96043aa1683f003e9c17d9cf0da0c3193fa885aff99c8d8bb4343292b7a", null ]
     ] ]
 ];

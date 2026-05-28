@@ -1,5 +1,6 @@
 var files_dup =
 [
+    [ "doxygen-1.15.0", "dir_3aa06d09f16bce6acb97fb94bc069769.html", "dir_3aa06d09f16bce6acb97fb94bc069769" ],
     [ "CryptnoxWallet.cpp", "CryptnoxWallet_8cpp.html", null ],
     [ "CryptnoxWallet.h", "CryptnoxWallet_8h.html", "CryptnoxWallet_8h" ],
     [ "CW_CryptoProvider.h", "CW__CryptoProvider_8h.html", null ],
