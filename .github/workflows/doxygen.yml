@@ -20,7 +20,7 @@ jobs:
       #    README.md) and Graphviz.
       - name: Install Doxygen and Graphviz
         env:
-          DOXYGEN_VERSION: "1.12.0"
+          DOXYGEN_VERSION: "1.15.0"
         run: |
           sudo apt-get update
           sudo apt-get install -y graphviz wget
