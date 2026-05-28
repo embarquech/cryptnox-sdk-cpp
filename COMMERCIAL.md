@@ -1,9 +1,12 @@
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/6ce54a27-8fb6-48e6-9d1f-da144f43425a"/>
-</p>
+<div align="center">
 
-<h3 align="center">cryptnox-sdk-cpp</h3>
-<p align="center">Commercial license</p>
+<img src="https://github.com/user-attachments/assets/6ce54a27-8fb6-48e6-9d1f-da144f43425a"/>
+
+### cryptnox-sdk-cpp
+
+Commercial license
+
+</div>
 
 <br/>
 <br/>
