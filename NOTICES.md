@@ -1,9 +1,8 @@
 # Third-party notices
 
-`cryptnox-sdk-cpp` is the platform-independent C++ core SDK that powers
-the Cryptnox smart-card wallet integrations on ESP32 and Arduino. It is
-distributed under a dual LGPL-3.0 / commercial license (see
-[LICENSE](LICENSE) and [COMMERCIAL.md](COMMERCIAL.md)).
+`cryptnox-sdk-cpp` is the platform-independent C++ core SDK for the
+Cryptnox smart-card wallet. It is distributed under a dual LGPL-3.0 /
+commercial license (see [LICENSE](LICENSE) and [COMMERCIAL.md](COMMERCIAL.md)).
 
 ---
 
