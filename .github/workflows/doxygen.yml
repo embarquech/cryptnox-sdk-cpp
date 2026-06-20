@@ -36,6 +36,18 @@ jobs:
       - name: Generate Doxygen docs
         run: doxygen docs/Doxyfile
 
+      # 3b. Install LaTeX and build the PDF (Doxygen LaTeX output, pdflatex)
+      - name: Install LaTeX for PDF
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends doxygen-latex latexmk
+
+      - name: Build PDF (pdflatex)
+        run: |
+          sed -i 's/\\documentclass\[twoside\]/\\documentclass[oneside]/' docs/latex/refman.tex
+          make -C docs/latex
+          cp docs/latex/refman.pdf docs/html/cryptnox-sdk-cpp.pdf
+
       # 4. Deploy HTML documentation to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4

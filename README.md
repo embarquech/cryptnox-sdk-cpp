@@ -6,6 +6,8 @@
 
 Platform-independent C++ core SDK for Cryptnox Hardware Wallet
 
+📄 [Download this documentation as PDF](https://docs.cryptnox.com/cryptnox-sdk-cpp/cryptnox-sdk-cpp.pdf)
+
 </div>
 
 <br/>
