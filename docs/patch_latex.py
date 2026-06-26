@@ -8,7 +8,23 @@ import sys
 
 path = sys.argv[1]
 title = sys.argv[2] if len(sys.argv) > 2 else None
-s = open(path, encoding="utf-8").read()
+
+# pdflatex can't embed the committed SVG logo directly, so convert it to a PDF beside
+# refman.tex for the \includegraphics{cryptnox-logo-dark} on the cover (cairosvg in CI).
+try:
+    import cairosvg
+except ImportError as _e:
+    raise RuntimeError(
+        "PDF docs build requires cairosvg to generate the cover logo; "
+        "install it (pip install cairosvg)."
+    ) from _e
+cairosvg.svg2pdf(
+    url=os.path.join(os.path.dirname(path), os.pardir, "cryptnox-logo.svg"),
+    write_to=os.path.join(os.path.dirname(path), "cryptnox-logo-dark.pdf"),
+)
+
+with open(path, encoding="utf-8") as _f:
+    s = _f.read()
 
 # Use TeX Gyre Heros (sans) for the whole document, like the Sphinx PDFs.
 # Doxygen already defaults to \sfdefault; just swap its Helvetica for TeX Gyre Heros.
@@ -98,23 +114,28 @@ s = s.replace(r"\addcontentsline{toc}{chapter}{\indexname}", "")
 # flushright above, matching the Sphinx layout)
 s = s.replace(r"\vspace*{7cm}", r"\noindent\rule{\textwidth}{1pt}\par")
 
-open(path, "w", encoding="utf-8").write(s)
+with open(path, "w", encoding="utf-8") as _f:
+    _f.write(s)
 print("patched", path)
 
 # Section/subsection headings are defined in doxygen.sty (not refman.tex) with a
 # hardcoded \normalfont (serif); switch them to the sans heading font + gray.
 sty = os.path.join(os.path.dirname(path), "doxygen.sty")
 if os.path.exists(sty):
-    d = open(sty, encoding="utf-8").read()
+    with open(sty, encoding="utf-8") as _f:
+        d = _f.read()
     d = d.replace(r"{\raggedright\normalfont", r"{\raggedright\sffamily\color{black}")
-    open(sty, "w", encoding="utf-8").write(d)
+    with open(sty, "w", encoding="utf-8") as _f:
+        _f.write(d)
     print("patched", sty)
 
 # Strip the "Download this documentation as PDF" link from the mainpage (README) —
 # pointless inside the PDF itself. Kept in README.md for GitHub/HTML.
 idx = os.path.join(os.path.dirname(path), "index.tex")
 if os.path.exists(idx):
-    i = open(idx, encoding="utf-8").read()
+    with open(idx, encoding="utf-8") as _f:
+        i = _f.read()
     i = re.sub(r"^.*Download this documentation as PDF.*\n", "", i, flags=re.MULTILINE)
-    open(idx, "w", encoding="utf-8").write(i)
+    with open(idx, "w", encoding="utf-8") as _f:
+        _f.write(i)
     print("patched", idx)

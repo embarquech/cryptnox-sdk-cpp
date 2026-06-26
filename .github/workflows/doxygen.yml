@@ -44,6 +44,7 @@ jobs:
 
       - name: Build PDF (pdflatex)
         run: |
+          python3 -m pip install --quiet cairosvg
           python3 docs/patch_latex.py docs/latex/refman.tex "Cryptnox SDK for C++"
           make -C docs/latex
           cp docs/latex/refman.pdf docs/html/cryptnox-sdk-cpp.pdf
