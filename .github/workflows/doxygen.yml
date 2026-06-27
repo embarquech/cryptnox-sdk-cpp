@@ -26,8 +26,8 @@ jobs:
           sudo apt-get install -y graphviz wget
           # Extract in /tmp so the bundled examples/ directory does NOT end
           # up inside the repo and get picked up by INPUT = . recursive.
-          wget -q -O /tmp/doxygen.tar.gz \
-            "https://www.doxygen.nl/files/doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz"
+          wget -O /tmp/doxygen.tar.gz \
+            "https://github.com/doxygen/doxygen/releases/download/Release_${DOXYGEN_VERSION//./_}/doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz"
           tar xf /tmp/doxygen.tar.gz -C /tmp
           sudo install "/tmp/doxygen-${DOXYGEN_VERSION}/bin/doxygen" /usr/local/bin/doxygen
           doxygen --version
@@ -40,7 +40,7 @@ jobs:
       - name: Install LaTeX for PDF
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends doxygen-latex latexmk
+          sudo apt-get install -y --no-install-recommends doxygen-latex latexmk tex-gyre
 
       - name: Build PDF (pdflatex)
         run: |
