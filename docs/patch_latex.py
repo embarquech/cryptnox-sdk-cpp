@@ -106,6 +106,18 @@ s = s.replace(
     1,
 )
 
+# pdflatex (inputenc utf8) aborts on any Unicode char it doesn't know. Declare the
+# math relations we want rendered as real glyphs (used in @c doc comments, e.g.
+# "len <= 254"); everything else non-ASCII is transliterated to safe ASCII at the end
+# of this script. Without this, pdflatex stops with "Unicode character not set up".
+s = s.replace(
+    r"\begin{document}",
+    "\\DeclareUnicodeCharacter{2264}{\\ensuremath{\\leq}}\n"
+    "\\DeclareUnicodeCharacter{2265}{\\ensuremath{\\geq}}\n"
+    "\\begin{document}",
+    1,
+)
+
 # Drop the alphabetical index
 s = s.replace(r"\printindex", "")
 s = s.replace(r"\addcontentsline{toc}{chapter}{\indexname}", "")
@@ -139,3 +151,58 @@ if os.path.exists(idx):
     with open(idx, "w", encoding="utf-8") as _f:
         _f.write(i)
     print("patched", idx)
+
+# Final safety net: Doxygen emits non-ASCII from source comments and the README
+# (box-drawing art in directory trees / wiring diagrams, arrows, stray symbols) into
+# every *.tex file. pdflatex's inputenc fatally stops on any codepoint it doesn't
+# know, and which ones appear changes as the docs change — so instead of declaring
+# each one, transliterate to ASCII here. Chars LaTeX already renders well are kept;
+# box-drawing is mapped to ASCII; anything else is dropped so the build cannot fail
+# on an unexpected glyph. Runs last, over all .tex files (the .sty files are pure
+# LaTeX and contain no such literals).
+import glob
+
+# Codepoints inputenc/textcomp already render (verified in CI logs) plus the math
+# relations declared above — left untouched so their nicer glyphs survive.
+keep = frozenset({
+    0x00A0, 0x00B2, 0x00B3, 0x00D7,            # nbsp, superscript 2/3, multiplication
+    0x2013, 0x2014, 0x2026,                    # en/em dash, ellipsis
+    0x2018, 0x2019, 0x201C, 0x201D,            # curly quotes
+    0x2190, 0x2192, 0x2194,                    # left/right/both arrows
+    0x2264, 0x2265,                            # <= and >= (declared in the preamble)
+})
+
+
+def _to_ascii(match):
+    cp = ord(match.group(0))
+    if cp in keep:
+        out = match.group(0)
+    elif 0x2500 <= cp <= 0x257F:
+        # Box-drawing block: verticals -> '|', corners/tees -> '+', the rest -> '-'.
+        if cp in (0x2502, 0x2503, 0x2551):
+            out = "|"
+        elif 0x250C <= cp <= 0x254B:
+            out = "+"
+        else:
+            out = "-"
+    else:
+        out = ""
+    return out
+
+
+for tex in glob.glob(os.path.join(os.path.dirname(path), "*.tex")):
+    with open(tex, encoding="utf-8") as _f:
+        body = _f.read()
+    # refman.tex's preamble holds Doxygen's own \doxynewunicodechar{<char>}{...}
+    # declarations; transliterating those would empty the first argument and crash.
+    # Only rewrite the document body. Other .tex files are pure body (no \begin{document}),
+    # so the marker is absent and the whole file is processed.
+    marker = "\\begin{document}"
+    split = body.find(marker)
+    head = body[:split] if split != -1 else ""
+    tail = body[split:] if split != -1 else body
+    fixed = head + re.sub(r"[^\x00-\x7F]", _to_ascii, tail)
+    if fixed != body:
+        with open(tex, "w", encoding="utf-8") as _f:
+            _f.write(fixed)
+        print("transliterated", tex)
