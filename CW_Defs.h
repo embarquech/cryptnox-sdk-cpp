@@ -81,21 +81,27 @@
 #define CW_NOK                        (0x01U)  /**< NOK */
 #define CW_INVALID_SESSION            (0x02U)  /**< Invalid session */
 
-/* Key / path types for SIGN command (keyType) */
+/* Key / path types for SIGN command (keyType).
+ * Encoded as (derivation | curve): low nibble = derivation
+ * (0 current, 1 derive, 2 derive-and-make-current, 3 pinless),
+ * high nibble = curve (0 k1, 1 r1, 2 ed25519). */
 #define CW_SIGN_CURR_K1               (0x00U)  /**< Current key (k1) */
 #define CW_SIGN_CURR_R1               (0x10U)  /**< Current key (r1) */
 #define CW_SIGN_DERIVE_K1             (0x01U)  /**< Derive with k1 curve */
 #define CW_SIGN_DERIVE_R1             (0x11U)  /**< Derive with r1 curve */
 #define CW_SIGN_PINLESS_K1            (0x03U)  /**< PIN-less path (k1 only) */
+#define CW_SIGN_CURR_ED25519          (0x20U)  /**< Current Ed25519 key (Solana; applet v2.0+) */
+#define CW_SIGN_DERIVE_ED25519        (0x21U)  /**< Derive Ed25519 key (Solana; applet v2.0+) */
 
 /* PIN mode for SIGN command */
 #define CW_SIGN_WITH_PIN              (false)  /**< PIN path */
 #define CW_SIGN_PINLESS               (true)   /**< PIN-less path */
 
-/* Signature types for SIGN command */
+/* Signature types for SIGN command (APDU P2) */
 #define CW_SIGN_SIG_ECDSA_LOW_S       (0x00U)  /**< ECDSA with canonical low S */
 #define CW_SIGN_SIG_ECDSA_EOSIO       (0x01U)  /**< ECDSA EOSIO format */
 #define CW_SIGN_SIG_SCHNORR_BIP340    (0x02U)  /**< Schnorr BIP340 */
+#define CW_SIGN_SIG_EDDSA             (0x03U)  /**< EdDSA (Ed25519) — forced automatically for Ed25519 key types */
 
 /* SIGN-specific error codes */
 #define CW_SIGN_KEY_TOO_SHORT                  (0x80U)
@@ -104,8 +110,12 @@
 #define CW_SIGN_KEY_TOO_SHORT_WITH_PINLESS_MODE (0x83U)
 
 /* Size constants */
-#define CW_RAW_SIGNATURE_SIZE         (64U)    /**< Raw signature (r[32] + s[32]) */
-#define CW_HASH_SIZE                  (32U)    /**< Standard hash size */
+#define CW_RAW_SIGNATURE_SIZE         (64U)    /**< Raw signature (r[32] + s[32], or Ed25519 R||S) */
+#define CW_HASH_SIZE                  (32U)    /**< Standard hash size (ECDSA digest) */
+#define CW_ED25519_PUBKEY_SIZE        (32U)    /**< Raw Ed25519 public key size (Solana address) */
+/* Ed25519 signs the raw message (the card hashes internally). Cap the message
+ * so the framed payload [len(2)|msg|path|pin(9)] fits one secure-channel page. */
+#define CW_MAX_ED25519_MESSAGE_LENGTH (CW_USER_DATA_PAGE_SIZE - 2U - CW_MAX_DERIVE_PATH_LENGTH - CW_MAX_PIN_LENGTH) /* 177 */
 #define CW_MAX_DERIVE_PATH_LENGTH     (20U)    /**< Max BIP32 path bytes */
 #define CW_MIN_PIN_LENGTH              (4U)    /**< Minimum PIN length */
 #define CW_MAX_PIN_LENGTH              (9U)    /**< Maximum PIN length */
