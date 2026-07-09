@@ -474,8 +474,10 @@ bool CryptnoxWallet::validateSignRequest(const CW_SignRequest& request, CW_SignR
 #endif
         result.errorCode = CW_SIGN_KEY_TOO_SHORT;
     }
-    else if (request.hashLength > (cwIsEd25519(request.keyType) ? CW_MAX_ED25519_MESSAGE_LENGTH
-                                                                 : CW_HASH_SIZE)) {
+    else if (request.hashLength > (cwIsEd25519(request.keyType)
+                                       ? (cwSignNeedsPath(request.keyType) ? CW_MAX_ED25519_MESSAGE_LENGTH
+                                                                           : CW_MAX_ED25519_MESSAGE_LENGTH_CURR)
+                                       : CW_HASH_SIZE)) {
 #if CW_DEBUG_LOGGING
         _logger.println(F("Error: Message/hash too large to sign."));
 #endif

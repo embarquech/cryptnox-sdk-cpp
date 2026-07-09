@@ -114,8 +114,11 @@
 #define CW_HASH_SIZE                  (32U)    /**< Standard hash size (ECDSA digest) */
 #define CW_ED25519_PUBKEY_SIZE        (32U)    /**< Raw Ed25519 public key size (Solana address) */
 /* Ed25519 signs the raw message (the card hashes internally). Cap the message
- * so the framed payload [len(2)|msg|path|pin(9)] fits one secure-channel page. */
-#define CW_MAX_ED25519_MESSAGE_LENGTH (CW_USER_DATA_PAGE_SIZE - 2U - CW_MAX_DERIVE_PATH_LENGTH - CW_MAX_PIN_LENGTH) /* 177 */
+ * so the framed payload [len(2)|msg|path|pin(9)] fits one secure-channel page.
+ * The DERIVE cap reserves room for the 20-byte path; a current-key sign carries
+ * no path, so it can take that much more (needed for a ~180-byte Solana tx). */
+#define CW_MAX_ED25519_MESSAGE_LENGTH      (CW_USER_DATA_PAGE_SIZE - 2U - CW_MAX_DERIVE_PATH_LENGTH - CW_MAX_PIN_LENGTH) /* 177 */
+#define CW_MAX_ED25519_MESSAGE_LENGTH_CURR (CW_USER_DATA_PAGE_SIZE - 2U - CW_MAX_PIN_LENGTH)                            /* 197 */
 #define CW_MAX_DERIVE_PATH_LENGTH     (20U)    /**< Max BIP32 path bytes */
 #define CW_MIN_PIN_LENGTH              (4U)    /**< Minimum PIN length */
 #define CW_MAX_PIN_LENGTH              (9U)    /**< Maximum PIN length */
