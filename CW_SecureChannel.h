@@ -158,11 +158,12 @@ public:
      *
      * Final step of the secure channel handshake:
      *  1. ECDH shared secret = clientPrivateKey · cardEphemeralPubKey
-     *  2. (Kenc || Kmac || IV) ← SHA-512(salt || pairingKey || sharedSecret)
+     *  2. (Kenc || Kmac) ← SHA-512(sharedSecret || pairingKey || salt)
      *  3. Encrypts a 16-byte random challenge with the new Kenc and sends
      *     it inside the MUTUALLY AUTHENTICATE APDU
-     *  4. Verifies the card returns the same plaintext when re-encrypting
-     *     its own counter — this proves the card knows Kenc
+     *  4. Takes the first block of the card's response as the initial rolling
+     *     IV. The challenge is not echoed or verified here; card authenticity
+     *     rests on the certificate chain plus the MAC of the first command.
      *
      * @param[out] session             Secure session populated with derived keys + initial IV.
      * @param[in]  salt                32-byte salt from @ref openSecureChannel.
