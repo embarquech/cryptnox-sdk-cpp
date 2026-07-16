@@ -322,15 +322,20 @@ public:
                       uint8_t* pubKey, uint16_t pubKeyBufSize, uint16_t& pubKeyLength);
 
     /**
-     * @brief Write data to a user memory slot, paginating in CW_USER_DATA_PAGE_SIZE chunks.
+     * @brief Write user data (WRITE APDU 0x80FC, P1=0 user-data slot, single page).
+     *
+     * Writes @p data in one APDU. The applet stores it in logical page 0 of the
+     * user-data area; larger multi-page writes need transport-level APDU chaining
+     * (not available on the single-APDU embedded transport), so @p dataLength
+     * greater than @ref CW_USER_DATA_PAGE_SIZE is rejected.
      *
      * @param[in,out] session    Valid secure session.
-     * @param[in]     slot       User data slot index.
      * @param[in]     data       Data to write.
-     * @param[in]     dataLength Total bytes to write.
-     * @return true if all pages written successfully, false otherwise.
+     * @param[in]     dataLength Bytes to write (1..CW_USER_DATA_PAGE_SIZE).
+     * @return true on success, false on closed session, bad parameters,
+     *         @p dataLength above one page, or transport / MAC failure.
      */
-    bool writeUserData(CW_SecureSession& session, uint8_t slot,
+    bool writeUserData(CW_SecureSession& session,
                        const uint8_t* data, uint16_t dataLength);
 
     /**

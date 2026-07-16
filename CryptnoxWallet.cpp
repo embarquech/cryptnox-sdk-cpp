@@ -250,7 +250,7 @@ bool CryptnoxWallet::verifyPin(CW_SecureSession& session, const uint8_t* pin, ui
     return ret;
 }
 
-bool CryptnoxWallet::writeUserData(CW_SecureSession& session, uint8_t slot,
+bool CryptnoxWallet::writeUserData(CW_SecureSession& session,
                                     const uint8_t* data, uint16_t dataLength) {
     bool ret = false;
 
@@ -264,39 +264,25 @@ bool CryptnoxWallet::writeUserData(CW_SecureSession& session, uint8_t slot,
         _logger.println(F("Error: Invalid data for write user data."));
 #endif
     }
+    else if (dataLength > CW_USER_DATA_PAGE_SIZE) {
+        /* The applet's WRITE (0xFC) P2 selects a 1200-byte logical page written
+         * at offset 1200*P2, not a chunk counter — so multiple single-APDU
+         * chunks cannot be concatenated over this transport. Reject anything
+         * that won't fit one page instead of silently corrupting the write. */
+#if CW_DEBUG_LOGGING
+        _logger.print(F("Error: user data exceeds one page ("));
+        _logger.print((uint8_t)CW_USER_DATA_PAGE_SIZE);
+        _logger.println(F(" B max for this transport)."));
+#endif
+    }
     else {
-        uint16_t offset = 0U;
-        uint8_t  page   = 0U;
-        ret = true;
-
-        while ((offset < dataLength) && ret) {
-            uint16_t chunkSize = dataLength - offset;
-            if (chunkSize > CW_USER_DATA_PAGE_SIZE) {
-                chunkSize = CW_USER_DATA_PAGE_SIZE;
-            }
-
-            uint8_t apdu[] = { 0x80U, 0xFCU, slot, page };
-
+        /* P1 = 0 (write user data slot; P1 is the applet's operation selector,
+         * not a slot index), P2 = 0 (logical page 0). */
+        uint8_t apdu[] = { 0x80U, 0xFCU, 0x00U, 0x00U };
+        ret = _secure.aesCbcEncrypt(session, apdu, sizeof(apdu), data, dataLength);
 #if CW_DEBUG_LOGGING
-            _logger.print(F("Writing user data page "));
-            _logger.print(page);
-            _logger.print(F(" ("));
-            _logger.print(chunkSize);
-            _logger.println(F(" bytes)..."));
+        if (!ret) { _logger.println(F("Error: Write user data failed.")); }
 #endif
-
-            if (!_secure.aesCbcEncrypt(session, apdu, sizeof(apdu), data + offset, chunkSize)) {
-#if CW_DEBUG_LOGGING
-                _logger.print(F("Error: Write user data failed on page "));
-                _logger.println(page);
-#endif
-                ret = false;
-            }
-            else {
-                offset += chunkSize;
-                page++;
-            }
-        }
     }
 
     return ret;
@@ -317,8 +303,12 @@ CW_SignResult CryptnoxWallet::sign(CW_SignRequest& request) {
         uint16_t derLength = 0U;
 
         if (sendSignApdu(request, data, dataLength, derResponse, derLength, result)) {
-            if (cwIsEd25519(request.keyType)) {
-                /* Ed25519 returns a raw 64-byte R||S signature, not DER. */
+            /* Ed25519 (EdDSA) and Schnorr BIP340 both return a raw 64-byte
+             * R||S signature with no DER wrapper; ECDSA (low-S / EOSIO) returns
+             * a DER SEQUENCE that extractRawSignature() unpacks. */
+            const bool rawSig = cwIsEd25519(request.keyType) ||
+                                (request.signatureType == CW_SIGN_SIG_SCHNORR_BIP340);
+            if (rawSig) {
                 if (derLength == CW_RAW_SIGNATURE_SIZE) {
                     (void)CW_Utils::safe_memcpy(result.signature, sizeof(result.signature),
                                                 derResponse, CW_RAW_SIGNATURE_SIZE);
@@ -326,7 +316,7 @@ CW_SignResult CryptnoxWallet::sign(CW_SignRequest& request) {
                     result.errorCode = CW_OK;
                 } else {
 #if CW_DEBUG_LOGGING
-                    _logger.println(F("Error: Ed25519 signature not 64 bytes."));
+                    _logger.println(F("Error: raw signature not 64 bytes."));
 #endif
                     result.errorCode = CW_NOK;
                 }
