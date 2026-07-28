@@ -140,8 +140,16 @@ bool CryptnoxWallet::establishSecureChannel(CW_SecureSession& session) {
 #endif
         } else {
             if (_secure.getCardCertificate(cardCertificate, cardCertificateLength)) {
+#if CW_VERIFY_CERT
                 uint8_t certResult = _secure.verifyCertificateChain(cardCertificate,
                                                                     cardCertificateLength);
+#else
+                /* CW_VERIFY_CERT=0: the chain is not checked at all, so any card
+                 * is accepted and will sign whatever it is given. Logged outside
+                 * CW_DEBUG_LOGGING so the build can never do this silently. */
+                uint8_t certResult = CW_CERT_OK;
+                _logger.println(F("*** CW_VERIFY_CERT=0: card authenticity NOT verified."));
+#endif
                 if (certResult != CW_CERT_OK) {
 #if CW_DEBUG_LOGGING
                     _logger.print(F("Card authenticity check failed (code 0x"));

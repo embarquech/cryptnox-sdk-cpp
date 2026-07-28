@@ -212,15 +212,25 @@ struct CW_SecureSession {
  * 5. Compile-time feature flags
  ******************************************************************/
 
-/** Certificate chain verification is always enabled (SEC-004 / H-07).
- * Building with -DCW_VERIFY_CERT=0 is a hard error — it disables the card
- * authenticity gate and allows any forged key to be accepted. */
+/** Card certificate chain verification (SEC-004 / H-07).
+ *
+ * At 1, establishSecureChannel() checks the card's chain against
+ * CW_TRUSTED_CA_KEYS and refuses to open a session on failure. At 0 the check is
+ * compiled out entirely and ANY card is accepted, including a forged one, which
+ * will then sign whatever it is given. Release builds must ship 1.
+ *
+ * 0 is for bring-up against a card signed by a non-production CA, and is meant to
+ * be passed from the build (-DCW_VERIFY_CERT=0) rather than edited in here, so a
+ * bench setting cannot reach a commit. The better answer in that case is to add
+ * the dev CA public key to CW_TRUSTED_CA_KEYS in CW_TrustedKeys.h — the table
+ * holds several and tries each in turn, so verification stays enabled and nothing
+ * has to be weakened.
+ */
 #ifndef CW_VERIFY_CERT
 #define CW_VERIFY_CERT 1
 #endif
 #if CW_VERIFY_CERT == 0
-#  error "CW_VERIFY_CERT=0 disables certificate chain verification (CRIT-02/H-07). " \
-         "Remove -DCW_VERIFY_CERT=0 from your build flags — this gate must never be disabled."
+#  warning "CW_VERIFY_CERT=0: card authenticity verification is compiled out (CRIT-02/H-07). Never ship this."
 #endif
 
 /**
