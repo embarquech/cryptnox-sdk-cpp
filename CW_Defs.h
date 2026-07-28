@@ -93,6 +93,7 @@
 #define CW_SIGN_CURR_ED25519          (0x20U)  /**< Current Ed25519 key (Solana; applet v2.0+) */
 #define CW_SIGN_DERIVE_ED25519        (0x21U)  /**< Derive Ed25519 key (Solana; applet v2.0+) */
 
+
 /* PIN mode for SIGN command */
 #define CW_SIGN_WITH_PIN              (false)  /**< PIN path */
 #define CW_SIGN_PINLESS               (true)   /**< PIN-less path */
@@ -115,8 +116,17 @@
 #define CW_ED25519_PUBKEY_SIZE        (32U)    /**< Raw Ed25519 public key size (Solana address) */
 /* Ed25519 signs the raw message (the card hashes internally). Cap the message
  * so the framed payload [len(2)|msg|path|pin(9)] fits one secure-channel page.
- * The DERIVE cap reserves room for the 20-byte path; a current-key sign carries
- * no path, so it can take that much more (needed for a ~180-byte Solana tx). */
+ *
+ * These two are WORST-CASE bounds, kept for reference and for callers that want a
+ * compile-time constant. CW_MAX_ED25519_MESSAGE_LENGTH reserves the full 20-byte
+ * path, so it under-reports the room available to a shorter path — a 4-level
+ * Solana path (16 B) leaves 181, not 177. validateSignRequest() therefore
+ * computes the bound from the actual request instead of using these; sizing a
+ * caller-side buffer with CW_MAX_ED25519_MESSAGE_LENGTH stays safe, just
+ * conservative.
+ *
+ * Neither figure is a card limit: the v2.0 SIGN spec accepts up to 1200 bytes of
+ * raw data. The ceiling is this SDK's single-page secure-channel buffer. */
 #define CW_MAX_ED25519_MESSAGE_LENGTH      (CW_USER_DATA_PAGE_SIZE - 2U - CW_MAX_DERIVE_PATH_LENGTH - CW_MAX_PIN_LENGTH) /* 177 */
 #define CW_MAX_ED25519_MESSAGE_LENGTH_CURR (CW_USER_DATA_PAGE_SIZE - 2U - CW_MAX_PIN_LENGTH)                            /* 197 */
 #define CW_MAX_DERIVE_PATH_LENGTH     (20U)    /**< Max BIP32 path bytes */
