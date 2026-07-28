@@ -30,6 +30,12 @@
  *   anything else   → both parsers receive the same payload
  */
 
+/* Host-only harness.  When this repo is consumed as a subdirectory of an
+ * Arduino library's src/, the IDE compiles src/ recursively and would pull
+ * this file into the firmware build; there is no libFuzzer there and the
+ * stubs below would collide with the sketch.  Compile to an empty TU.   */
+#if !defined(ARDUINO)
+
 /* Must be defined before including CW_SecureChannel.h so the friend
  * declaration for DerFuzzTarget is compiled in.                        */
 #define CW_FUZZ_BUILD 1
@@ -162,3 +168,5 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
 
     return 0;
 }
+
+#endif /* !ARDUINO */
