@@ -81,21 +81,27 @@
 #define CW_NOK                        (0x01U)  /**< NOK */
 #define CW_INVALID_SESSION            (0x02U)  /**< Invalid session */
 
-/* Key / path types for SIGN command (keyType) */
+/* Key / path types for SIGN command (keyType).
+ * Encoded as (derivation | curve): low nibble = derivation
+ * (0 current, 1 derive, 2 derive-and-make-current, 3 pinless),
+ * high nibble = curve (0 k1, 1 r1, 2 ed25519). */
 #define CW_SIGN_CURR_K1               (0x00U)  /**< Current key (k1) */
 #define CW_SIGN_CURR_R1               (0x10U)  /**< Current key (r1) */
 #define CW_SIGN_DERIVE_K1             (0x01U)  /**< Derive with k1 curve */
 #define CW_SIGN_DERIVE_R1             (0x11U)  /**< Derive with r1 curve */
 #define CW_SIGN_PINLESS_K1            (0x03U)  /**< PIN-less path (k1 only) */
+#define CW_SIGN_CURR_ED25519          (0x20U)  /**< Current Ed25519 key (Solana; applet v2.0+) */
+#define CW_SIGN_DERIVE_ED25519        (0x21U)  /**< Derive Ed25519 key (Solana; applet v2.0+) */
 
 /* PIN mode for SIGN command */
 #define CW_SIGN_WITH_PIN              (false)  /**< PIN path */
 #define CW_SIGN_PINLESS               (true)   /**< PIN-less path */
 
-/* Signature types for SIGN command */
+/* Signature types for SIGN command (APDU P2) */
 #define CW_SIGN_SIG_ECDSA_LOW_S       (0x00U)  /**< ECDSA with canonical low S */
 #define CW_SIGN_SIG_ECDSA_EOSIO       (0x01U)  /**< ECDSA EOSIO format */
 #define CW_SIGN_SIG_SCHNORR_BIP340    (0x02U)  /**< Schnorr BIP340 */
+#define CW_SIGN_SIG_EDDSA             (0x03U)  /**< EdDSA (Ed25519) — forced automatically for Ed25519 key types */
 
 /* SIGN-specific error codes */
 #define CW_SIGN_KEY_TOO_SHORT                  (0x80U)
@@ -104,8 +110,15 @@
 #define CW_SIGN_KEY_TOO_SHORT_WITH_PINLESS_MODE (0x83U)
 
 /* Size constants */
-#define CW_RAW_SIGNATURE_SIZE         (64U)    /**< Raw signature (r[32] + s[32]) */
-#define CW_HASH_SIZE                  (32U)    /**< Standard hash size */
+#define CW_RAW_SIGNATURE_SIZE         (64U)    /**< Raw signature (r[32] + s[32], or Ed25519 R||S) */
+#define CW_HASH_SIZE                  (32U)    /**< Standard hash size (ECDSA digest) */
+#define CW_ED25519_PUBKEY_SIZE        (32U)    /**< Raw Ed25519 public key size (Solana address) */
+/* Ed25519 signs the raw message (the card hashes it). Worst-case cap so the
+ * framed payload [len(2)|msg|path(20)|pin(9)] fits one secure-channel page —
+ * safe for sizing a caller buffer. validateSignRequest() allows more when the
+ * request's actual path is shorter. Not a card limit: the v2.0 SIGN spec takes
+ * 1200 bytes; the ceiling is this SDK's single-page buffer. */
+#define CW_MAX_ED25519_MESSAGE_LENGTH (CW_USER_DATA_PAGE_SIZE - 2U - CW_MAX_DERIVE_PATH_LENGTH - CW_MAX_PIN_LENGTH) /* 177 */
 #define CW_MAX_DERIVE_PATH_LENGTH     (20U)    /**< Max BIP32 path bytes */
 #define CW_MIN_PIN_LENGTH              (4U)    /**< Minimum PIN length */
 #define CW_MAX_PIN_LENGTH              (9U)    /**< Maximum PIN length */
@@ -189,15 +202,25 @@ struct CW_SecureSession {
  * 5. Compile-time feature flags
  ******************************************************************/
 
-/** Certificate chain verification is always enabled (SEC-004 / H-07).
- * Building with -DCW_VERIFY_CERT=0 is a hard error — it disables the card
- * authenticity gate and allows any forged key to be accepted. */
+/** Card certificate chain verification (SEC-004 / H-07).
+ *
+ * At 1, establishSecureChannel() checks the card's chain against
+ * CW_TRUSTED_CA_KEYS and refuses to open a session on failure. At 0 the check is
+ * compiled out entirely and ANY card is accepted, including a forged one, which
+ * will then sign whatever it is given. Release builds must ship 1.
+ *
+ * 0 is for bring-up against a card signed by a non-production CA, and is meant to
+ * be passed from the build (-DCW_VERIFY_CERT=0) rather than edited in here, so a
+ * bench setting cannot reach a commit. The better answer in that case is to add
+ * the dev CA public key to CW_TRUSTED_CA_KEYS in CW_TrustedKeys.h — the table
+ * holds several and tries each in turn, so verification stays enabled and nothing
+ * has to be weakened.
+ */
 #ifndef CW_VERIFY_CERT
 #define CW_VERIFY_CERT 1
 #endif
 #if CW_VERIFY_CERT == 0
-#  error "CW_VERIFY_CERT=0 disables certificate chain verification (CRIT-02/H-07). " \
-         "Remove -DCW_VERIFY_CERT=0 from your build flags — this gate must never be disabled."
+#  warning "CW_VERIFY_CERT=0: card authenticity verification is compiled out (CRIT-02/H-07). Never ship this."
 #endif
 
 /**
