@@ -31,24 +31,22 @@ static bool cwSignNeedsPath(uint8_t keyType) {
     return (derivation == 1U) || (derivation == 2U);
 }
 
+/* True when keyType needs a path and the one supplied is unusable. Shared by
+ * sign() and getPublicKey() so both reject the same inputs — and so the length
+ * is known sane before cwMaxEd25519Message() subtracts it from the page. */
+static bool cwBadDerivePath(uint8_t keyType, const uint8_t* path, uint8_t pathLength) {
+    return cwSignNeedsPath(keyType) &&
+           ((path == NULL) || (pathLength == 0U) ||
+            (pathLength > CW_MAX_DERIVE_PATH_LENGTH) || ((pathLength % 4U) != 0U));
+}
+
 /* Largest Ed25519 message that still fits one secure-channel page for THIS
- * request. buildSignPayload() lays the data field out as
- * [len(2)|msg|path?|pin(9)], so the room left for the message depends on the
- * path the request actually carries.
- *
- * CW_MAX_ED25519_MESSAGE_LENGTH assumes the worst case,
- * CW_MAX_DERIVE_PATH_LENGTH (20), and so rejects messages that do fit: a 4-level
- * Solana path is 16 bytes, which leaves room for 181 rather than 177. That
- * difference is what decides whether a ~180-byte SPL transfer can be signed with
- * the path inside the SIGN command (P1 0x21) instead of requiring the key to be
- * made current beforehand.
- *
- * The card itself is not the limit here: the v2.0 SIGN spec allows up to 1200
- * bytes of raw data for P1 0x20/0x21. The 208-byte ceiling is this SDK's
- * single-page secure-channel buffer. */
+ * request: buildSignPayload() frames it as [len(2)|msg|path?|pin(9)], so a
+ * shorter path leaves more room than the worst-case
+ * CW_MAX_ED25519_MESSAGE_LENGTH — 181 for a 4-level Solana path, not 177.
+ * Precondition: the caller has already rejected an over-long path
+ * (validateSignRequest does), otherwise the subtraction below wraps. */
 static uint16_t cwMaxEd25519Message(const CW_SignRequest& request) {
-    /* Callers must have rejected an over-long path first (validateSignRequest
-     * does), otherwise the subtraction below would wrap. */
     uint16_t overhead = 2U;  /* big-endian message length prefix */
 
     if (cwSignNeedsPath(request.keyType) && (request.derivePath != NULL)) {
@@ -288,7 +286,6 @@ bool CryptnoxWallet::verifyPin(CW_SecureSession& session, const uint8_t* pin, ui
     return ret;
 }
 
-
 bool CryptnoxWallet::writeUserData(CW_SecureSession& session, uint8_t slot,
                                     const uint8_t* data, uint16_t dataLength) {
     bool ret = false;
@@ -398,9 +395,7 @@ bool CryptnoxWallet::getPublicKey(CW_SecureSession& session, uint8_t keyType,
         _logger.println(F("Error: Invalid output buffer for get public key."));
 #endif
     }
-    else if (cwSignNeedsPath(keyType) &&
-             ((derivePath == NULL) || (derivePathLength == 0U) ||
-              (derivePathLength > CW_MAX_DERIVE_PATH_LENGTH))) {
+    else if (cwBadDerivePath(keyType, derivePath, derivePathLength)) {
 #if CW_DEBUG_LOGGING
         _logger.println(F("Error: Invalid derivation path for get public key."));
 #endif
@@ -513,13 +508,9 @@ bool CryptnoxWallet::validateSignRequest(const CW_SignRequest& request, CW_SignR
 #endif
         result.errorCode = CW_SIGN_KEY_TOO_SHORT;
     }
-    /* Validate the path BEFORE sizing the message, which subtracts its length
-     * from the page: an out-of-range path would make that subtraction wrap and
-     * report a nonsense cap. getPublicKey() already applies these same rules. */
-    else if (cwSignNeedsPath(request.keyType) &&
-             ((request.derivePath == NULL) || (request.derivePathLength == 0U) ||
-              (request.derivePathLength > CW_MAX_DERIVE_PATH_LENGTH) ||
-              ((request.derivePathLength % 4U) != 0U))) {
+    /* Path first: cwMaxEd25519Message() below subtracts its length from the
+     * page, and an out-of-range one would make that subtraction wrap. */
+    else if (cwBadDerivePath(request.keyType, request.derivePath, request.derivePathLength)) {
 #if CW_DEBUG_LOGGING
         _logger.println(F("Error: Invalid derivation path for sign."));
 #endif
