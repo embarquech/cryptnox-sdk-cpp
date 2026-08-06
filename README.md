@@ -72,6 +72,7 @@ useful references for a complete port.
 | `CW_CryptoProvider.h`           | **Adapter interface** — SHA-256/512, AES-CBC, ECDH, EC keygen, RNG |
 | `CW_Logger.h`                   | **Adapter interface** — debug/serial output |
 | `CW_TrustedKeys.h`              | Cryptnox CA public keys used to verify card certificates |
+| `CW_Tron.{h,cpp}`               | TRON network: `m/44'/195'/0'/0/0` path, Keccak-256, Base58Check address encode/decode |
 | `CW_Defs.h`, `CW_Utils.{h,cpp}` | Constants, error codes, small helpers |
 | `platform_compat.h`             | Shim for non-Arduino targets |
 
