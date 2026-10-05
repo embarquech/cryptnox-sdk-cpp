@@ -622,7 +622,8 @@ bool CryptnoxWallet::sendSignApdu(CW_SignRequest& request, const uint8_t* data,
 #if CW_DEBUG_LOGGING
         _logger.println(F("Sign APDU failed."));
 #endif
-        result.errorCode = CW_SIGN_NO_KEY_LOADED;
+        result.errorCode = (_secure.lastStatusWord() == CW_SW_CARD_WIPED)
+                               ? CW_SIGN_CARD_WIPED : CW_SIGN_NO_KEY_LOADED;
     }
 
     return ret;

@@ -109,6 +109,10 @@
 #define CW_SIGN_NO_KEY_LOADED                  (0x81U)
 #define CW_SIGN_PIN_INCORRECT                  (0x82U)
 #define CW_SIGN_KEY_TOO_SHORT_WITH_PINLESS_MODE (0x83U)
+#define CW_SIGN_CARD_WIPED                     (0x84U)  /**< Duress wipe code entered as the PIN: card erased (SW 6F03) */
+
+/* Card status words */
+#define CW_SW_CARD_WIPED              (0x6F03U) /**< Wipe code entered at VERIFY PIN / SIGN: card is now blank, channel dead */
 
 /* Size constants */
 #define CW_RAW_SIGNATURE_SIZE         (64U)    /**< Raw signature (r[32] + s[32], or Ed25519 R||S) */
@@ -192,9 +196,10 @@ struct CW_SecureSession {
     uint8_t aesKey[CW_AESKEY_SIZE];  /**< AES-256 session encryption key (Kenc) */
     uint8_t macKey[CW_MACKEY_SIZE];  /**< AES-256 session MAC key (Kmac) */
     uint8_t iv[CW_IV_SIZE];          /**< Current AES-CBC IV (rolling IV) */
+    uint32_t macCounter;             /**< GAP-01 anti-replay counter (applet 2.0+): +1 per wrapped command, folded into both MACs, never sent */
 
-    /** @brief Zero-initialise all session keys and IV. */
-    CW_SecureSession() {
+    /** @brief Zero-initialise all session keys, IV and counter. */
+    CW_SecureSession() : macCounter(0U) {
         memset(aesKey, 0U, sizeof(aesKey));
         memset(macKey, 0U, sizeof(macKey));
         memset(iv, 0U, sizeof(iv));
@@ -205,6 +210,7 @@ struct CW_SecureSession {
         CW_Utils::secure_wipe(aesKey, sizeof(aesKey));
         CW_Utils::secure_wipe(macKey, sizeof(macKey));
         CW_Utils::secure_wipe(iv,     sizeof(iv));
+        macCounter = 0U;
     }
 };
 

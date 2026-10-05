@@ -263,8 +263,20 @@ public:
      *          a false return as "wrong PIN" only after confirming session
      *          validity — a transport glitch should not be retried with a
      *          new PIN.
+     * @warning If the value entered is the card's duress wipe code, the card
+     *          erases itself: this returns false, @ref lastStatusWord is
+     *          @ref CW_SW_CARD_WIPED and @p session is cleared. Route the user
+     *          to re-initialisation; do not retry.
      */
     bool verifyPin(CW_SecureSession& session, const uint8_t* pin, uint8_t pinLength);
+
+    /**
+     * @brief Status word of the card's last response (0 if none was received).
+     *
+     * Use after a false / failed call to tell e.g. a wrong PIN (0x63Cx,
+     * x = retries left) from a duress wipe (@ref CW_SW_CARD_WIPED).
+     */
+    uint16_t lastStatusWord() const { return _secure.lastStatusWord(); }
 
     /**
      * @brief Sign a 32-byte digest using a card-resident key.
@@ -284,7 +296,11 @@ public:
      * @retval CW_OK                                  Signature valid.
      * @retval CW_INVALID_SESSION                     Secure channel not open.
      * @retval CW_SIGN_KEY_TOO_SHORT                  Bad hash buffer / length.
-     * @retval CW_SIGN_NO_KEY_LOADED                  Card rejected the SIGN APDU.
+     * @retval CW_SIGN_NO_KEY_LOADED                  Card rejected the SIGN APDU
+     *                                                (see @ref lastStatusWord).
+     * @retval CW_SIGN_CARD_WIPED                     The PIN was the duress wipe
+     *                                                code: card erased, session
+     *                                                cleared.
      * @retval CW_SIGN_PIN_INCORRECT                  PIN length out of range.
      * @retval CW_SIGN_KEY_TOO_SHORT_WITH_PINLESS_MODE
      *                                                PIN-less mode requested but
