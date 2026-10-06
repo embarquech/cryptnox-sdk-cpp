@@ -89,7 +89,7 @@ CW_SecureChannel::CW_SecureChannel(CW_NfcTransport& driver,
                                    CW_CryptoProvider& crypto,
                                    CW_Platform& platform)
     : _driver(driver), _logger(logger), _crypto(crypto), _platform(platform),
-      _cachedMfCertLen(0U), _appletMajor(0U), _lastSw(0U) {
+      _cachedMfCertLen(0U), _appletMajor(0U) {
     memset(_lastNonce, 0, sizeof(_lastNonce));
 }
 
@@ -129,7 +129,6 @@ bool CW_SecureChannel::checkStatusWord(const uint8_t* response, uint16_t respons
     else {
         uint8_t sw1 = response[responseLength - 2U];
         uint8_t sw2 = response[responseLength - 1U];
-        _lastSw = (uint16_t)(((uint16_t)sw1 << 8U) | sw2);
 
         if ((sw1 == sw1Expected) && (sw2 == sw2Expected)) {
             ret = true;
@@ -467,7 +466,6 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
                                      const uint8_t data[], uint16_t dataLength,
                                      uint8_t* decryptedOutput, uint16_t* decryptedOutputLength) {
     bool ret = false;
-    _lastSw = 0U;
 
     /* Reject payloads that would overflow s_dataBuf (MED-01). */
     if (dataLength > INPUT_BUFFER_LIMIT) {
@@ -570,9 +568,6 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
         } else if (responseLength >= 2U) {
             /* Card-level error: surface the SW so the caller can diagnose
              * common cases (e.g. 0x63Cn = wrong PIN with n retries left). */
-            if (_lastSw == CW_SW_CARD_WIPED) {
-                session.clear();  /* card erased itself: the channel is dead */
-            }
 #if CW_DEBUG_LOGGING
             _logger.print(F("Secured APDU: bad SW 0x"));
             if (response[responseLength - 2U] < 0x10U) { _logger.print(F("0")); }
@@ -667,7 +662,6 @@ bool CW_SecureChannel::aesCbcDecrypt(const CW_SecureSession& session,
         uint8_t innerSW1 = s_dataBuf[decryptedDataLength - 2U];
         uint8_t innerSW2 = s_dataBuf[decryptedDataLength - 1U];
         uint16_t payloadLength = decryptedDataLength - 2U;
-        _lastSw = (uint16_t)(((uint16_t)innerSW1 << 8U) | innerSW2);
 
         if ((innerSW1 != 0x90U) || (innerSW2 != 0x00U)) {
 #if CW_DEBUG_LOGGING

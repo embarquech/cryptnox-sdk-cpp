@@ -110,15 +110,6 @@ public:
     bool selectApdu();
 
     /**
-     * @brief Status word of the last card response (outer, or the decrypted
-     *        inner one for wrapped commands). 0 if no response was received.
-     *
-     * Lets callers tell a wrong PIN (0x63Cx) from a duress wipe
-     * (@ref CW_SW_CARD_WIPED) after a failed @ref aesCbcEncrypt.
-     */
-    uint16_t lastStatusWord() const { return _lastSw; }
-
-    /**
      * @brief Retrieve the card's ephemeral public key via GET CARD CERTIFICATE.
      *
      * Sends a random challenge nonce to the card and stores it internally.
@@ -337,9 +328,6 @@ private:
 
     /** @brief Applet major version from the last SELECT (0 = unknown → legacy channel). */
     uint8_t _appletMajor;
-
-    /** @brief See @ref lastStatusWord. */
-    uint16_t _lastSw;
 
     void macIvForCounter(const CW_SecureSession& session, uint8_t* macIv);
 

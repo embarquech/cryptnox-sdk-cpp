@@ -109,10 +109,6 @@
 #define CW_SIGN_NO_KEY_LOADED                  (0x81U)
 #define CW_SIGN_PIN_INCORRECT                  (0x82U)
 #define CW_SIGN_KEY_TOO_SHORT_WITH_PINLESS_MODE (0x83U)
-#define CW_SIGN_CARD_WIPED                     (0x84U)  /**< Duress wipe code entered as the PIN: card erased (SW 6F03) */
-
-/* Card status words */
-#define CW_SW_CARD_WIPED              (0x6F03U) /**< Wipe code entered at VERIFY PIN / SIGN: card is now blank, channel dead */
 
 /* Size constants */
 #define CW_RAW_SIGNATURE_SIZE         (64U)    /**< Raw signature (r[32] + s[32], or Ed25519 R||S) */
