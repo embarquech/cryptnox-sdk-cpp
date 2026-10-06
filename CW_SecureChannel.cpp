@@ -371,7 +371,12 @@ bool CW_SecureChannel::mutuallyAuthenticate(CW_SecureSession& session,
             _crypto.random(challenge, MUTUALAUTH_CHALLENGE_IN_BYTES)) {
             (void)CW_Utils::safe_memcpy(session.aesKey, CW_AESKEY_SIZE, sha512Output, CW_AESKEY_SIZE);
             (void)CW_Utils::safe_memcpy(session.macKey, CW_MACKEY_SIZE, sha512Output + CW_AESKEY_SIZE, CW_MACKEY_SIZE);
-            (void)CW_Utils::safe_memcpy(session.iv, CW_IV_SIZE, session.aesKey, CW_IV_SIZE);
+            /* 2.0+: IV = Kenc[:16]. 1.6.x: fixed 0x01 IV, as the Python SDK does. */
+            if (_appletMajor >= APPLET_MAJOR_V2) {
+                (void)CW_Utils::safe_memcpy(session.iv, CW_IV_SIZE, session.aesKey, CW_IV_SIZE);
+            } else {
+                memset(session.iv, 0x01U, CW_IV_SIZE);
+            }
             session.macCounter = 0U;
             (void)CW_Utils::safe_memcpy(proofInput, sizeof(proofInput), session.aesKey, CW_AESKEY_SIZE);
 
