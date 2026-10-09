@@ -33,3 +33,13 @@ jobs:
             -I . \
             --force \
             .
+
+      # Coding rule: every variable is initialised where it is declared, so a
+      # read before the first write sees a known value. cppcheck only reports
+      # reads of uninitialised data, not declarations, hence this grep.
+      - name: Uninitialised declarations
+        run: |
+          if grep -nPH '^\s*(static\s+)?(const\s+)?(u?int(8|16|32|64)_t|size_t|bool|char|int|unsigned|float|double|CW_CardInfo|CW_SignResult|CW_SecureSession)\s*\*?\s*[A-Za-z_]\w*(\s*\[[^\]]*\])*\s*;' -- *.h *.cpp fuzz/*.cpp; then
+            echo "::error::Uninitialised declaration(s) above: add '= { 0U }' or '{}'."
+            exit 1
+          fi
