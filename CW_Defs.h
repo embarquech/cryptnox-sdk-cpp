@@ -81,31 +81,56 @@
 #define CW_NOK                        (0x01U)  /**< NOK */
 #define CW_INVALID_SESSION            (0x02U)  /**< Invalid session */
 
-/* Key / path types for SIGN command (keyType) */
+/* Key / path types for SIGN command (keyType).
+ * Encoded as (derivation | curve): low nibble = derivation
+ * (0 current, 1 derive, 2 derive-and-make-current, 3 pinless),
+ * high nibble = curve (0 k1, 1 r1, 2 ed25519). */
 #define CW_SIGN_CURR_K1               (0x00U)  /**< Current key (k1) */
 #define CW_SIGN_CURR_R1               (0x10U)  /**< Current key (r1) */
 #define CW_SIGN_DERIVE_K1             (0x01U)  /**< Derive with k1 curve */
 #define CW_SIGN_DERIVE_R1             (0x11U)  /**< Derive with r1 curve */
 #define CW_SIGN_PINLESS_K1            (0x03U)  /**< PIN-less path (k1 only) */
+#define CW_SIGN_CURR_ED25519          (0x20U)  /**< Current Ed25519 key (Solana; applet v2.0+) */
+#define CW_SIGN_DERIVE_ED25519        (0x21U)  /**< Derive Ed25519 key (Solana; applet v2.0+) */
+
 
 /* PIN mode for SIGN command */
 #define CW_SIGN_WITH_PIN              (false)  /**< PIN path */
 #define CW_SIGN_PINLESS               (true)   /**< PIN-less path */
 
-/* Signature types for SIGN command */
+/* Signature types for SIGN command (APDU P2) */
 #define CW_SIGN_SIG_ECDSA_LOW_S       (0x00U)  /**< ECDSA with canonical low S */
 #define CW_SIGN_SIG_ECDSA_EOSIO       (0x01U)  /**< ECDSA EOSIO format */
 #define CW_SIGN_SIG_SCHNORR_BIP340    (0x02U)  /**< Schnorr BIP340 */
+#define CW_SIGN_SIG_EDDSA             (0x03U)  /**< EdDSA (Ed25519) — forced automatically for Ed25519 key types */
 
 /* SIGN-specific error codes */
 #define CW_SIGN_KEY_TOO_SHORT                  (0x80U)
 #define CW_SIGN_NO_KEY_LOADED                  (0x81U)
 #define CW_SIGN_PIN_INCORRECT                  (0x82U)
 #define CW_SIGN_KEY_TOO_SHORT_WITH_PINLESS_MODE (0x83U)
+#define CW_SIGN_INVALID_PATH                   (0x84U)  /**< Derivation path missing, too long or not a multiple of 4 */
+#define CW_SIGN_MESSAGE_TOO_LONG               (0x85U)  /**< Hash/message longer than the key type allows */
 
 /* Size constants */
-#define CW_RAW_SIGNATURE_SIZE         (64U)    /**< Raw signature (r[32] + s[32]) */
-#define CW_HASH_SIZE                  (32U)    /**< Standard hash size */
+#define CW_RAW_SIGNATURE_SIZE         (64U)    /**< Raw signature (r[32] + s[32], or Ed25519 R||S) */
+#define CW_HASH_SIZE                  (32U)    /**< Standard hash size (ECDSA digest) */
+#define CW_ED25519_PUBKEY_SIZE        (32U)    /**< Raw Ed25519 public key size (Solana address) */
+/* Ed25519 signs the raw message (the card hashes internally). Cap the message
+ * so the framed payload [len(2)|msg|path|pin(9)] fits one secure-channel page.
+ *
+ * These two are WORST-CASE bounds, kept for reference and for callers that want a
+ * compile-time constant. CW_MAX_ED25519_MESSAGE_LENGTH reserves the full 20-byte
+ * path, so it under-reports the room available to a shorter path — a 4-level
+ * Solana path (16 B) leaves 181, not 177. validateSignRequest() therefore
+ * computes the bound from the actual request instead of using these; sizing a
+ * caller-side buffer with CW_MAX_ED25519_MESSAGE_LENGTH stays safe, just
+ * conservative.
+ *
+ * Neither figure is a card limit: the v2.0 SIGN spec accepts up to 1200 bytes of
+ * raw data. The ceiling is this SDK's single-page secure-channel buffer. */
+#define CW_MAX_ED25519_MESSAGE_LENGTH      (CW_USER_DATA_PAGE_SIZE - 2U - CW_MAX_DERIVE_PATH_LENGTH - CW_MAX_PIN_LENGTH) /* 177 */
+#define CW_MAX_ED25519_MESSAGE_LENGTH_CURR (CW_USER_DATA_PAGE_SIZE - 2U - CW_MAX_PIN_LENGTH)                            /* 197 */
 #define CW_MAX_DERIVE_PATH_LENGTH     (20U)    /**< Max BIP32 path bytes */
 #define CW_MIN_PIN_LENGTH              (4U)    /**< Minimum PIN length */
 #define CW_MAX_PIN_LENGTH              (9U)    /**< Maximum PIN length */
@@ -166,22 +191,20 @@ enum CW_Curve {
  * allowing functions to be reentrant by passing session state as a parameter.
  */
 struct CW_SecureSession {
-    uint8_t aesKey[CW_AESKEY_SIZE];  /**< AES-256 session encryption key (Kenc) */
-    uint8_t macKey[CW_MACKEY_SIZE];  /**< AES-256 session MAC key (Kmac) */
-    uint8_t iv[CW_IV_SIZE];          /**< Current AES-CBC IV (rolling IV) */
+    uint8_t aesKey[CW_AESKEY_SIZE] {};  /**< AES-256 session encryption key (Kenc) */
+    uint8_t macKey[CW_MACKEY_SIZE] {};  /**< AES-256 session MAC key (Kmac) */
+    uint8_t iv[CW_IV_SIZE] {};          /**< Current AES-CBC IV (rolling IV) */
+    uint32_t macCounter {};             /**< GAP-01 anti-replay counter (applet 2.0+): +1 per wrapped command, folded into both MACs, never sent */
 
-    /** @brief Zero-initialise all session keys and IV. */
-    CW_SecureSession() {
-        memset(aesKey, 0U, sizeof(aesKey));
-        memset(macKey, 0U, sizeof(macKey));
-        memset(iv, 0U, sizeof(iv));
-    }
+    /** @brief Zero-initialise all session keys, IV and counter. */
+    CW_SecureSession() = default;
 
     /** @brief Securely clear all session keys and IV. */
     void clear() {
         CW_Utils::secure_wipe(aesKey, sizeof(aesKey));
         CW_Utils::secure_wipe(macKey, sizeof(macKey));
         CW_Utils::secure_wipe(iv,     sizeof(iv));
+        macCounter = 0U;
     }
 };
 
@@ -189,15 +212,41 @@ struct CW_SecureSession {
  * 5. Compile-time feature flags
  ******************************************************************/
 
-/** Certificate chain verification is always enabled (SEC-004 / H-07).
- * Building with -DCW_VERIFY_CERT=0 is a hard error — it disables the card
- * authenticity gate and allows any forged key to be accepted. */
+/** Card certificate chain verification (SEC-004 / H-07).
+ *
+ * At 1, establishSecureChannel() checks the card's chain against
+ * CW_TRUSTED_CA_KEYS and refuses to open a session on failure. At 0 the check is
+ * compiled out entirely and ANY card is accepted, including a forged one, which
+ * will then sign whatever it is given. Release builds must ship 1.
+ *
+ * 0 is for bring-up against a card signed by a non-production CA, and is meant to
+ * be passed from the build (-DCW_VERIFY_CERT=0) rather than edited in here, so a
+ * bench setting cannot reach a commit. The better answer in that case is to add
+ * the dev CA public key to CW_TRUSTED_CA_KEYS in CW_TrustedKeys.h — the table
+ * holds several and tries each in turn, so verification stays enabled and nothing
+ * has to be weakened.
+ *
+ * This flag gates the chain check only. Providers must keep sha256() working at
+ * 0: the applet 2.0 mutual-auth proof (SHA256(Kenc || challenge)) relies on it.
+ */
 #ifndef CW_VERIFY_CERT
 #define CW_VERIFY_CERT 1
 #endif
 #if CW_VERIFY_CERT == 0
-#  error "CW_VERIFY_CERT=0 disables certificate chain verification (CRIT-02/H-07). " \
-         "Remove -DCW_VERIFY_CERT=0 from your build flags — this gate must never be disabled."
+#  warning "CW_VERIFY_CERT=0: card authenticity verification is compiled out (CRIT-02/H-07). Never ship this."
+#endif
+
+/** Minimum applet major version accepted at SELECT (PR #27 review #9).
+ *
+ * The version comes from the unauthenticated SELECT response, so an NFC
+ * man-in-the-middle can report 1.x to a 2.0 card and force the legacy channel
+ * (no anti-replay counter, no mutual-auth proof). Against a genuine 2.0 card
+ * that only breaks the channel, but a fleet made only of 2.0+ cards can refuse
+ * legacy outright with -DCW_MIN_APPLET_MAJOR=2. An unreadable version counts
+ * as 0 and is refused too. Default 0 accepts every applet.
+ */
+#ifndef CW_MIN_APPLET_MAJOR
+#define CW_MIN_APPLET_MAJOR 0U
 #endif
 
 /**

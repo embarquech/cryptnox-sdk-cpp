@@ -30,9 +30,9 @@
 /* GET_MANUFACTURER_CERT: full DataOut up to certLen(2)+cert(411)+SW(2)=415 bytes; 420 for margin. */
 #define RESPONSE_GETMANUFACTURERCERT_PAGE_IN_BYTES  420U
 #define RESPONSE_OPENSECURECHANNEL_IN_BYTES      34U
-#define REQUEST_MUTUALLYAUTHENTICATE_IN_BYTES    69U
-#define RESPONSE_MUTUALLYAUTHENTICATE_IN_BYTES   66U
+#define MUTUALAUTH_CHALLENGE_IN_BYTES            32U
 #define RESPONSE_STATUS_WORDS_IN_BYTES            2U
+#define APPLET_MAJOR_V2                           2U  /* first applet with the MAC counter + mutual-auth proof */
 
 #define OPENSECURECHANNEL_SALT_IN_BYTES   (RESPONSE_OPENSECURECHANNEL_IN_BYTES - RESPONSE_STATUS_WORDS_IN_BYTES)
 #define GETCARDCERTIFICATE_IN_BYTES       (RESPONSE_GETCARDCERTIFICATE_IN_BYTES - RESPONSE_STATUS_WORDS_IN_BYTES)
@@ -57,12 +57,12 @@ static_assert(APDU_HEADER_LEN + APDU_LC_LEN + AES_BLOCK_SIZE + ENC_BUF_MAX_LEN <
 
 /* Shared static crypto scratch buffers — reuse is safe because decrypt is
  * always called from inside encrypt AFTER encrypt's large buffers are done. */
-static uint8_t s_apduBuf[SEND_APDU_MAX_LEN];  /* 245 bytes */
-static uint8_t s_macBuf [MAX_MAC_DATA_LEN];   /* 240 bytes */
-static uint8_t s_dataBuf[ENC_BUF_MAX_LEN];   /* 224 bytes */
+static uint8_t s_apduBuf[SEND_APDU_MAX_LEN] = { 0U };  /* 245 bytes */
+static uint8_t s_macBuf [MAX_MAC_DATA_LEN] = { 0U };   /* 240 bytes */
+static uint8_t s_dataBuf[ENC_BUF_MAX_LEN] = { 0U };   /* 224 bytes */
 
 /* Manufacturer certificate assembly buffer (used only during verifyCertificateChain). */
-static uint8_t s_mfCertBuf[CW_MANUF_CERT_MAX_BYTES];
+static uint8_t s_mfCertBuf[CW_MANUF_CERT_MAX_BYTES] = { 0U };
 
 /* DER TLV tag bytes */
 #define DER_TAG_SEQUENCE    (0x30U)  /* SEQUENCE (universal, constructed) */
@@ -89,8 +89,7 @@ CW_SecureChannel::CW_SecureChannel(CW_NfcTransport& driver,
                                    CW_CryptoProvider& crypto,
                                    CW_Platform& platform)
     : _driver(driver), _logger(logger), _crypto(crypto), _platform(platform),
-      _cachedMfCertLen(0U) {
-    memset(_lastNonce, 0, sizeof(_lastNonce));
+      _cachedMfCertLen(0U), _appletMajor(0U) {
 }
 
 /******************************************************************
@@ -161,12 +160,25 @@ bool CW_SecureChannel::selectApdu() {
         0xA0, 0x00, 0x00, 0x10, 0x00, 0x01, 0x12
     };
 
-    uint8_t response[RESPONSE_SELECT_IN_BYTES];
+    uint8_t response[RESPONSE_SELECT_IN_BYTES] = { 0U };
     uint8_t responseLength = static_cast<uint8_t>(sizeof(response));
+    _appletMajor = 0U;
 
     if (_driver.sendAPDU(selectApduCmd, sizeof(selectApduCmd), response, responseLength)) {
         if (checkStatusWord(response, responseLength, 0x90U, 0x00U)) {
+            /* Layout: type(1) | version major, minor, patch (3) | status ... | SW */
+            if (responseLength >= (4U + RESPONSE_STATUS_WORDS_IN_BYTES)) {
+                _appletMajor = response[1];
+            }
             ret = true;
+#if CW_MIN_APPLET_MAJOR > 0
+            if (_appletMajor < (uint8_t)CW_MIN_APPLET_MAJOR) {
+#if CW_DEBUG_LOGGING
+                _logger.println(F("Applet older than CW_MIN_APPLET_MAJOR, refused."));
+#endif
+                ret = false;
+            }
+#endif
         } else {
 #if CW_DEBUG_LOGGING
             _logger.println(F("Select APDU failed."));
@@ -183,7 +195,7 @@ bool CW_SecureChannel::selectApdu() {
 
 bool CW_SecureChannel::getCardCertificate(uint8_t* cardCertificate, uint8_t& cardCertificateLength) {
     bool ret = false;
-    uint8_t getCardCertificateResponse[RESPONSE_GETCARDCERTIFICATE_IN_BYTES];
+    uint8_t getCardCertificateResponse[RESPONSE_GETCARDCERTIFICATE_IN_BYTES] = { 0U };
     uint8_t getCardCertificateResponseLength = static_cast<uint8_t>(sizeof(getCardCertificateResponse));
 
     if (cardCertificate != NULL) {
@@ -202,7 +214,7 @@ bool CW_SecureChannel::getCardCertificate(uint8_t* cardCertificate, uint8_t& car
             0x80, 0xF8, 0x00, 0x00, 0x08
         };
 
-        uint8_t fullApdu[sizeof(getCardCertificateApdu) + RANDOM_BYTES];
+        uint8_t fullApdu[sizeof(getCardCertificateApdu) + RANDOM_BYTES] = { 0U };
         (void)CW_Utils::safe_memcpy(fullApdu, sizeof(fullApdu), getCardCertificateApdu, sizeof(getCardCertificateApdu));
         (void)CW_Utils::safe_memcpy(fullApdu + sizeof(getCardCertificateApdu), RANDOM_BYTES, randomBytes, RANDOM_BYTES);
 
@@ -278,11 +290,11 @@ bool CW_SecureChannel::openSecureChannel(uint8_t* salt,
             0x80, 0x10, 0x00, 0x00, 0x41, 0x04
         };
 
-        uint8_t fullApdu[sizeof(opcApduHeader) + CLIENT_PUBLIC_KEY_SIZE];
+        uint8_t fullApdu[sizeof(opcApduHeader) + CLIENT_PUBLIC_KEY_SIZE] = { 0U };
         (void)CW_Utils::safe_memcpy(fullApdu, sizeof(fullApdu), opcApduHeader, sizeof(opcApduHeader));
         (void)CW_Utils::safe_memcpy(fullApdu + sizeof(opcApduHeader), CLIENT_PUBLIC_KEY_SIZE, sessionPublicKey, CLIENT_PUBLIC_KEY_SIZE);
 
-        uint8_t response[RESPONSE_OPENSECURECHANNEL_IN_BYTES];
+        uint8_t response[RESPONSE_OPENSECURECHANNEL_IN_BYTES] = { 0U };
         uint8_t responseLength = static_cast<uint8_t>(sizeof(response));
 
         if (_driver.sendAPDU(fullApdu, sizeof(fullApdu), response, responseLength)) {
@@ -315,21 +327,19 @@ bool CW_SecureChannel::openSecureChannel(uint8_t* salt,
  * Cryptographic flow:
  *  1. Compute the ECDH shared secret S = ECDH(clientPrivateKey,
  *     cardEphemeralPubKey) on the negotiated curve.
- *  2. Derive 80 bytes of keying material via SHA-512 over
- *     (salt || S || pairingDataHash) and split into:
+ *  2. Derive 64 bytes of keying material via SHA-512 over
+ *     (S || pairingData || salt) and split into:
  *       - Kenc[32]: AES-256 session encryption key
  *       - Kmac[32]: AES-256 session MAC key
- *       - IV[16]  : initial rolling IV
- *  3. Send MUTUALLY AUTHENTICATE with a random 16-byte challenge encrypted
- *     under Kenc / IV. The card must answer with the same 16 bytes
- *     re-encrypted with the new IV — a verification that fails fast on
- *     any key-derivation mismatch.
- *  4. On success, populate @p session and wipe @p sharedSecret from the stack.
+ *     The initial encryption IV is Kenc[:16] (the card does the same), and the
+ *     anti-replay MAC counter starts at 0.
+ *  3. Send MUTUALLY AUTHENTICATE as the first wrapped command (counter 1) with
+ *     a random 32-byte challenge. @ref aesCbcEncrypt verifies the response MAC.
+ *  4. Applet 2.0+: the response must equal SHA256(Kenc || challenge), proving
+ *     the card holds this session's Kenc. 1.6.x answers random bytes, so only
+ *     the length is checked there.
  *
- * Failure modes that cause an early-exit with a wiped session:
- *  - ECDH returned zero or invalid (curve mismatch)
- *  - APDU transport failure
- *  - Card challenge response mismatch (active attacker or wrong card)
+ * Any failure leaves @p session cleared.
  */
 bool CW_SecureChannel::mutuallyAuthenticate(CW_SecureSession& session,
                                             const uint8_t* salt,
@@ -356,122 +366,91 @@ bool CW_SecureChannel::mutuallyAuthenticate(CW_SecureSession& session,
         (void)CW_Utils::safe_memcpy(concat + 32U, sizeof(concat) - 32U, reinterpret_cast<const uint8_t*>(COMMON_PAIRING_DATA), pairingKeyLen);
         (void)CW_Utils::safe_memcpy(concat + 32U + pairingKeyLen, 32U, salt, 32U);
 
-        bool sha512Ok = _crypto.sha512(concat, concatLen, sha512Output);
+        /* proof = Kenc || challenge, then SHA256 of it; one buffer for both. */
+        uint8_t proofInput[CW_AESKEY_SIZE + MUTUALAUTH_CHALLENGE_IN_BYTES] = { 0U };
+        uint8_t expected[32U] = { 0U };
+        uint8_t response[ENC_BUF_MAX_LEN] = { 0U };  /* aesCbcEncrypt may write up to ENC_BUF_MAX_LEN */
+        uint16_t responseLength = 0U;
+        uint8_t* challenge = proofInput + CW_AESKEY_SIZE;
 
-        if (!sha512Ok) {
-            CW_Utils::secure_wipe(sharedSecret, sizeof(sharedSecret));
-            CW_Utils::secure_wipe(sha512Output, sizeof(sha512Output));
-            CW_Utils::secure_wipe(concat, sizeof(concat));
-            return false;
-        }
-
-        (void)CW_Utils::safe_memcpy(session.aesKey, CW_AESKEY_SIZE, sha512Output, CW_AESKEY_SIZE);
-        (void)CW_Utils::safe_memcpy(session.macKey, CW_MACKEY_SIZE, sha512Output + CW_AESKEY_SIZE, CW_MACKEY_SIZE);
-
-        uint8_t iv_opc[AES_BLOCK_SIZE] = { 0U };
-        uint8_t mac_iv[AES_BLOCK_SIZE] = { 0U };
-        memset(iv_opc, 0x01U, AES_BLOCK_SIZE);
-
-        uint8_t RNG_data[32U] = { 0U };
-        if (!_crypto.random(RNG_data, sizeof(RNG_data))) {
+        if (!_crypto.sha512(concat, concatLen, sha512Output)) {
 #if CW_DEBUG_LOGGING
-            _logger.println(F("RNG failed."));
+            _logger.println(F("MutualAuth: SHA512 failed."));
 #endif
-            session.clear();
-            CW_Utils::secure_wipe(sharedSecret, sizeof(sharedSecret));
-            CW_Utils::secure_wipe(sha512Output, sizeof(sha512Output));
-            CW_Utils::secure_wipe(concat, sizeof(concat));
-            return false;
-        }
+        } else if (!_crypto.random(challenge, MUTUALAUTH_CHALLENGE_IN_BYTES)) {
+#if CW_DEBUG_LOGGING
+            _logger.println(F("MutualAuth: RNG failed (radio off? TRNG not seeded)."));
+#endif
+        } else {
+            (void)CW_Utils::safe_memcpy(session.aesKey, CW_AESKEY_SIZE, sha512Output, CW_AESKEY_SIZE);
+            (void)CW_Utils::safe_memcpy(session.macKey, CW_MACKEY_SIZE, sha512Output + CW_AESKEY_SIZE, CW_MACKEY_SIZE);
+            /* 2.0+: IV = Kenc[:16]. 1.6.x: fixed 0x01 IV, as the Python SDK does. */
+            if (_appletMajor >= APPLET_MAJOR_V2) {
+                (void)CW_Utils::safe_memcpy(session.iv, CW_IV_SIZE, session.aesKey, CW_IV_SIZE);
+            } else {
+                memset(session.iv, 0x01U, CW_IV_SIZE);
+            }
+            session.macCounter = 0U;
+            (void)CW_Utils::safe_memcpy(proofInput, sizeof(proofInput), session.aesKey, CW_AESKEY_SIZE);
 
-        /* Encrypt random data with Kenc (Bit padding) */
-        uint8_t ciphertextOPC[48U] = { 0U };
-        uint16_t cipherLength = _crypto.aesCbcEncrypt(RNG_data, sizeof(RNG_data),
-                                                      ciphertextOPC,
-                                                      session.aesKey, sizeof(session.aesKey),
-                                                      iv_opc, true);
-
-        /* Compute MAC over APDU header + ciphertext (Null padding) */
-        uint8_t opcApduHeader[APDU_HEADER_LEN + APDU_LC_LEN] = {
-            0x80U, 0x11U, 0x00U, 0x00U,
-            (uint8_t)(cipherLength + AES_BLOCK_SIZE)
-        };
-        uint8_t MAC_apduHeader[AES_BLOCK_SIZE] = { 0U };
-        (void)CW_Utils::safe_memcpy(MAC_apduHeader, sizeof(MAC_apduHeader), opcApduHeader, sizeof(opcApduHeader));
-
-        size_t  MAC_data_length = sizeof(MAC_apduHeader) + cipherLength;
-        uint8_t MAC_data[64U] = { 0U };
-        uint8_t ciphertextMACLong[64U] = { 0U };
-
-        if (MAC_data_length > sizeof(MAC_data)) {
-            session.clear();
-            CW_Utils::secure_wipe(sharedSecret, sizeof(sharedSecret));
-            CW_Utils::secure_wipe(sha512Output, sizeof(sha512Output));
-            CW_Utils::secure_wipe(concat, sizeof(concat));
-            CW_Utils::secure_wipe(RNG_data, sizeof(RNG_data));
-            return false;
-        }
-
-        (void)CW_Utils::safe_memcpy(MAC_data, sizeof(MAC_data), MAC_apduHeader, sizeof(MAC_apduHeader));
-        (void)CW_Utils::safe_memcpy(MAC_data + sizeof(MAC_apduHeader), sizeof(MAC_data) - sizeof(MAC_apduHeader), ciphertextOPC, cipherLength);
-
-        uint16_t encryptedLengthMAC = _crypto.aesCbcEncrypt(MAC_data, (uint16_t)MAC_data_length,
-                                                            ciphertextMACLong,
-                                                            session.macKey, sizeof(session.macKey),
-                                                            mac_iv, false);
-
-        uint8_t MAC_value[AES_BLOCK_SIZE] = { 0U };
-        uint8_t macOffset = (uint8_t)(encryptedLengthMAC - AES_BLOCK_SIZE);
-        (void)CW_Utils::safe_memcpy(MAC_value, sizeof(MAC_value), ciphertextMACLong + macOffset, AES_BLOCK_SIZE);
-
-        /* Forge MUTUALLY AUTHENTICATE APDU */
-        uint8_t sendApduOpc[REQUEST_MUTUALLYAUTHENTICATE_IN_BYTES] = { 0U };
-        uint16_t offset = 0U;
-        (void)CW_Utils::safe_memcpy(sendApduOpc + offset, sizeof(sendApduOpc) - static_cast<size_t>(offset), opcApduHeader, sizeof(opcApduHeader));
-        offset += sizeof(opcApduHeader);
-        (void)CW_Utils::safe_memcpy(sendApduOpc + offset, sizeof(sendApduOpc) - static_cast<size_t>(offset), MAC_value, sizeof(MAC_value));
-        offset += sizeof(MAC_value);
-        (void)CW_Utils::safe_memcpy(sendApduOpc + offset, sizeof(sendApduOpc) - static_cast<size_t>(offset), ciphertextOPC, cipherLength);
-
-        uint8_t response[255U] = { 0U };
-        uint8_t responseLength = static_cast<uint8_t>(sizeof(response));
-
-        if (_driver.sendAPDU(sendApduOpc, sizeof(sendApduOpc), response, responseLength)) {
-            if (checkStatusWord(response, responseLength, 0x90U, 0x00U)) {
-                if (responseLength == static_cast<uint8_t>(RESPONSE_MUTUALLYAUTHENTICATE_IN_BYTES)) {
-                    (void)CW_Utils::safe_memcpy(session.iv, CW_IV_SIZE, response, CW_IV_SIZE);
+            const uint8_t apdu[] = { 0x80U, 0x11U, 0x00U, 0x00U };
+            if (aesCbcEncrypt(session, apdu, sizeof(apdu),
+                              challenge, MUTUALAUTH_CHALLENGE_IN_BYTES,
+                              response, &responseLength) &&
+                (responseLength == MUTUALAUTH_CHALLENGE_IN_BYTES)) {
+                if (_appletMajor < APPLET_MAJOR_V2) {
+                    ret = true;  /* 1.6.x: response is random, nothing to verify */
+                } else if (_crypto.sha256(proofInput, sizeof(proofInput), expected) &&
+                           CW_Utils::secure_compare(expected, response, sizeof(expected))) {
                     ret = true;
                 } else {
 #if CW_DEBUG_LOGGING
-                    _logger.println(F("MutualAuth: unexpected response size."));
+                    _logger.println(F("MutualAuth: bad SHA256(Kenc || challenge) proof."));
 #endif
                 }
             } else {
 #if CW_DEBUG_LOGGING
-                _logger.println(F("MutualAuth: bad SW."));
+                _logger.println(F("MutualAuth APDU failed."));
 #endif
             }
-        } else {
-#if CW_DEBUG_LOGGING
-            _logger.println(F("MutualAuth APDU failed."));
-#endif
         }
 
         /* Secure cleanup */
         CW_Utils::secure_wipe(sharedSecret, sizeof(sharedSecret));
         CW_Utils::secure_wipe(sha512Output, sizeof(sha512Output));
         CW_Utils::secure_wipe(concat, sizeof(concat));
-        CW_Utils::secure_wipe(RNG_data, sizeof(RNG_data));
-        CW_Utils::secure_wipe(ciphertextOPC, sizeof(ciphertextOPC));
-        CW_Utils::secure_wipe(MAC_data, sizeof(MAC_data));
+        CW_Utils::secure_wipe(proofInput, sizeof(proofInput));
+        CW_Utils::secure_wipe(expected, sizeof(expected));
+        CW_Utils::secure_wipe(response, sizeof(response));
 
-        /* If the APDU exchange failed after session keys were written, clear
-         * them now to prevent a half-initialised session from being used (CRIT-04). */
+        /* Never leave a half-initialised session behind (CRIT-04). */
         if (!ret) {
             session.clear();
         }
     }
 
+    return ret;
+}
+
+/* GAP-01 anti-replay (applet 2.0+). The card MACs (counter block || MAC data)
+ * with a zero IV, the counter being a 16-byte big-endian block. In CBC that is
+ * exactly the MAC of the MAC data alone with IV = AES_Kmac(counter block), so we
+ * fold the counter into the IV instead of prepending it: the scratch buffers and
+ * the maximum APDU size stay unchanged. 1.6.x: zero IV, legacy MAC. */
+bool CW_SecureChannel::macIvForCounter(const CW_SecureSession& session, uint8_t* macIv) {
+    bool ret = true;
+    memset(macIv, 0U, AES_BLOCK_SIZE);
+    if (_appletMajor >= APPLET_MAJOR_V2) {
+        uint8_t ctrBlock[AES_BLOCK_SIZE] = { 0U };
+        uint8_t zeroIv[AES_BLOCK_SIZE] = { 0U };
+        ctrBlock[12] = (uint8_t)(session.macCounter >> 24U);
+        ctrBlock[13] = (uint8_t)(session.macCounter >> 16U);
+        ctrBlock[14] = (uint8_t)(session.macCounter >> 8U);
+        ctrBlock[15] = (uint8_t)(session.macCounter);
+        ret = (_crypto.aesCbcEncrypt(ctrBlock, AES_BLOCK_SIZE, macIv,
+                                     session.macKey, sizeof(session.macKey),
+                                     zeroIv, false) == AES_BLOCK_SIZE);
+    }
     return ret;
 }
 
@@ -552,7 +531,18 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
     offset += sizeof(macApdu);
     (void)CW_Utils::safe_memcpy(s_macBuf + offset, sizeof(s_macBuf) - static_cast<size_t>(offset), s_dataBuf, encryptedLength);
 
+    /* GAP-01: +1 once per command; the same value authenticates its response.
+     * The card advances even when it answers a bare error SW, so stay in step. */
+    session.macCounter++;
     uint8_t macIv[AES_BLOCK_SIZE] = { 0U };
+    if (!macIvForCounter(session, macIv)) {
+#if CW_DEBUG_LOGGING
+        _logger.println(F("Error: MAC IV derivation failed."));
+#endif
+        CW_Utils::secure_wipe(s_dataBuf, sizeof(s_dataBuf));
+        CW_Utils::secure_wipe(s_macBuf,  sizeof(s_macBuf));
+        return false;
+    }
     uint16_t macEncryptedLength = _crypto.aesCbcEncrypt(s_macBuf, macDataLength, s_apduBuf,
                                                         session.macKey, sizeof(session.macKey),
                                                         macIv, false);
@@ -633,7 +623,7 @@ bool CW_SecureChannel::aesCbcDecrypt(const CW_SecureSession& session,
     }
 
     /* Response layout: MAC(16) || cipherText(N) || SW1(1) || SW2(1) */
-    uint8_t rep_mac[AES_BLOCK_SIZE];
+    uint8_t rep_mac[AES_BLOCK_SIZE] = { 0U };
     (void)CW_Utils::safe_memcpy(rep_mac, sizeof(rep_mac), response, AES_BLOCK_SIZE);
     uint8_t* rep_data  = response + AES_BLOCK_SIZE;
     size_t totalDataLen = response_len - 2U;
@@ -657,6 +647,13 @@ bool CW_SecureChannel::aesCbcDecrypt(const CW_SecureSession& session,
     (void)CW_Utils::safe_memcpy(s_macBuf + AES_BLOCK_SIZE, sizeof(s_macBuf) - AES_BLOCK_SIZE, rep_data, cipherLen);
 
     uint8_t mac_iv[AES_BLOCK_SIZE] = { 0U };
+    if (!macIvForCounter(session, mac_iv)) {  /* same counter as the command (GAP-01) */
+#if CW_DEBUG_LOGGING
+        _logger.println(F("Error: MAC IV derivation failed."));
+#endif
+        CW_Utils::secure_wipe(s_macBuf, sizeof(s_macBuf));
+        return false;
+    }
     uint16_t macEncryptedLength = _crypto.aesCbcEncrypt(s_macBuf, (uint16_t)macInputLen, s_apduBuf,
                                                         session.macKey, sizeof(session.macKey),
                                                         mac_iv, false);
@@ -691,9 +688,13 @@ bool CW_SecureChannel::aesCbcDecrypt(const CW_SecureSession& session,
 #endif
     }
     else {
-        uint8_t innerSW1 = s_dataBuf[decryptedDataLength - 2U];
-        uint8_t innerSW2 = s_dataBuf[decryptedDataLength - 1U];
-        uint16_t payloadLength = decryptedDataLength - 2U;
+        uint8_t innerSW1 = 0U;
+        uint8_t innerSW2 = 0U;
+        uint16_t payloadLength = 0U;
+
+        innerSW1 = s_dataBuf[decryptedDataLength - 2U];
+        innerSW2 = s_dataBuf[decryptedDataLength - 1U];
+        payloadLength = (uint16_t)(decryptedDataLength - 2U);
 
         if ((innerSW1 != 0x90U) || (innerSW2 != 0x00U)) {
 #if CW_DEBUG_LOGGING
@@ -1102,7 +1103,7 @@ bool CW_SecureChannel::getManufacturerCertificate(uint8_t* cert, uint16_t& certL
     if (cert != NULL) {
         const uint8_t APDU_P2_IDX = 3U;  /* P2 field offset in ISO 7816-4 APDU header */
         uint8_t apdu[5U] = { 0x80U, 0xF7U, 0x00U, 0x00U, 0x00U };
-        uint8_t response[RESPONSE_GETMANUFACTURERCERT_PAGE_IN_BYTES];
+        uint8_t response[RESPONSE_GETMANUFACTURERCERT_PAGE_IN_BYTES] = { 0U };
         uint16_t responseLen = static_cast<uint16_t>(sizeof(response));
 
         if (!_driver.sendAPDULarge(apdu, static_cast<uint8_t>(sizeof(apdu)), response,
