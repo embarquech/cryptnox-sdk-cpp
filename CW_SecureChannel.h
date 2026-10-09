@@ -321,15 +321,16 @@ private:
     CW_Platform&       _platform; ///< Platform abstraction (sleep_ms).
 
     /** @brief Nonce sent in the last getCardCertificate() call; checked in verifyCertificateChain(). */
-    uint8_t _lastNonce[CW_CERT_NONCE_SIZE];
+    uint8_t _lastNonce[CW_CERT_NONCE_SIZE] {};
 
     /** @brief Non-zero when s_mfCertBuf holds a valid pre-fetched manufacturer certificate. */
-    uint16_t _cachedMfCertLen;
+    uint16_t _cachedMfCertLen {};
 
     /** @brief Applet major version from the last SELECT (0 = unknown → legacy channel). */
-    uint8_t _appletMajor;
+    uint8_t _appletMajor {};
 
-    void macIvForCounter(const CW_SecureSession& session, uint8_t* macIv);
+    /** @brief MAC IV for the current counter (zero on 1.6.x). @return false if AES failed. */
+    bool macIvForCounter(const CW_SecureSession& session, uint8_t* macIv);
 
     static bool parseDerSigToRaw(const uint8_t* der, uint8_t derLen,
                                  uint8_t* raw64);

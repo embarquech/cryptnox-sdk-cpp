@@ -342,7 +342,7 @@ bool CryptnoxWallet::writeUserData(CW_SecureSession& session, uint8_t slot,
 }
 
 CW_SignResult CryptnoxWallet::sign(CW_SignRequest& request) {
-    CW_SignResult result;
+    CW_SignResult result{};
 
     if (validateSignRequest(request, result)) {
         /* One secure-channel page holds the largest framed payload for either
@@ -400,7 +400,8 @@ bool CryptnoxWallet::getPublicKey(CW_SecureSession& session, uint8_t keyType,
     }
     else if (cwSignNeedsPath(keyType) &&
              ((derivePath == NULL) || (derivePathLength == 0U) ||
-              (derivePathLength > CW_MAX_DERIVE_PATH_LENGTH))) {
+              (derivePathLength > CW_MAX_DERIVE_PATH_LENGTH) ||
+              ((derivePathLength % 4U) != 0U))) {
 #if CW_DEBUG_LOGGING
         _logger.println(F("Error: Invalid derivation path for get public key."));
 #endif
@@ -523,7 +524,7 @@ bool CryptnoxWallet::validateSignRequest(const CW_SignRequest& request, CW_SignR
 #if CW_DEBUG_LOGGING
         _logger.println(F("Error: Invalid derivation path for sign."));
 #endif
-        result.errorCode = CW_SIGN_KEY_TOO_SHORT;
+        result.errorCode = CW_SIGN_INVALID_PATH;
     }
     else if (request.hashLength > (cwIsEd25519(request.keyType)
                                        ? cwMaxEd25519Message(request)
@@ -531,7 +532,7 @@ bool CryptnoxWallet::validateSignRequest(const CW_SignRequest& request, CW_SignR
 #if CW_DEBUG_LOGGING
         _logger.println(F("Error: Message/hash too large to sign."));
 #endif
-        result.errorCode = CW_SIGN_KEY_TOO_SHORT;
+        result.errorCode = CW_SIGN_MESSAGE_TOO_LONG;
     }
     else if ((request.pinLessMode) && (request.keyType != CW_SIGN_PINLESS_K1)) {
 #if CW_DEBUG_LOGGING

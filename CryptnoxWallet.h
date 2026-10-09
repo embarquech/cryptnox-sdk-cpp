@@ -53,13 +53,10 @@
  * and email programmed when the card was initialised. NUL-terminated.
  */
 struct CW_CardInfo {
-    char name[CW_CARD_NAME_MAX_LEN + 1U];    /**< NUL-terminated ASCII name. */
-    char email[CW_CARD_EMAIL_MAX_LEN + 1U];  /**< NUL-terminated ASCII email. */
+    char name[CW_CARD_NAME_MAX_LEN + 1U] {};    /**< NUL-terminated ASCII name. */
+    char email[CW_CARD_EMAIL_MAX_LEN + 1U] {};  /**< NUL-terminated ASCII email. */
 
-    CW_CardInfo() {
-        name[0]  = '\0';
-        email[0] = '\0';
-    }
+    CW_CardInfo() = default;
 };
 
 /**
@@ -73,14 +70,14 @@ struct CW_CardInfo {
  */
 struct CW_SignRequest {
     CW_SecureSession& session;       /**< Reference to an open secure session. */
-    uint8_t keyType;                 /**< Key / path type — one of the @c CW_SIGN_CURR_*, @c CW_SIGN_DERIVE_*, @c CW_SIGN_PINLESS_K1, @c CW_SIGN_*_ED25519 constants. */
-    uint8_t signatureType;           /**< Signature format — @c CW_SIGN_SIG_ECDSA_LOW_S / EOSIO / SCHNORR_BIP340. Ignored for Ed25519 key types (EdDSA is forced). */
-    uint8_t pin[CW_MAX_PIN_LENGTH];  /**< PIN bytes (4–9 ASCII digits). Zero-padded; cleared in the destructor. */
-    bool pinLessMode;                /**< false = PIN path, true = PIN-less path (requires @c keyType == @ref CW_SIGN_PINLESS_K1). */
-    const uint8_t* hash;             /**< Data to sign. For ECDSA: a digest (typically 32 bytes). For Ed25519 (@c CW_SIGN_*_ED25519): the RAW message — the card hashes it internally. */
-    uint8_t hashLength;              /**< Length of @c hash. ECDSA: ≤ @ref CW_HASH_SIZE. Ed25519: ≤ @ref CW_MAX_ED25519_MESSAGE_LENGTH. */
-    const uint8_t* derivePath;       /**< BIP32 path bytes for DERIVE modes; @c NULL for CURR / PINLESS modes. */
-    uint8_t derivePathLength;        /**< Length of @c derivePath in bytes (must be a multiple of 4). */
+    uint8_t keyType {};                 /**< Key / path type — one of the @c CW_SIGN_CURR_*, @c CW_SIGN_DERIVE_*, @c CW_SIGN_PINLESS_K1, @c CW_SIGN_*_ED25519 constants. */
+    uint8_t signatureType {};           /**< Signature format — @c CW_SIGN_SIG_ECDSA_LOW_S / EOSIO / SCHNORR_BIP340. Ignored for Ed25519 key types (EdDSA is forced). */
+    uint8_t pin[CW_MAX_PIN_LENGTH] {};  /**< PIN bytes (4–9 ASCII digits). Zero-padded; cleared in the destructor. */
+    bool pinLessMode {};                /**< false = PIN path, true = PIN-less path (requires @c keyType == @ref CW_SIGN_PINLESS_K1). */
+    const uint8_t* hash {};             /**< Data to sign. For ECDSA: a digest (typically 32 bytes). For Ed25519 (@c CW_SIGN_*_ED25519): the RAW message — the card hashes it internally. */
+    uint8_t hashLength {};              /**< Length of @c hash. ECDSA: ≤ @ref CW_HASH_SIZE. Ed25519: ≤ @ref CW_MAX_ED25519_MESSAGE_LENGTH. */
+    const uint8_t* derivePath {};       /**< BIP32 path bytes for DERIVE modes; @c NULL for CURR / PINLESS modes. */
+    uint8_t derivePathLength {};        /**< Length of @c derivePath in bytes (must be a multiple of 4). */
 
     /**
      * @brief Construct a sign request with sensible defaults.
@@ -96,7 +93,6 @@ struct CW_SignRequest {
         : session(sess), keyType(kType), signatureType(sigType),
           pinLessMode(pinless), hash(NULL), hashLength(0U),
           derivePath(NULL), derivePathLength(0U) {
-        memset(pin, 0U, sizeof(pin));
     }
 
     /** @brief Securely wipes the PIN buffer. */
@@ -114,12 +110,11 @@ struct CW_SignRequest {
  * @c keyType used). On any other code @c signature is left zero.
  */
 struct CW_SignResult {
-    uint8_t signature[CW_RAW_SIGNATURE_SIZE]; /**< Raw 64-byte signature: ECDSA r[32]||s[32], or Ed25519 R[32]||S[32]. Zero on failure. */
-    uint8_t errorCode;                        /**< @ref CW_OK on success, otherwise a @c CW_SIGN_* / @c CW_INVALID_SESSION code. */
+    uint8_t signature[CW_RAW_SIGNATURE_SIZE] {}; /**< Raw 64-byte signature: ECDSA r[32]||s[32], or Ed25519 R[32]||S[32]. Zero on failure. */
+    uint8_t errorCode {};                        /**< @ref CW_OK on success, otherwise a @c CW_SIGN_* / @c CW_INVALID_SESSION code. */
 
     /** @brief Construct a default-failure result. */
     CW_SignResult() : errorCode(CW_NOK) {
-        memset(signature, 0U, sizeof(signature));
     }
 };
 
@@ -283,7 +278,9 @@ public:
      *
      * @retval CW_OK                                  Signature valid.
      * @retval CW_INVALID_SESSION                     Secure channel not open.
-     * @retval CW_SIGN_KEY_TOO_SHORT                  Bad hash buffer / length.
+     * @retval CW_SIGN_KEY_TOO_SHORT                  Missing hash buffer / zero length.
+     * @retval CW_SIGN_INVALID_PATH                   Bad derivation path.
+     * @retval CW_SIGN_MESSAGE_TOO_LONG               Hash/message too long for the key type.
      * @retval CW_SIGN_NO_KEY_LOADED                  Card rejected the SIGN APDU.
      * @retval CW_SIGN_PIN_INCORRECT                  PIN length out of range.
      * @retval CW_SIGN_KEY_TOO_SHORT_WITH_PINLESS_MODE

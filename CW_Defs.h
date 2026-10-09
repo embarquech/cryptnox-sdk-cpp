@@ -109,6 +109,8 @@
 #define CW_SIGN_NO_KEY_LOADED                  (0x81U)
 #define CW_SIGN_PIN_INCORRECT                  (0x82U)
 #define CW_SIGN_KEY_TOO_SHORT_WITH_PINLESS_MODE (0x83U)
+#define CW_SIGN_INVALID_PATH                   (0x84U)  /**< Derivation path missing, too long or not a multiple of 4 */
+#define CW_SIGN_MESSAGE_TOO_LONG               (0x85U)  /**< Hash/message longer than the key type allows */
 
 /* Size constants */
 #define CW_RAW_SIGNATURE_SIZE         (64U)    /**< Raw signature (r[32] + s[32], or Ed25519 R||S) */
@@ -189,17 +191,13 @@ enum CW_Curve {
  * allowing functions to be reentrant by passing session state as a parameter.
  */
 struct CW_SecureSession {
-    uint8_t aesKey[CW_AESKEY_SIZE];  /**< AES-256 session encryption key (Kenc) */
-    uint8_t macKey[CW_MACKEY_SIZE];  /**< AES-256 session MAC key (Kmac) */
-    uint8_t iv[CW_IV_SIZE];          /**< Current AES-CBC IV (rolling IV) */
-    uint32_t macCounter;             /**< GAP-01 anti-replay counter (applet 2.0+): +1 per wrapped command, folded into both MACs, never sent */
+    uint8_t aesKey[CW_AESKEY_SIZE] {};  /**< AES-256 session encryption key (Kenc) */
+    uint8_t macKey[CW_MACKEY_SIZE] {};  /**< AES-256 session MAC key (Kmac) */
+    uint8_t iv[CW_IV_SIZE] {};          /**< Current AES-CBC IV (rolling IV) */
+    uint32_t macCounter {};             /**< GAP-01 anti-replay counter (applet 2.0+): +1 per wrapped command, folded into both MACs, never sent */
 
     /** @brief Zero-initialise all session keys, IV and counter. */
-    CW_SecureSession() : macCounter(0U) {
-        memset(aesKey, 0U, sizeof(aesKey));
-        memset(macKey, 0U, sizeof(macKey));
-        memset(iv, 0U, sizeof(iv));
-    }
+    CW_SecureSession() = default;
 
     /** @brief Securely clear all session keys and IV. */
     void clear() {
@@ -227,12 +225,28 @@ struct CW_SecureSession {
  * the dev CA public key to CW_TRUSTED_CA_KEYS in CW_TrustedKeys.h — the table
  * holds several and tries each in turn, so verification stays enabled and nothing
  * has to be weakened.
+ *
+ * This flag gates the chain check only. Providers must keep sha256() working at
+ * 0: the applet 2.0 mutual-auth proof (SHA256(Kenc || challenge)) relies on it.
  */
 #ifndef CW_VERIFY_CERT
 #define CW_VERIFY_CERT 1
 #endif
 #if CW_VERIFY_CERT == 0
 #  warning "CW_VERIFY_CERT=0: card authenticity verification is compiled out (CRIT-02/H-07). Never ship this."
+#endif
+
+/** Minimum applet major version accepted at SELECT (PR #27 review #9).
+ *
+ * The version comes from the unauthenticated SELECT response, so an NFC
+ * man-in-the-middle can report 1.x to a 2.0 card and force the legacy channel
+ * (no anti-replay counter, no mutual-auth proof). Against a genuine 2.0 card
+ * that only breaks the channel, but a fleet made only of 2.0+ cards can refuse
+ * legacy outright with -DCW_MIN_APPLET_MAJOR=2. An unreadable version counts
+ * as 0 and is refused too. Default 0 accepts every applet.
+ */
+#ifndef CW_MIN_APPLET_MAJOR
+#define CW_MIN_APPLET_MAJOR 0U
 #endif
 
 /**
