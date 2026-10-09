@@ -102,6 +102,9 @@ public:
 
     /**
      * @brief Send the SELECT APDU to activate the Cryptnox application.
+     *
+     * Also records the applet major version (SELECT byte 1), which gates the
+     * 2.0 channel features: the anti-replay MAC counter and the mutual-auth proof.
      * @return true on success, false otherwise.
      */
     bool selectApdu();
@@ -158,11 +161,13 @@ public:
      *
      * Final step of the secure channel handshake:
      *  1. ECDH shared secret = clientPrivateKey · cardEphemeralPubKey
-     *  2. (Kenc || Kmac || IV) ← SHA-512(salt || pairingKey || sharedSecret)
-     *  3. Encrypts a 16-byte random challenge with the new Kenc and sends
-     *     it inside the MUTUALLY AUTHENTICATE APDU
-     *  4. Verifies the card returns the same plaintext when re-encrypting
-     *     its own counter — this proves the card knows Kenc
+     *  2. (Kenc || Kmac) ← SHA-512(sharedSecret || pairingKey || salt);
+     *     initial IV = Kenc[:16], MAC counter = 0
+     *  3. Sends a 32-byte random challenge as the first wrapped command
+     *     (MUTUALLY AUTHENTICATE, MAC counter 1); the response MAC is verified
+     *  4. Applet 2.0+: checks the response equals SHA256(Kenc || challenge),
+     *     proving the card holds this session's Kenc. 1.6.x replies random bytes
+     *     and only the length is checked.
      *
      * @param[out] session             Secure session populated with derived keys + initial IV.
      * @param[in]  salt                32-byte salt from @ref openSecureChannel.
@@ -316,10 +321,16 @@ private:
     CW_Platform&       _platform; ///< Platform abstraction (sleep_ms).
 
     /** @brief Nonce sent in the last getCardCertificate() call; checked in verifyCertificateChain(). */
-    uint8_t _lastNonce[CW_CERT_NONCE_SIZE];
+    uint8_t _lastNonce[CW_CERT_NONCE_SIZE] {};
 
     /** @brief Non-zero when s_mfCertBuf holds a valid pre-fetched manufacturer certificate. */
-    uint16_t _cachedMfCertLen;
+    uint16_t _cachedMfCertLen {};
+
+    /** @brief Applet major version from the last SELECT (0 = unknown → legacy channel). */
+    uint8_t _appletMajor {};
+
+    /** @brief MAC IV for the current counter (zero on 1.6.x). @return false if AES failed. */
+    bool macIvForCounter(const CW_SecureSession& session, uint8_t* macIv);
 
     static bool parseDerSigToRaw(const uint8_t* der, uint8_t derLen,
                                  uint8_t* raw64);
