@@ -36,10 +36,30 @@ jobs:
 
       # Coding rule: every variable is initialised where it is declared, so a
       # read before the first write sees a known value. cppcheck only reports
-      # reads of uninitialised data, not declarations, hence this grep.
-      - name: Uninitialised declarations
+      # reads of uninitialised data, not declarations. Both checks below work
+      # on the compiler's AST, so they cover every type with no list to keep:
+      #  - clang-tidy: scalars, pointers, plain structs, and members a
+      #    constructor leaves unset (it skips arrays, hence clang-query).
+      #  - clang-query: any variable, arrays included, with no initialiser.
+      - name: Install clang tools
+        run: sudo apt-get install -y clang-tidy clang-tools
+
+      - name: Uninitialised members and variables (clang-tidy)
         run: |
-          if grep -nPH '^\s*(static\s+)?(const\s+)?(u?int(8|16|32|64)_t|size_t|bool|char|int|unsigned|float|double|CW_CardInfo|CW_SignResult|CW_SecureSession)\s*\*?\s*[A-Za-z_]\w*(\s*\[[^\]]*\])*\s*;' -- *.h *.cpp fuzz/*.cpp; then
+          clang-tidy \
+            -checks='-*,cppcoreguidelines-init-variables,cppcoreguidelines-pro-type-member-init' \
+            -header-filter='.*' \
+            -warnings-as-errors='*' \
+            *.cpp fuzz/*.cpp \
+            -- -std=c++17 -I . -DCW_FUZZ_BUILD=1
+
+      - name: Uninitialised variables and arrays (clang-query)
+        run: |
+          clang-query \
+            -c 'match varDecl(unless(parmVarDecl()), unless(hasInitializer(anything())), unless(isExpansionInSystemHeader()))' \
+            *.cpp fuzz/*.cpp \
+            -- -std=c++17 -I . -DCW_FUZZ_BUILD=1 | tee clang-query.log
+          if grep -qE '^[1-9][0-9]* match' clang-query.log; then
             echo "::error::Uninitialised declaration(s) above: add '= { 0U }' or '{}'."
             exit 1
           fi
