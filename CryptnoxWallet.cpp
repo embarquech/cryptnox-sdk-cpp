@@ -290,6 +290,61 @@ bool CryptnoxWallet::writeUserData(CW_SecureSession& session, uint8_t slot,
     return ret;
 }
 
+bool CryptnoxWallet::getPublicKey(CW_SecureSession& session,
+                                  const uint8_t* derivePath,
+                                  uint8_t derivePathLength,
+                                  uint8_t* publicKey64) {
+    bool ret = false;
+
+    if ((publicKey64 == NULL) ||
+        ((derivePath == NULL) != (derivePathLength == 0U)) ||
+        ((derivePathLength % 4U) != 0U) ||
+        (derivePathLength > CW_MAX_DERIVE_PATH_LENGTH)) {
+        return false;
+    }
+    if (!isSecureChannelOpen(session)) {
+        return false;
+    }
+
+    /* P1 mirrors the SIGN APDU's key type byte (derivation | curve), P2 = 1
+     * selects the plain public key rather than the extended (BIP32) one. */
+    const uint8_t apdu[] = {
+        0x80U, 0xC2U,
+        (uint8_t)((derivePath != NULL) ? CW_SIGN_DERIVE_K1 : CW_SIGN_CURR_K1),
+        0x01U
+    };
+
+    uint8_t  response[255U] = { 0U };
+    uint16_t responseLength = 0U;
+
+    if (_secure.aesCbcEncrypt(session, apdu, sizeof(apdu),
+                              derivePath, derivePathLength,
+                              response, &responseLength)) {
+        /* SEC1 uncompressed: 0x04 || X || Y. Some applet versions answer with
+         * the bare coordinates, so accept both rather than fail on a key that
+         * is perfectly usable. */
+        if ((responseLength >= 65U) && (response[0] == 0x04U)) {
+            ret = CW_Utils::safe_memcpy(publicKey64, 64U, &response[1], 64U);
+        }
+        else if (responseLength == 64U) {
+            ret = CW_Utils::safe_memcpy(publicKey64, 64U, response, 64U);
+        }
+        else {
+#if CW_DEBUG_LOGGING
+            _logger.println(F("Get public key: unexpected response length."));
+#endif
+        }
+    }
+    else {
+#if CW_DEBUG_LOGGING
+        _logger.println(F("Get public key APDU failed."));
+#endif
+    }
+
+    CW_Utils::secure_wipe(response, sizeof(response));
+    return ret;
+}
+
 CW_SignResult CryptnoxWallet::sign(CW_SignRequest& request) {
     CW_SignResult result;
 
