@@ -315,21 +315,20 @@ bool CW_SecureChannel::openSecureChannel(uint8_t* salt,
  * Cryptographic flow:
  *  1. Compute the ECDH shared secret S = ECDH(clientPrivateKey,
  *     cardEphemeralPubKey) on the negotiated curve.
- *  2. Derive 80 bytes of keying material via SHA-512 over
- *     (salt || S || pairingDataHash) and split into:
- *       - Kenc[32]: AES-256 session encryption key
- *       - Kmac[32]: AES-256 session MAC key
- *       - IV[16]  : initial rolling IV
+ *  2. Derive keying material via SHA-512(S || pairingData || salt) and split
+ *     the 64-byte digest into:
+ *       - Kenc[32]: AES-256 session encryption key (digest[0..32])
+ *       - Kmac[32]: AES-256 session MAC key        (digest[32..64])
  *  3. Send MUTUALLY AUTHENTICATE with a random 16-byte challenge encrypted
- *     under Kenc / IV. The card must answer with the same 16 bytes
- *     re-encrypted with the new IV — a verification that fails fast on
- *     any key-derivation mismatch.
+ *     under Kenc. The card's response first block is taken as the next rolling
+ *     IV; the challenge content is not echoed back or checked. Card
+ *     authenticity comes from the certificate chain (already verified) plus the
+ *     MAC on the first real command, not from this exchange.
  *  4. On success, populate @p session and wipe @p sharedSecret from the stack.
  *
  * Failure modes that cause an early-exit with a wiped session:
  *  - ECDH returned zero or invalid (curve mismatch)
  *  - APDU transport failure
- *  - Card challenge response mismatch (active attacker or wrong card)
  */
 bool CW_SecureChannel::mutuallyAuthenticate(CW_SecureSession& session,
                                             const uint8_t* salt,
@@ -370,6 +369,9 @@ bool CW_SecureChannel::mutuallyAuthenticate(CW_SecureSession& session,
 
         uint8_t iv_opc[AES_BLOCK_SIZE] = { 0U };
         uint8_t mac_iv[AES_BLOCK_SIZE] = { 0U };
+        /* Challenge IV = 0x01 x 16, intentional: matches the reference SDK
+         * (cryptnox-sdk-py connection.py) and is tolerated by the applet (the
+         * challenge content is never validated). Do not change to Kenc[0..16]. */
         memset(iv_opc, 0x01U, AES_BLOCK_SIZE);
 
         uint8_t RNG_data[32U] = { 0U };
