@@ -83,9 +83,9 @@ static const uint8_t KECCAK_ROT[KECCAK_STATE_LANES] = {
  */
 static void keccak_f(uint64_t* a) {
     for (unsigned round = 0U; round < KECCAK_ROUNDS; round++) {
-        uint64_t c[5];
-        uint64_t d[5];
-        uint64_t b[KECCAK_STATE_LANES];
+        uint64_t c[5] = { 0U };
+        uint64_t d[5] = { 0U };
+        uint64_t b[KECCAK_STATE_LANES] = { 0U };
 
         /* Theta */
         for (unsigned x = 0U; x < 5U; x++) {
@@ -156,7 +156,7 @@ bool CW_Tron::keccak256(const uint8_t* data, size_t len, uint8_t* out) {
     bool ret = false;
 
     if (((data != NULL) || (len == 0U)) && (out != NULL)) {
-        uint64_t a[KECCAK_STATE_LANES];
+        uint64_t a[KECCAK_STATE_LANES] = { 0U };
         for (unsigned i = 0U; i < KECCAK_STATE_LANES; i++) {
             a[i] = 0ULL;
         }
@@ -190,8 +190,8 @@ bool CW_Tron::keccak256(const uint8_t* data, size_t len, uint8_t* out) {
  * @return true on success, false if the encoding did not come out 34 chars.
  */
 static bool base58_encode_payload(const uint8_t* payload, char* out) {
-    uint8_t tmp[TRON_PAYLOAD_BYTES];
-    char    reversed[CW_TRON_ADDRESS_STR_LEN];
+    uint8_t tmp[TRON_PAYLOAD_BYTES] = { 0U };
+    char    reversed[CW_TRON_ADDRESS_STR_LEN] = {};
     size_t  digits = 0U;
     size_t  start  = 0U;
 
@@ -263,8 +263,8 @@ static bool base58_decode_payload(const char* address, uint8_t* payload) {
  */
 static bool tron_checksum(const uint8_t* addressBytes, CW_CryptoProvider& crypto,
                           uint8_t* checksum4) {
-    uint8_t first[KECCAK_DIGEST_BYTES];
-    uint8_t second[KECCAK_DIGEST_BYTES];
+    uint8_t first[KECCAK_DIGEST_BYTES] = { 0U };
+    uint8_t second[KECCAK_DIGEST_BYTES] = { 0U };
     bool    ret = false;
 
     if (crypto.sha256(addressBytes, CW_TRON_ADDRESS_BYTES, first) &&
@@ -280,7 +280,7 @@ bool CW_Tron::addressBytesFromPublicKey(const uint8_t* publicKey64, uint8_t* out
     bool ret = false;
 
     if ((publicKey64 != NULL) && (out != NULL)) {
-        uint8_t digest[KECCAK_DIGEST_BYTES];
+        uint8_t digest[KECCAK_DIGEST_BYTES] = { 0U };
         if (CW_Tron::keccak256(publicKey64, PUBLIC_KEY_BYTES, digest)) {
             out[0] = CW_TRON_ADDRESS_PREFIX;
             memcpy(&out[1], &digest[KECCAK_DIGEST_BYTES - ETH_ADDRESS_BYTES],
@@ -300,7 +300,7 @@ bool CW_Tron::encodeAddress(const uint8_t* addressBytes, CW_CryptoProvider& cryp
         (outSize >= CW_TRON_ADDRESS_STR_SIZE) &&
         (addressBytes[0] == CW_TRON_ADDRESS_PREFIX)) {
 
-        uint8_t payload[TRON_PAYLOAD_BYTES];
+        uint8_t payload[TRON_PAYLOAD_BYTES] = { 0U };
         memcpy(payload, addressBytes, CW_TRON_ADDRESS_BYTES);
 
         if (tron_checksum(addressBytes, crypto, &payload[CW_TRON_ADDRESS_BYTES])) {
@@ -314,7 +314,7 @@ bool CW_Tron::encodeAddress(const uint8_t* addressBytes, CW_CryptoProvider& cryp
 bool CW_Tron::addressFromPublicKey(const uint8_t* publicKey64,
                                    CW_CryptoProvider& crypto,
                                    char* out, size_t outSize) {
-    uint8_t addressBytes[CW_TRON_ADDRESS_BYTES];
+    uint8_t addressBytes[CW_TRON_ADDRESS_BYTES] = { 0U };
 
     return CW_Tron::addressBytesFromPublicKey(publicKey64, addressBytes) &&
            CW_Tron::encodeAddress(addressBytes, crypto, out, outSize);
@@ -327,8 +327,8 @@ bool CW_Tron::decodeAddress(const char* address, CW_CryptoProvider& crypto,
     if ((address != NULL) && (out != NULL) &&
         (strlen(address) == CW_TRON_ADDRESS_STR_LEN)) {
 
-        uint8_t payload[TRON_PAYLOAD_BYTES];
-        uint8_t checksum[TRON_CHECKSUM_BYTES];
+        uint8_t payload[TRON_PAYLOAD_BYTES] = { 0U };
+        uint8_t checksum[TRON_CHECKSUM_BYTES] = { 0U };
 
         if (base58_decode_payload(address, payload) &&
             (payload[0] == CW_TRON_ADDRESS_PREFIX) &&
