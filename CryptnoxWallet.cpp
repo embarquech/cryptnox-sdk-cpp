@@ -228,7 +228,7 @@ bool CryptnoxWallet::getCardInfo(CW_SecureSession& session, CW_CardInfo* info) {
 
     ret = _secure.aesCbcEncrypt(session, apdu, sizeof(apdu),
                                 data, sizeof(data),
-                                decrypted, &decryptedLen);
+                                decrypted, &decryptedLen, sizeof(decrypted));
 
     if (ret && (info != NULL)) {
         /* Response layout (Cryptnox basic_g1 spec):
@@ -382,7 +382,8 @@ CW_SignResult CryptnoxWallet::sign(CW_SignRequest& request) {
         uint8_t derResponse[255U] = { 0U };
         uint16_t derLength = 0U;
 
-        if (sendSignApdu(request, data, dataLength, derResponse, derLength, result)) {
+        if (sendSignApdu(request, data, dataLength, derResponse, sizeof(derResponse),
+                         derLength, result)) {
             /* Ed25519 (EdDSA) and Schnorr BIP340 both return a raw 64-byte
              * R||S signature with no DER wrapper; ECDSA (low-S / EOSIO) returns
              * a DER SEQUENCE that extractRawSignature() unpacks. */
@@ -448,7 +449,7 @@ bool CryptnoxWallet::getPublicKey(CW_SecureSession& session, uint8_t keyType,
         uint16_t decryptedLen    = 0U;
 
         if (_secure.aesCbcEncrypt(session, apdu, sizeof(apdu), data, dataLen,
-                                  decrypted, &decryptedLen)) {
+                                  decrypted, &decryptedLen, sizeof(decrypted))) {
             if ((decryptedLen > 0U) && (decryptedLen <= pubKeyBufSize)) {
                 (void)CW_Utils::safe_memcpy(pubKey, pubKeyBufSize, decrypted, decryptedLen);
                 pubKeyLength = decryptedLen;
@@ -636,6 +637,7 @@ void CryptnoxWallet::buildSignPayload(const CW_SignRequest& request,
 
 bool CryptnoxWallet::sendSignApdu(CW_SignRequest& request, const uint8_t* data,
                                    uint16_t dataLength, uint8_t* derResponse,
+                                   uint16_t derResponseSize,
                                    uint16_t& derLength, CW_SignResult& result) {
     bool ret = false;
     /* Ed25519 forces P2 = EdDSA; the caller-supplied signatureType is ignored. */
@@ -647,7 +649,7 @@ bool CryptnoxWallet::sendSignApdu(CW_SignRequest& request, const uint8_t* data,
 #endif
 
     if (_secure.aesCbcEncrypt(request.session, apdu, sizeof(apdu), data, dataLength,
-                               derResponse, &derLength)) {
+                               derResponse, &derLength, derResponseSize)) {
         ret = true;
     }
     else {

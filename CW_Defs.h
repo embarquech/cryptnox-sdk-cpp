@@ -138,6 +138,9 @@
 #define CW_MIN_PIN_LENGTH              (4U)    /**< Minimum PIN length */
 #define CW_MAX_PIN_LENGTH              (9U)    /**< Maximum PIN length */
 #define CW_USER_DATA_PAGE_SIZE        (208U)   /**< Max plaintext bytes per write user data page */
+/* Largest plaintext one secure-channel exchange can hand back: a full page plus
+ * the block the bit padding may add. Bounds every decryptedOutput buffer. */
+#define CW_SECURE_PAYLOAD_MAX         (CW_USER_DATA_PAGE_SIZE + 16U)  /**< 224 */
 #define CW_CONNECT_MAX_ATTEMPTS        (5U)    /**< Max NFC connection retry attempts */
 
 /* Byte offsets within a raw 64-byte signature (r[32] || s[32]) */

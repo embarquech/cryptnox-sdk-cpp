@@ -212,7 +212,8 @@ static bool base58_encode_payload(const uint8_t* payload, char* out) {
         }
     }
 
-    const bool ret = (digits == CW_TRON_ADDRESS_STR_LEN);
+    /* Both: 34 digits written AND the value exhausted, else it was truncated. */
+    const bool ret = (digits == CW_TRON_ADDRESS_STR_LEN) && (start == TRON_PAYLOAD_BYTES);
     if (ret) {
         for (size_t i = 0U; i < digits; i++) {
             out[i] = reversed[digits - 1U - i];

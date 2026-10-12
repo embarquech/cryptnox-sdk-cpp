@@ -51,6 +51,10 @@
 #define MAX_MAC_DATA_LEN          (APDU_HEADER_LEN + MAC_APDU_LEN + ENC_BUF_MAX_LEN)
 #define SEND_APDU_MAX_LEN         (APDU_HEADER_LEN + APDU_LC_LEN + AES_BLOCK_SIZE + ENC_BUF_MAX_LEN)
 
+/* The header's default output bound must track the internal buffer it stands for. */
+static_assert(ENC_BUF_MAX_LEN == CW_SECURE_PAYLOAD_MAX,
+              "CW_SECURE_PAYLOAD_MAX out of step with ENC_BUF_MAX_LEN");
+
 /* Enforce APDU fits within a single PN532 APDU (255 bytes max) */
 static_assert(APDU_HEADER_LEN + APDU_LC_LEN + AES_BLOCK_SIZE + ENC_BUF_MAX_LEN <= 255U,
               "CW_USER_DATA_PAGE_SIZE too large for PN532 single APDU transport");
@@ -396,7 +400,7 @@ bool CW_SecureChannel::mutuallyAuthenticate(CW_SecureSession& session,
             const uint8_t apdu[] = { 0x80U, 0x11U, 0x00U, 0x00U };
             if (aesCbcEncrypt(session, apdu, sizeof(apdu),
                               challenge, MUTUALAUTH_CHALLENGE_IN_BYTES,
-                              response, &responseLength) &&
+                              response, &responseLength, sizeof(response)) &&
                 (responseLength == MUTUALAUTH_CHALLENGE_IN_BYTES)) {
                 if (_appletMajor < APPLET_MAJOR_V2) {
                     ret = true;  /* 1.6.x: response is random, nothing to verify */
@@ -480,7 +484,8 @@ bool CW_SecureChannel::macIvForCounter(const CW_SecureSession& session, uint8_t*
 bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
                                      const uint8_t apdu[], uint16_t apduLength,
                                      const uint8_t data[], uint16_t dataLength,
-                                     uint8_t* decryptedOutput, uint16_t* decryptedOutputLength) {
+                                     uint8_t* decryptedOutput, uint16_t* decryptedOutputLength,
+                                     uint16_t decryptedOutputSize) {
     bool ret = false;
 
     /* Reject payloads that would overflow s_dataBuf (MED-01). */
@@ -547,6 +552,16 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
                                                         session.macKey, sizeof(session.macKey),
                                                         macIv, false);
 
+    /* A provider failure returns 0: without this the offset below wraps. */
+    if (macEncryptedLength < AES_BLOCK_SIZE) {
+#if CW_DEBUG_LOGGING
+        _logger.println(F("Error: MAC computation failed."));
+#endif
+        CW_Utils::secure_wipe(s_dataBuf, sizeof(s_dataBuf));
+        CW_Utils::secure_wipe(s_macBuf, sizeof(s_macBuf));
+        return false;
+    }
+
     uint8_t macValue[AES_BLOCK_SIZE] = { 0U };
     uint16_t macOffset = macEncryptedLength - AES_BLOCK_SIZE;
     (void)CW_Utils::safe_memcpy(macValue, sizeof(macValue), s_apduBuf + macOffset, AES_BLOCK_SIZE);
@@ -582,7 +597,7 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
              * Moving it before aesCbcDecrypt would let an attacker-chosen IV
              * desynchronise the rolling-IV state even on MAC failure. */
             ret = aesCbcDecrypt(session, response, static_cast<size_t>(responseLength), macValue,
-                                decryptedOutput, decryptedOutputLength);
+                                decryptedOutput, decryptedOutputLength, decryptedOutputSize);
             if (ret) {
                 (void)CW_Utils::safe_memcpy(session.iv, CW_IV_SIZE, response, CW_IV_SIZE);
             } else {
@@ -615,7 +630,8 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
 bool CW_SecureChannel::aesCbcDecrypt(const CW_SecureSession& session,
                                      uint8_t* response, size_t response_len,
                                      uint8_t* mac_value,
-                                     uint8_t* decryptedOutput, uint16_t* decryptedOutputLength) {
+                                     uint8_t* decryptedOutput, uint16_t* decryptedOutputLength,
+                                     uint16_t decryptedOutputSize) {
     /* Precondition: response must hold at least MAC(16) + 1 ciphertext byte + SW(2) (HIGH-02).
      * Without this check, response_len < 18 causes size_t underflow in the subtractions below. */
     if ((response == NULL) || (response_len < (size_t)(AES_BLOCK_SIZE + 2U + 1U))) {
@@ -657,6 +673,15 @@ bool CW_SecureChannel::aesCbcDecrypt(const CW_SecureSession& session,
     uint16_t macEncryptedLength = _crypto.aesCbcEncrypt(s_macBuf, (uint16_t)macInputLen, s_apduBuf,
                                                         session.macKey, sizeof(session.macKey),
                                                         mac_iv, false);
+
+    /* A provider failure returns 0: without this the offset below wraps. */
+    if (macEncryptedLength < AES_BLOCK_SIZE) {
+#if CW_DEBUG_LOGGING
+        _logger.println(F("Error: MAC computation failed."));
+#endif
+        CW_Utils::secure_wipe(s_macBuf, sizeof(s_macBuf));
+        return false;
+    }
 
     uint8_t recomputedMacValue[AES_BLOCK_SIZE] = { 0U };
     uint16_t macOffset = macEncryptedLength - AES_BLOCK_SIZE;
@@ -711,8 +736,18 @@ bool CW_SecureChannel::aesCbcDecrypt(const CW_SecureSession& session,
         }
 
         if ((decryptedOutput != NULL) && (decryptedOutputLength != NULL)) {
-            (void)CW_Utils::safe_memcpy(decryptedOutput, sizeof(s_dataBuf), s_dataBuf, payloadLength);
-            *decryptedOutputLength = payloadLength;
+            /* The caller sized its buffer blind — only the card knows how long the
+             * answer is. Refuse rather than overrun: sizeof(s_dataBuf) here compared
+             * the source against itself, so the check could never fail. */
+            if (payloadLength > decryptedOutputSize) {
+#if CW_DEBUG_LOGGING
+                _logger.println(F("Error: payload larger than the caller's buffer."));
+#endif
+                ret = false;
+            } else {
+                (void)CW_Utils::safe_memcpy(decryptedOutput, decryptedOutputSize, s_dataBuf, payloadLength);
+                *decryptedOutputLength = payloadLength;
+            }
         }
     }
 
