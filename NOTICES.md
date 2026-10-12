@@ -11,7 +11,7 @@ commercial license (see [LICENSE](LICENSE) and [COMMERCIAL.md](COMMERCIAL.md)).
 All source files in this repository (`CryptnoxWallet.*`,
 `CW_SecureChannel.*`, `CW_Utils.*`, `CW_Defs.h`, `CW_CryptoProvider.h`,
 `CW_Logger.h`, `CW_NfcTransport.h`, `CW_Platform.h`, `CW_TrustedKeys.h`,
-`platform_compat.h`, and the fuzz harness under `fuzz/`) are
+`CW_Tron.*`, `platform_compat.h`, and the fuzz harness under `fuzz/`) are
 first-party work, © Cryptnox SA, LGPL-3.0-or-later. Every translation
 unit declares its license explicitly via an `SPDX-License-Identifier:
 LGPL-3.0-or-later` header.
@@ -30,6 +30,19 @@ This SDK depends on:
 Final-product distributions that bundle a compiled artefact must
 include the licenses of these platform components alongside the
 LGPL-3.0 grant for `cryptnox-sdk-cpp`.
+
+---
+
+## Public-domain algorithms
+
+`CW_Tron.cpp` contains an implementation of the Keccak-f[1600] sponge
+permutation (used for TRON / Ethereum-style `keccak256` addresses) and
+of Base58Check encoding. Both are public-domain algorithms — Keccak was
+designed by Bertoni, Daemen, Peeters and Van Assche; Base58 originates
+in Bitcoin. The code was written for this project from the FIPS 202
+specification and does not derive from any specific implementation
+under copyright. The round-constant table and rotation offsets are the
+canonical constants from the Keccak specification.
 
 ---
 
