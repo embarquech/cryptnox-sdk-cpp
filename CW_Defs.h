@@ -116,6 +116,9 @@
 #define CW_RAW_SIGNATURE_SIZE         (64U)    /**< Raw signature (r[32] + s[32], or Ed25519 R||S) */
 #define CW_HASH_SIZE                  (32U)    /**< Standard hash size (ECDSA digest) */
 #define CW_ED25519_PUBKEY_SIZE        (32U)    /**< Raw Ed25519 public key size (Solana address) */
+#define CW_RAW_PUBKEY_SIZE            (64U)    /**< Raw k1/r1 public key (X[32] || Y[32]) */
+#define CW_SEC1_PUBKEY_SIZE           (65U)    /**< SEC1 uncompressed public key (0x04 || X || Y) */
+#define CW_SEC1_UNCOMPRESSED_TAG      (0x04U)  /**< SEC1 uncompressed point prefix */
 /* Ed25519 signs the raw message (the card hashes internally). Cap the message
  * so the framed payload [len(2)|msg|path|pin(9)] fits one secure-channel page.
  *

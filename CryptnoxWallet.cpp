@@ -334,39 +334,25 @@ bool CryptnoxWallet::getPublicKey(CW_SecureSession& session,
                                   uint8_t derivePathLength,
                                   uint8_t* publicKey64) {
     bool ret = false;
+    /* SEC1 uncompressed point: 0x04 || X || Y. Some applet versions answer
+     * with the bare coordinates, so accept both. */
+    uint8_t  key[CW_SEC1_PUBKEY_SIZE] = { 0U };
+    uint16_t keyLength = 0U;
+    const uint8_t keyType = (derivePath != NULL) ? CW_SIGN_DERIVE_K1 : CW_SIGN_CURR_K1;
 
     if ((publicKey64 == NULL) ||
-        ((derivePath == NULL) != (derivePathLength == 0U)) ||
-        ((derivePathLength % 4U) != 0U) ||
-        (derivePathLength > CW_MAX_DERIVE_PATH_LENGTH)) {
-        return false;
+        ((derivePath == NULL) != (derivePathLength == 0U))) {
+#if CW_DEBUG_LOGGING
+        _logger.println(F("Error: Invalid arguments for get public key."));
+#endif
     }
-    if (!isSecureChannelOpen(session)) {
-        return false;
-    }
-
-    /* P1 mirrors the SIGN APDU's key type byte (derivation | curve), P2 = 1
-     * selects the plain public key rather than the extended (BIP32) one. */
-    const uint8_t apdu[] = {
-        0x80U, 0xC2U,
-        (uint8_t)((derivePath != NULL) ? CW_SIGN_DERIVE_K1 : CW_SIGN_CURR_K1),
-        0x01U
-    };
-
-    uint8_t  response[255U] = { 0U };
-    uint16_t responseLength = 0U;
-
-    if (_secure.aesCbcEncrypt(session, apdu, sizeof(apdu),
-                              derivePath, derivePathLength,
-                              response, &responseLength)) {
-        /* SEC1 uncompressed: 0x04 || X || Y. Some applet versions answer with
-         * the bare coordinates, so accept both rather than fail on a key that
-         * is perfectly usable. */
-        if ((responseLength >= 65U) && (response[0] == 0x04U)) {
-            ret = CW_Utils::safe_memcpy(publicKey64, 64U, &response[1], 64U);
+    else if (getPublicKey(session, keyType, derivePath, derivePathLength,
+                          key, sizeof(key), keyLength)) {
+        if ((keyLength == CW_SEC1_PUBKEY_SIZE) && (key[0] == CW_SEC1_UNCOMPRESSED_TAG)) {
+            ret = CW_Utils::safe_memcpy(publicKey64, CW_RAW_PUBKEY_SIZE, &key[1], CW_RAW_PUBKEY_SIZE);
         }
-        else if (responseLength == 64U) {
-            ret = CW_Utils::safe_memcpy(publicKey64, 64U, response, 64U);
+        else if (keyLength == CW_RAW_PUBKEY_SIZE) {
+            ret = CW_Utils::safe_memcpy(publicKey64, CW_RAW_PUBKEY_SIZE, key, CW_RAW_PUBKEY_SIZE);
         }
         else {
 #if CW_DEBUG_LOGGING
@@ -375,12 +361,10 @@ bool CryptnoxWallet::getPublicKey(CW_SecureSession& session,
         }
     }
     else {
-#if CW_DEBUG_LOGGING
-        _logger.println(F("Get public key APDU failed."));
-#endif
+        /* getPublicKey() above already logged the cause. */
     }
 
-    CW_Utils::secure_wipe(response, sizeof(response));
+    CW_Utils::secure_wipe(key, sizeof(key));
     return ret;
 }
 
