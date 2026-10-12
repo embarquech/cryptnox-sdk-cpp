@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['name_0',['name',['../structCW__CardInfo.html#a127fbcca2102755f6d494330e6897ebf',1,'CW_CardInfo']]]
+  ['mackey_0',['macKey',['../structCW__SecureSession.html#a1ed577efda4e4071cd585fbf1e922f88',1,'CW_SecureSession']]]
 ];

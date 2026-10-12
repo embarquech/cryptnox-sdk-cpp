@@ -1,0 +1,22 @@
+<map id="CW_Tron.h" name="CW_Tron.h">
+<area shape="rect" id="Node000001" title="TRON (TRX) network support — BIP44 path and Base58Check addresses." alt="" coords="123,5,214,31"/>
+<area shape="rect" id="Node000002" href="$platform__compat_8h.html" title="Arduino compatibility shims for non&#45;Arduino (plain C++) builds." alt="" coords="113,299,259,324"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="162,32,149,53,138,79,136,91,138,104,158,205,180,285,175,286,153,206,133,104,131,91,133,78,144,51,158,29"/>
+<area shape="rect" id="Node000007" href="$CW__CryptoProvider_8h.html" title="Abstract cryptographic primitives interface." alt="" coords="148,79,307,104"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="180,29,211,67,207,70,176,33"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,372,76,397"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="164,326,78,368,75,364,161,322"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="101,372,175,397"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="180,326,156,362,151,359,176,323"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="200,372,271,397"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="196,323,222,359,217,362,192,326"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="295,372,378,397"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="211,322,301,364,298,368,209,326"/>
+<area shape="poly" id="edge7_Node000007_Node000002" title=" " alt="" coords="218,106,202,127,189,153,181,188,179,224,184,285,179,285,174,224,176,187,183,151,197,124,214,103"/>
+<area shape="rect" id="Node000008" href="$CW__Defs_8h.html" title="Shared constants, error codes, and session state for the SDK." alt="" coords="198,152,291,177"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="233,104,241,138,236,140,228,105"/>
+<area shape="poly" id="edge9_Node000008_Node000002" title=" " alt="" coords="242,179,198,287,193,285,237,177"/>
+<area shape="rect" id="Node000009" href="$CW__Utils_8h.html" title="Platform&#45;independent security and memory utilities." alt="" coords="249,225,342,251"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="255,176,281,213,277,216,251,179"/>
+<area shape="poly" id="edge11_Node000009_Node000002" title=" " alt="" coords="279,253,217,293,214,289,276,248"/>
+</map>

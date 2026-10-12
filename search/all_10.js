@@ -10,5 +10,6 @@ var searchData=
   ['response_5fmutuallyauthenticate_5fin_5fbytes_7',['RESPONSE_MUTUALLYAUTHENTICATE_IN_BYTES',['../CW__SecureChannel_8cpp.html#aa1b05565a70ac025eb457db8de5a5729',1,'CW_SecureChannel.cpp']]],
   ['response_5fopensecurechannel_5fin_5fbytes_8',['RESPONSE_OPENSECURECHANNEL_IN_BYTES',['../CW__SecureChannel_8cpp.html#a7c5aeb3574b13dac470b43046615b00a',1,'CW_SecureChannel.cpp']]],
   ['response_5fselect_5fin_5fbytes_9',['RESPONSE_SELECT_IN_BYTES',['../CW__SecureChannel_8cpp.html#a460ee1a0f1a0e3420b7f4f621b35157b',1,'CW_SecureChannel.cpp']]],
-  ['response_5fstatus_5fwords_5fin_5fbytes_10',['RESPONSE_STATUS_WORDS_IN_BYTES',['../CW__SecureChannel_8cpp.html#a06c6580716e31d8e2dc06ce292908f0c',1,'CW_SecureChannel.cpp']]]
+  ['response_5fstatus_5fwords_5fin_5fbytes_10',['RESPONSE_STATUS_WORDS_IN_BYTES',['../CW__SecureChannel_8cpp.html#a06c6580716e31d8e2dc06ce292908f0c',1,'CW_SecureChannel.cpp']]],
+  ['rotl64_11',['ROTL64',['../CW__Tron_8cpp.html#aab4c612b9a4d47b2ca53fdd37b963358',1,'CW_Tron.cpp']]]
 ];

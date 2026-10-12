@@ -52,7 +52,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "CW__CryptoProvider_8h.html",
-"structCW__SecureSession.html#a7f5784e87376b41e263a187709ae9208"
+"globals_defs.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

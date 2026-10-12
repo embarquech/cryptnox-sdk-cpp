@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['hash_0',['hash',['../structCW__SignRequest.html#a76ad3bbaf6808649883e60297aedd8ab',1,'CW_SignRequest']]],
-  ['hashlength_1',['hashLength',['../structCW__SignRequest.html#a60f7cef1c6aa6d327a678ae554365164',1,'CW_SignRequest']]]
+  ['email_0',['email',['../structCW__CardInfo.html#a590f9b4badd408ac548437381e497cf9',1,'CW_CardInfo']]],
+  ['errorcode_1',['errorCode',['../structCW__SignResult.html#a75988aa74d72c0d8923e8b30765f251c',1,'CW_SignResult']]]
 ];

@@ -10,5 +10,6 @@ var searchData=
   ['cw_5fsecuresession_7',['CW_SecureSession',['../structCW__SecureSession.html',1,'']]],
   ['cw_5fsignrequest_8',['CW_SignRequest',['../structCW__SignRequest.html',1,'']]],
   ['cw_5fsignresult_9',['CW_SignResult',['../structCW__SignResult.html',1,'']]],
-  ['cw_5futils_10',['CW_Utils',['../classCW__Utils.html',1,'']]]
+  ['cw_5ftron_10',['CW_Tron',['../classCW__Tron.html',1,'']]],
+  ['cw_5futils_11',['CW_Utils',['../classCW__Utils.html',1,'']]]
 ];

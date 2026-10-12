@@ -11,5 +11,6 @@ var annotated_dup =
     [ "CW_SecureSession", "structCW__SecureSession.html", "structCW__SecureSession" ],
     [ "CW_SignRequest", "structCW__SignRequest.html", "structCW__SignRequest" ],
     [ "CW_SignResult", "structCW__SignResult.html", "structCW__SignResult" ],
+    [ "CW_Tron", "classCW__Tron.html", "classCW__Tron" ],
     [ "CW_Utils", "classCW__Utils.html", "classCW__Utils" ]
 ];

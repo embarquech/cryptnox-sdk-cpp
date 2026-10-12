@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['makekey_0',['makeKey',['../classCW__CryptoProvider.html#adb0cb9fc0ee8264d09832d8992bae48c',1,'CW_CryptoProvider']]],
-  ['mutuallyauthenticate_1',['mutuallyAuthenticate',['../classCW__SecureChannel.html#a2561fd15dadb9c6cef938e344e645c22',1,'CW_SecureChannel']]]
+  ['keccak256_0',['keccak256',['../classCW__Tron.html#a3a62e038f512742391e71de3d73d9897',1,'CW_Tron']]],
+  ['keccak_5fabsorb_1',['keccak_absorb',['../CW__Tron_8cpp.html#a05b9924bbe7ea2d8e81b15c098227f11',1,'CW_Tron.cpp']]],
+  ['keccak_5ff_2',['keccak_f',['../CW__Tron_8cpp.html#aad089b10caef3dfa38a48553e36edb9a',1,'CW_Tron.cpp']]]
 ];

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['cw_5fca_5fdlt_5fpubkey_0',['CW_CA_DLT_PUBKEY',['../CW__TrustedKeys_8h.html#aa6fa4a57da6c5d2b3e32aeece3ad6f54',1,'CW_TrustedKeys.h']]],
-  ['cw_5ftrusted_5fca_5fkeys_1',['CW_TRUSTED_CA_KEYS',['../CW__TrustedKeys_8h.html#a4af434523c372512f1b1da1f33863f4e',1,'CW_TrustedKeys.h']]]
+  ['base58_5falphabet_0',['BASE58_ALPHABET',['../CW__Tron_8cpp.html#a01432d3b0d88204eca9000a48af35f7c',1,'CW_Tron.cpp']]]
 ];

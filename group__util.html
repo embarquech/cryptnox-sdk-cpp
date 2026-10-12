@@ -99,6 +99,8 @@ $(function(){initNavTree('group__util.html','',''); });
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:CW_5FTron" id="r_CW_5FTron"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCW__Tron.html">CW_Tron</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">TRON address derivation and Base58Check encoding.  <a href="classCW__Tron.html#details">More...</a><br /></td></tr>
 <tr class="memitem:CW_5FUtils" id="r_CW_5FUtils"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCW__Utils.html">CW_Utils</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Portable utility functions for cryptographic and security operations.  <a href="classCW__Utils.html#details">More...</a><br /></td></tr>
 </table><table class="memberdecls">
@@ -108,6 +110,11 @@ Enumerations</h2></td></tr>
 , <a class="el" href="#ga158c7b96043aa1683f003e9c17d9cf0da0c3193fa885aff99c8d8bb4343292b7a">CW_CURVE_SECP256K1</a> = 1
  }</td></tr>
 <tr class="memdesc:ga158c7b96043aa1683f003e9c17d9cf0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Portable curve identifier used throughout the SDK.  <a href="#ga158c7b96043aa1683f003e9c17d9cf0d">More...</a><br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:ga09831fe4c10d51fd7c8d4b621159841c" id="r_ga09831fe4c10d51fd7c8d4b621159841c"><td class="memItemLeft" align="right" valign="top">const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga09831fe4c10d51fd7c8d4b621159841c">CW_TRON_DERIVE_PATH</a> [<a class="el" href="CW__Tron_8h.html#afd7a7fe7c7fe7f553ebdc644373f7b01">CW_TRON_PATH_LENGTH</a>]</td></tr>
+<tr class="memdesc:ga09831fe4c10d51fd7c8d4b621159841c"><td class="mdescLeft">&#160;</td><td class="mdescRight">BIP44 derivation path for TRON: <code>m/44'/195'/0'/0/0</code>.  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <p>Platform-independent helpers and shared constants. </p>
@@ -135,6 +142,34 @@ Enumerations</h2></td></tr>
 </table>
 
 <p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00151">151</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+
+</div>
+</div>
+<a name="doc-var-members" id="doc-var-members"></a><h2 id="header-doc-var-members" class="groupheader">Variable Documentation</h2>
+<a id="ga09831fe4c10d51fd7c8d4b621159841c" name="ga09831fe4c10d51fd7c8d4b621159841c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga09831fe4c10d51fd7c8d4b621159841c">&#9670;&#160;</a></span>CW_TRON_DERIVE_PATH</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const uint8_t CW_TRON_DERIVE_PATH[<a class="el" href="CW__Tron_8h.html#afd7a7fe7c7fe7f553ebdc644373f7b01">CW_TRON_PATH_LENGTH</a>]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel extern">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>BIP44 derivation path for TRON: <code>m/44'/195'/0'/0/0</code>. </p>
+<p>Wire format expected by the card's SIGN command: five big-endian uint32 levels, hardened levels carrying the high bit. Pass as <code><a class="el" href="structCW__SignRequest.html#ab1205bbd93729d6f6a3e3ef4ce1e09cd">CW_SignRequest::derivePath</a></code> with <code>keyType</code> == <a class="el" href="CW__Defs_8h.html#ac1d11b442a570641ec273642b76795bf">CW_SIGN_DERIVE_K1</a>. </p>
+
+<p class="definition">Definition at line <a class="el" href="CW__Tron_8cpp_source.html#l00031">31</a> of file <a class="el" href="CW__Tron_8cpp_source.html">CW_Tron.cpp</a>.</p>
 
 </div>
 </div>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['send_5fapdu_5fmax_5flen_0',['SEND_APDU_MAX_LEN',['../CW__SecureChannel_8cpp.html#acb48e7c75b9b39117ac42c6dda5676b8',1,'CW_SecureChannel.cpp']]]
+  ['public_5fkey_5fbytes_0',['PUBLIC_KEY_BYTES',['../CW__Tron_8cpp.html#ad5efc07c6661656b396c6c3e859e0e74',1,'CW_Tron.cpp']]]
 ];

@@ -47,7 +47,12 @@ var searchData=
   ['cw_5fsign_5fsig_5fecdsa_5flow_5fs_44',['CW_SIGN_SIG_ECDSA_LOW_S',['../CW__Defs_8h.html#a96fed9be166364a32f8d85dfd64b3ec4',1,'CW_Defs.h']]],
   ['cw_5fsign_5fsig_5fschnorr_5fbip340_45',['CW_SIGN_SIG_SCHNORR_BIP340',['../CW__Defs_8h.html#ab01f3f53dad2bbb3ad1d0be3539ea1fb',1,'CW_Defs.h']]],
   ['cw_5fsign_5fwith_5fpin_46',['CW_SIGN_WITH_PIN',['../CW__Defs_8h.html#a8169464dc341135c728565e19852ee42',1,'CW_Defs.h']]],
-  ['cw_5ftrusted_5fca_5fcount_47',['CW_TRUSTED_CA_COUNT',['../CW__TrustedKeys_8h.html#a9236ebe6bddc24060d3f945182f79185',1,'CW_TrustedKeys.h']]],
-  ['cw_5fuser_5fdata_5fpage_5fsize_48',['CW_USER_DATA_PAGE_SIZE',['../CW__Defs_8h.html#a6085fa47786e4251e9d24e22bed82ba5',1,'CW_Defs.h']]],
-  ['cw_5fverify_5fcert_49',['CW_VERIFY_CERT',['../CW__Defs_8h.html#aa42903386adfc7674fc4bfbc17fee5e2',1,'CW_Defs.h']]]
+  ['cw_5ftron_5faddress_5fbytes_47',['CW_TRON_ADDRESS_BYTES',['../CW__Tron_8h.html#aaf8248691ddf10cf25349e34cf6e057c',1,'CW_Tron.h']]],
+  ['cw_5ftron_5faddress_5fprefix_48',['CW_TRON_ADDRESS_PREFIX',['../CW__Tron_8h.html#a7284d540d6306c5cdbc88630f510e690',1,'CW_Tron.h']]],
+  ['cw_5ftron_5faddress_5fstr_5flen_49',['CW_TRON_ADDRESS_STR_LEN',['../CW__Tron_8h.html#a3c7773056b956fc334b3b1eb6863c493',1,'CW_Tron.h']]],
+  ['cw_5ftron_5faddress_5fstr_5fsize_50',['CW_TRON_ADDRESS_STR_SIZE',['../CW__Tron_8h.html#ad1bd098da4374e0f77bed05d8782ce57',1,'CW_Tron.h']]],
+  ['cw_5ftron_5fpath_5flength_51',['CW_TRON_PATH_LENGTH',['../CW__Tron_8h.html#afd7a7fe7c7fe7f553ebdc644373f7b01',1,'CW_Tron.h']]],
+  ['cw_5ftrusted_5fca_5fcount_52',['CW_TRUSTED_CA_COUNT',['../CW__TrustedKeys_8h.html#a9236ebe6bddc24060d3f945182f79185',1,'CW_TrustedKeys.h']]],
+  ['cw_5fuser_5fdata_5fpage_5fsize_53',['CW_USER_DATA_PAGE_SIZE',['../CW__Defs_8h.html#a6085fa47786e4251e9d24e22bed82ba5',1,'CW_Defs.h']]],
+  ['cw_5fverify_5fcert_54',['CW_VERIFY_CERT',['../CW__Defs_8h.html#aa42903386adfc7674fc4bfbc17fee5e2',1,'CW_Defs.h']]]
 ];

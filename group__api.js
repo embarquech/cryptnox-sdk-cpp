@@ -29,6 +29,7 @@ var group__api =
       [ "establishSecureChannel", "classCryptnoxWallet.html#a8584e36b3c8c088ad1ee18358246262e", null ],
       [ "extractRawSignature", "classCryptnoxWallet.html#a6a683e324d4e03eda442248a5a0d4fd0", null ],
       [ "getCardInfo", "classCryptnoxWallet.html#a8331fe2f662397916749769e17d68ecd", null ],
+      [ "getPublicKey", "classCryptnoxWallet.html#a4a250b97782d932a604ec45ce7a87bc3", null ],
       [ "isSecureChannelOpen", "classCryptnoxWallet.html#a08c6fa72f255be4cff6113187f8e3218", null ],
       [ "operator=", "classCryptnoxWallet.html#a58a42d63ad36000234d879e44f28fd8b", null ],
       [ "parseDerSignature", "classCryptnoxWallet.html#a03e08d9bb6e9e5af10a886e715c05237", null ],

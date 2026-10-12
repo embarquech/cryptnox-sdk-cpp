@@ -1,15 +1,19 @@
 <map id="CW_Defs.h" name="CW_Defs.h">
-<area shape="rect" id="Node000001" title="Shared constants, error codes, and session state for the SDK." alt="" coords="174,5,267,31"/>
-<area shape="rect" id="Node000002" href="$CW__CryptoProvider_8h.html" title="Abstract cryptographic primitives interface." alt="" coords="24,79,183,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="191,40,124,81,121,76,189,35"/>
-<area shape="rect" id="Node000003" href="$CW__SecureChannel_8h.html" title="Cryptnox secure channel protocol over NFC." alt="" coords="49,152,209,177"/>
-<area shape="poly" id="edge6_Node000001_Node000003" title=" " alt="" coords="219,45,211,75,196,105,173,133,148,154,144,150,169,129,192,103,206,73,214,44"/>
-<area shape="rect" id="Node000005" href="$CryptnoxWallet_8h.html" title="High&#45;level API for interacting with a Cryptnox Hardware Wallet over NFC." alt="" coords="204,225,339,251"/>
-<area shape="poly" id="edge7_Node000001_Node000005" title=" " alt="" coords="229,44,271,224,266,226,224,45"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="115,116,127,151,122,153,110,118"/>
-<area shape="rect" id="Node000004" href="$CW__SecureChannel_8cpp.html" title="Implementation of the Cryptnox secure channel protocol." alt="" coords="5,225,180,251"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="119,191,101,226,96,224,114,188"/>
-<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="165,181,249,223,247,227,162,186"/>
-<area shape="rect" id="Node000006" href="$CryptnoxWallet_8cpp.html" title="Implementation of the high&#45;level CryptnoxWallet API." alt="" coords="197,299,346,324"/>
-<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="274,264,274,299,269,299,269,264"/>
+<area shape="rect" id="Node000001" title="Shared constants, error codes, and session state for the SDK." alt="" coords="238,5,331,31"/>
+<area shape="rect" id="Node000002" href="$CW__CryptoProvider_8h.html" title="Abstract cryptographic primitives interface." alt="" coords="88,79,247,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="255,40,188,81,185,76,253,35"/>
+<area shape="rect" id="Node000003" href="$CW__SecureChannel_8h.html" title="Cryptnox secure channel protocol over NFC." alt="" coords="157,152,317,177"/>
+<area shape="poly" id="edge8_Node000001_Node000003" title=" " alt="" coords="280,45,262,105,244,153,239,151,257,103,275,43"/>
+<area shape="rect" id="Node000005" href="$CryptnoxWallet_8h.html" title="High&#45;level API for interacting with a Cryptnox Hardware Wallet over NFC." alt="" coords="333,225,468,251"/>
+<area shape="poly" id="edge9_Node000001_Node000005" title=" " alt="" coords="300,42,397,224,392,226,295,44"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="190,112,227,150,224,154,186,116"/>
+<area shape="rect" id="Node000007" href="$CW__Tron_8h.html" title="TRON (TRX) network support — BIP44 path and Base58Check addresses." alt="" coords="35,152,126,177"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="145,115,97,154,93,150,141,110"/>
+<area shape="rect" id="Node000004" href="$CW__SecureChannel_8cpp.html" title="Implementation of the Cryptnox secure channel protocol." alt="" coords="135,225,309,251"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="234,191,227,226,222,225,229,190"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="277,180,375,223,373,228,275,185"/>
+<area shape="rect" id="Node000006" href="$CryptnoxWallet_8cpp.html" title="Implementation of the high&#45;level CryptnoxWallet API." alt="" coords="326,299,475,324"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="403,264,403,299,398,299,398,264"/>
+<area shape="rect" id="Node000008" href="$CW__Tron_8cpp.html" title="Implementation of TRON address derivation and Base58Check coding." alt="" coords="5,225,111,251"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="75,192,64,226,59,224,70,190"/>
 </map>

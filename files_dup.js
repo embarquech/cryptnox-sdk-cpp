@@ -9,6 +9,8 @@ var files_dup =
     [ "CW_Platform.h", "CW__Platform_8h.html", null ],
     [ "CW_SecureChannel.cpp", "CW__SecureChannel_8cpp.html", "CW__SecureChannel_8cpp" ],
     [ "CW_SecureChannel.h", "CW__SecureChannel_8h.html", "CW__SecureChannel_8h" ],
+    [ "CW_Tron.cpp", "CW__Tron_8cpp.html", "CW__Tron_8cpp" ],
+    [ "CW_Tron.h", "CW__Tron_8h.html", "CW__Tron_8h" ],
     [ "CW_TrustedKeys.h", "CW__TrustedKeys_8h.html", "CW__TrustedKeys_8h" ],
     [ "CW_Utils.cpp", "CW__Utils_8cpp.html", null ],
     [ "CW_Utils.h", "CW__Utils_8h.html", null ],
