@@ -228,7 +228,7 @@ bool CryptnoxWallet::getCardInfo(CW_SecureSession& session, CW_CardInfo* info) {
 
     ret = _secure.aesCbcEncrypt(session, apdu, sizeof(apdu),
                                 data, sizeof(data),
-                                decrypted, &decryptedLen, sizeof(decrypted));
+                                decrypted, sizeof(decrypted), &decryptedLen);
 
     if (ret && (info != NULL)) {
         /* Response layout (Cryptnox basic_g1 spec):
@@ -449,7 +449,7 @@ bool CryptnoxWallet::getPublicKey(CW_SecureSession& session, uint8_t keyType,
         uint16_t decryptedLen    = 0U;
 
         if (_secure.aesCbcEncrypt(session, apdu, sizeof(apdu), data, dataLen,
-                                  decrypted, &decryptedLen, sizeof(decrypted))) {
+                                  decrypted, sizeof(decrypted), &decryptedLen)) {
             if ((decryptedLen > 0U) && (decryptedLen <= pubKeyBufSize)) {
                 (void)CW_Utils::safe_memcpy(pubKey, pubKeyBufSize, decrypted, decryptedLen);
                 pubKeyLength = decryptedLen;
@@ -649,7 +649,7 @@ bool CryptnoxWallet::sendSignApdu(CW_SignRequest& request, const uint8_t* data,
 #endif
 
     if (_secure.aesCbcEncrypt(request.session, apdu, sizeof(apdu), data, dataLength,
-                               derResponse, &derLength, derResponseSize)) {
+                               derResponse, derResponseSize, &derLength)) {
         ret = true;
     }
     else {

@@ -82,10 +82,12 @@ static const uint8_t KECCAK_ROT[KECCAK_STATE_LANES] = {
  * @param a 25-lane state.
  */
 static void keccak_f(uint64_t* a) {
+    /* Outside the round loop: every round fully rewrites all three before reading them. */
+    uint64_t c[5] = { 0U };
+    uint64_t d[5] = { 0U };
+    uint64_t b[KECCAK_STATE_LANES] = { 0U };
+
     for (unsigned round = 0U; round < KECCAK_ROUNDS; round++) {
-        uint64_t c[5] = { 0U };
-        uint64_t d[5] = { 0U };
-        uint64_t b[KECCAK_STATE_LANES] = { 0U };
 
         /* Theta */
         for (unsigned x = 0U; x < 5U; x++) {

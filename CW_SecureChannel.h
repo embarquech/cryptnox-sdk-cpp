@@ -256,16 +256,15 @@ public:
      * @param[in]     apduLength            Header length (must be 4).
      * @param[in]     data                  Plaintext payload.
      * @param[in]     dataLength            Plaintext length (≤ @ref CW_USER_DATA_PAGE_SIZE).
-     * @param[out]    decryptedOutput       Optional buffer for the decrypted response payload.
-     * @param[out]    decryptedOutputLength Optional pointer to receive the decrypted payload length.
+     * @param[out]    decryptedOutput       Buffer for the decrypted response payload, or NULL.
      * @param[in]     decryptedOutputSize   Capacity of @p decryptedOutput. Only the card
      *                decides how long its answer is, so pass the real size: a payload that
-     *                does not fit is refused instead of overrunning the buffer. The default
-     *                is everything this channel can return, so it only suits a buffer of at
-     *                least @ref CW_SECURE_PAYLOAD_MAX bytes.
+     *                does not fit is refused instead of overrunning the buffer.
+     * @param[out]    decryptedOutputLength Receives the decrypted payload length, or NULL.
      * @return true if the APDU was sent and the response MAC verified +
      *         decrypted successfully; false on bad parameters, transport
-     *         failure, MAC mismatch, or unexpected status word.
+     *         failure, MAC mismatch, unexpected status word, or an exhausted
+     *         MAC counter (the session is then cleared; renegotiate).
      *
      * @pre @p session must be the output of a successful
      *      @ref mutuallyAuthenticate call.
@@ -279,9 +278,18 @@ public:
     bool aesCbcEncrypt(CW_SecureSession& session,
                        const uint8_t apdu[], uint16_t apduLength,
                        const uint8_t data[], uint16_t dataLength,
-                       uint8_t* decryptedOutput = NULL,
-                       uint16_t* decryptedOutputLength = NULL,
-                       uint16_t decryptedOutputSize = CW_SECURE_PAYLOAD_MAX);
+                       uint8_t* decryptedOutput, uint16_t decryptedOutputSize,
+                       uint16_t* decryptedOutputLength);
+
+    /**
+     * @brief @ref aesCbcEncrypt for a command whose response payload is discarded.
+     *
+     * The output buffer and its capacity come as a pair in the full overload,
+     * so there is no way to pass one without the other.
+     */
+    bool aesCbcEncrypt(CW_SecureSession& session,
+                       const uint8_t apdu[], uint16_t apduLength,
+                       const uint8_t data[], uint16_t dataLength);
 
     /**
      * @brief Verify MAC and decrypt an encrypted APDU response.
@@ -295,9 +303,9 @@ public:
      * @param[in]     response              Encrypted response buffer (MAC || cipher || SW).
      * @param[in]     responseLen           Response length.
      * @param[in]     macValue              MAC of the request — used as decrypt IV.
-     * @param[out]    decryptedOutput       Optional plaintext output buffer.
-     * @param[out]    decryptedOutputLength Optional plaintext output length.
+     * @param[out]    decryptedOutput       Plaintext output buffer, or NULL.
      * @param[in]     decryptedOutputSize   Capacity of @p decryptedOutput; see @ref aesCbcEncrypt.
+     * @param[out]    decryptedOutputLength Plaintext output length, or NULL.
      * @return true if MAC matched and decryption succeeded, false otherwise.
      *
      * @warning A false return indicates either tampering or a corrupted
@@ -306,9 +314,8 @@ public:
     bool aesCbcDecrypt(const CW_SecureSession& session,
                        uint8_t* response, size_t responseLen,
                        uint8_t* macValue,
-                       uint8_t* decryptedOutput = NULL,
-                       uint16_t* decryptedOutputLength = NULL,
-                       uint16_t decryptedOutputSize = CW_SECURE_PAYLOAD_MAX);
+                       uint8_t* decryptedOutput, uint16_t decryptedOutputSize,
+                       uint16_t* decryptedOutputLength);
 
     /**
      * @brief Verify the SW1/SW2 status word at the end of an APDU response.

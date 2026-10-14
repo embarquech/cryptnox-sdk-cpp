@@ -400,7 +400,7 @@ bool CW_SecureChannel::mutuallyAuthenticate(CW_SecureSession& session,
             const uint8_t apdu[] = { 0x80U, 0x11U, 0x00U, 0x00U };
             if (aesCbcEncrypt(session, apdu, sizeof(apdu),
                               challenge, MUTUALAUTH_CHALLENGE_IN_BYTES,
-                              response, &responseLength, sizeof(response)) &&
+                              response, sizeof(response), &responseLength) &&
                 (responseLength == MUTUALAUTH_CHALLENGE_IN_BYTES)) {
                 if (_appletMajor < APPLET_MAJOR_V2) {
                     ret = true;  /* 1.6.x: response is random, nothing to verify */
@@ -483,9 +483,15 @@ bool CW_SecureChannel::macIvForCounter(const CW_SecureSession& session, uint8_t*
  */
 bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
                                      const uint8_t apdu[], uint16_t apduLength,
+                                     const uint8_t data[], uint16_t dataLength) {
+    return aesCbcEncrypt(session, apdu, apduLength, data, dataLength, NULL, 0U, NULL);
+}
+
+bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
+                                     const uint8_t apdu[], uint16_t apduLength,
                                      const uint8_t data[], uint16_t dataLength,
-                                     uint8_t* decryptedOutput, uint16_t* decryptedOutputLength,
-                                     uint16_t decryptedOutputSize) {
+                                     uint8_t* decryptedOutput, uint16_t decryptedOutputSize,
+                                     uint16_t* decryptedOutputLength) {
     bool ret = false;
 
     /* Reject payloads that would overflow s_dataBuf (MED-01). */
@@ -537,7 +543,19 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
     (void)CW_Utils::safe_memcpy(s_macBuf + offset, sizeof(s_macBuf) - static_cast<size_t>(offset), s_dataBuf, encryptedLength);
 
     /* GAP-01: +1 once per command; the same value authenticates its response.
-     * The card advances even when it answers a bare error SW, so stay in step. */
+     * The card advances even when it answers a bare error SW, so stay in step.
+     * (Kmac, counter) must never repeat: a wrap would let a recorded response
+     * verify again. The card's counter is 16 bytes, so 32 bits here is the bound;
+     * clearing the session forces a new ECDH, hence a fresh Kmac. */
+    if (session.macCounter == UINT32_MAX) {
+#if CW_DEBUG_LOGGING
+        _logger.println(F("Error: MAC counter exhausted — renegotiate the channel."));
+#endif
+        CW_Utils::secure_wipe(s_dataBuf, sizeof(s_dataBuf));
+        CW_Utils::secure_wipe(s_macBuf,  sizeof(s_macBuf));
+        session.clear();
+        return false;
+    }
     session.macCounter++;
     uint8_t macIv[AES_BLOCK_SIZE] = { 0U };
     if (!macIvForCounter(session, macIv)) {
@@ -597,7 +615,7 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
              * Moving it before aesCbcDecrypt would let an attacker-chosen IV
              * desynchronise the rolling-IV state even on MAC failure. */
             ret = aesCbcDecrypt(session, response, static_cast<size_t>(responseLength), macValue,
-                                decryptedOutput, decryptedOutputLength, decryptedOutputSize);
+                                decryptedOutput, decryptedOutputSize, decryptedOutputLength);
             if (ret) {
                 (void)CW_Utils::safe_memcpy(session.iv, CW_IV_SIZE, response, CW_IV_SIZE);
             } else {
@@ -630,8 +648,8 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
 bool CW_SecureChannel::aesCbcDecrypt(const CW_SecureSession& session,
                                      uint8_t* response, size_t response_len,
                                      uint8_t* mac_value,
-                                     uint8_t* decryptedOutput, uint16_t* decryptedOutputLength,
-                                     uint16_t decryptedOutputSize) {
+                                     uint8_t* decryptedOutput, uint16_t decryptedOutputSize,
+                                     uint16_t* decryptedOutputLength) {
     /* Precondition: response must hold at least MAC(16) + 1 ciphertext byte + SW(2) (HIGH-02).
      * Without this check, response_len < 18 causes size_t underflow in the subtractions below. */
     if ((response == NULL) || (response_len < (size_t)(AES_BLOCK_SIZE + 2U + 1U))) {

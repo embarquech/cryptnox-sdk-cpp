@@ -354,10 +354,20 @@ public:
     /**
      * @brief Write user data (WRITE APDU 0x80FC, P1=0 user-data slot, single page).
      *
-     * Writes @p data in one APDU. The applet stores it in logical page 0 of the
-     * user-data area; larger multi-page writes need transport-level APDU chaining
-     * (not available on the single-APDU embedded transport), so @p dataLength
-     * greater than @ref CW_USER_DATA_PAGE_SIZE is rejected.
+     * Writes @p data in one APDU to page 0 of the card's single 3600-byte
+     * user-data area (three 1200-byte pages, P2 = page index).
+     *
+     * - At most @ref CW_USER_DATA_PAGE_SIZE (208) bytes, page 0 only.
+     * - Each write replaces the previous content: the card sets the stored
+     *   length to this write's length. Nothing is appended.
+     * - The limit is the transport's, not the card's. A page is one APDU on
+     *   the card (up to 1239 bytes), but this SDK caps APDUs at 255 bytes
+     *   (PN532 frame size; @c sendAPDU takes a @c uint8_t length), and pages 1
+     *   and 2 are refused until page 0 holds a full 1200 bytes. A full page
+     *   would also need a ~1240-byte buffer, ruling out AVR targets.
+     *
+     * Writing more needs extended APDUs in the SDK (readers such as PN7150 or
+     * PC/SC, targets such as ESP32) or an applet change (offset/append on P2).
      *
      * @param[in,out] session    Valid secure session.
      * @param[in]     data       Data to write.
