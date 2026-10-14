@@ -53,13 +53,10 @@
  * and email programmed when the card was initialised. NUL-terminated.
  */
 struct CW_CardInfo {
-    char name[CW_CARD_NAME_MAX_LEN + 1U];    /**< NUL-terminated ASCII name. */
-    char email[CW_CARD_EMAIL_MAX_LEN + 1U];  /**< NUL-terminated ASCII email. */
+    char name[CW_CARD_NAME_MAX_LEN + 1U] {};    /**< NUL-terminated ASCII name. */
+    char email[CW_CARD_EMAIL_MAX_LEN + 1U] {};  /**< NUL-terminated ASCII email. */
 
-    CW_CardInfo() {
-        name[0]  = '\0';
-        email[0] = '\0';
-    }
+    CW_CardInfo() = default;
 };
 
 /**
@@ -73,14 +70,14 @@ struct CW_CardInfo {
  */
 struct CW_SignRequest {
     CW_SecureSession& session;       /**< Reference to an open secure session. */
-    uint8_t keyType;                 /**< Key / path type — one of the @c CW_SIGN_CURR_*, @c CW_SIGN_DERIVE_*, @c CW_SIGN_PINLESS_K1 constants. */
-    uint8_t signatureType;           /**< Signature format — one of @c CW_SIGN_SIG_ECDSA_LOW_S, @c CW_SIGN_SIG_ECDSA_EOSIO, @c CW_SIGN_SIG_SCHNORR_BIP340. */
-    uint8_t pin[CW_MAX_PIN_LENGTH];  /**< PIN bytes (4–9 ASCII digits). Zero-padded; cleared in the destructor. */
-    bool pinLessMode;                /**< false = PIN path, true = PIN-less path (requires @c keyType == @ref CW_SIGN_PINLESS_K1). */
-    const uint8_t* hash;             /**< Pointer to the hash to sign (typically 32 bytes — SHA-256 of the transaction). */
-    uint8_t hashLength;              /**< Length of @c hash in bytes (must be ≤ @ref CW_HASH_SIZE). */
-    const uint8_t* derivePath;       /**< BIP32 path bytes for DERIVE modes; @c NULL for CURR / PINLESS modes. */
-    uint8_t derivePathLength;        /**< Length of @c derivePath in bytes (must be a multiple of 4). */
+    uint8_t keyType {};                 /**< Key / path type — one of the @c CW_SIGN_CURR_*, @c CW_SIGN_DERIVE_*, @c CW_SIGN_PINLESS_K1, @c CW_SIGN_*_ED25519 constants. */
+    uint8_t signatureType {};           /**< Signature format — @c CW_SIGN_SIG_ECDSA_LOW_S / EOSIO / SCHNORR_BIP340. Ignored for Ed25519 key types (EdDSA is forced). */
+    uint8_t pin[CW_MAX_PIN_LENGTH] {};  /**< PIN bytes (4–9 ASCII digits). Zero-padded; cleared in the destructor. */
+    bool pinLessMode {};                /**< false = PIN path, true = PIN-less path (requires @c keyType == @ref CW_SIGN_PINLESS_K1). */
+    const uint8_t* hash {};             /**< Data to sign. For ECDSA: a digest (typically 32 bytes). For Ed25519 (@c CW_SIGN_*_ED25519): the RAW message — the card hashes it internally. */
+    uint8_t hashLength {};              /**< Length of @c hash. ECDSA: ≤ @ref CW_HASH_SIZE. Ed25519: ≤ @ref CW_MAX_ED25519_MESSAGE_LENGTH. */
+    const uint8_t* derivePath {};       /**< BIP32 path bytes for DERIVE modes; @c NULL for CURR / PINLESS modes. */
+    uint8_t derivePathLength {};        /**< Length of @c derivePath in bytes (must be a multiple of 4). */
 
     /**
      * @brief Construct a sign request with sensible defaults.
@@ -96,7 +93,6 @@ struct CW_SignRequest {
         : session(sess), keyType(kType), signatureType(sigType),
           pinLessMode(pinless), hash(NULL), hashLength(0U),
           derivePath(NULL), derivePathLength(0U) {
-        memset(pin, 0U, sizeof(pin));
     }
 
     /** @brief Securely wipes the PIN buffer. */
@@ -114,12 +110,11 @@ struct CW_SignRequest {
  * @c keyType used). On any other code @c signature is left zero.
  */
 struct CW_SignResult {
-    uint8_t signature[CW_RAW_SIGNATURE_SIZE]; /**< Raw 64-byte signature: r[32] || s[32]. Zero on failure. */
-    uint8_t errorCode;                        /**< @ref CW_OK on success, otherwise a @c CW_SIGN_* / @c CW_INVALID_SESSION code. */
+    uint8_t signature[CW_RAW_SIGNATURE_SIZE] {}; /**< Raw 64-byte signature: ECDSA r[32]||s[32], or Ed25519 R[32]||S[32]. Zero on failure. */
+    uint8_t errorCode {};                        /**< @ref CW_OK on success, otherwise a @c CW_SIGN_* / @c CW_INVALID_SESSION code. */
 
     /** @brief Construct a default-failure result. */
     CW_SignResult() : errorCode(CW_NOK) {
-        memset(signature, 0U, sizeof(signature));
     }
 };
 
@@ -316,7 +311,9 @@ public:
      *
      * @retval CW_OK                                  Signature valid.
      * @retval CW_INVALID_SESSION                     Secure channel not open.
-     * @retval CW_SIGN_KEY_TOO_SHORT                  Bad hash buffer / length.
+     * @retval CW_SIGN_KEY_TOO_SHORT                  Missing hash buffer / zero length.
+     * @retval CW_SIGN_INVALID_PATH                   Bad derivation path.
+     * @retval CW_SIGN_MESSAGE_TOO_LONG               Hash/message too long for the key type.
      * @retval CW_SIGN_NO_KEY_LOADED                  Card rejected the SIGN APDU.
      * @retval CW_SIGN_PIN_INCORRECT                  PIN length out of range.
      * @retval CW_SIGN_KEY_TOO_SHORT_WITH_PINLESS_MODE
@@ -331,15 +328,54 @@ public:
     CW_SignResult sign(CW_SignRequest& request);
 
     /**
-     * @brief Write data to a user memory slot, paginating in CW_USER_DATA_PAGE_SIZE chunks.
+     * @brief Read a card-resident public key (GET PUBLIC KEY, APDU 0x80C2).
+     *
+     * Returns the key exactly as the card sends it: for @ref CW_SIGN_CURR_ED25519 /
+     * @ref CW_SIGN_DERIVE_ED25519 a raw 32-byte Ed25519 key (the Solana address bytes);
+     * for k1/r1 key types the 65-byte uncompressed point (0x04 || X[32] || Y[32]).
+     *
+     * @param[in,out] session          Valid secure session.
+     * @param[in]     keyType          One of the @c CW_SIGN_CURR_* / @c CW_SIGN_DERIVE_* constants.
+     * @param[in]     derivePath       BIP32 path bytes for DERIVE key types; @c NULL for current-key.
+     * @param[in]     derivePathLength Length of @p derivePath (multiple of 4); 0 for current-key.
+     * @param[out]    pubKey           Buffer to receive the raw key bytes.
+     * @param[in]     pubKeyBufSize    Size of @p pubKey (≥ 32 for Ed25519, ≥ 65 for k1/r1).
+     * @param[out]    pubKeyLength     Actual number of key bytes written on success.
+     * @return true on success, false on closed/invalid session, bad parameters,
+     *         a buffer too small for the returned key, or transport / MAC failure.
+     *
+     * @note Ed25519 key types require applet v2.0+. On an older applet the card
+     *       rejects the APDU and this returns false.
+     */
+    bool getPublicKey(CW_SecureSession& session, uint8_t keyType,
+                      const uint8_t* derivePath, uint8_t derivePathLength,
+                      uint8_t* pubKey, uint16_t pubKeyBufSize, uint16_t& pubKeyLength);
+
+    /**
+     * @brief Write user data (WRITE APDU 0x80FC, P1=0 user-data slot, single page).
+     *
+     * Writes @p data in one APDU to page 0 of the card's single 3600-byte
+     * user-data area (three 1200-byte pages, P2 = page index).
+     *
+     * - At most @ref CW_USER_DATA_PAGE_SIZE (208) bytes, page 0 only.
+     * - Each write replaces the previous content: the card sets the stored
+     *   length to this write's length. Nothing is appended.
+     * - The limit is the transport's, not the card's. A page is one APDU on
+     *   the card (up to 1239 bytes), but this SDK caps APDUs at 255 bytes
+     *   (PN532 frame size; @c sendAPDU takes a @c uint8_t length), and pages 1
+     *   and 2 are refused until page 0 holds a full 1200 bytes. A full page
+     *   would also need a ~1240-byte buffer, ruling out AVR targets.
+     *
+     * Writing more needs extended APDUs in the SDK (readers such as PN7150 or
+     * PC/SC, targets such as ESP32) or an applet change (offset/append on P2).
      *
      * @param[in,out] session    Valid secure session.
-     * @param[in]     slot       User data slot index.
      * @param[in]     data       Data to write.
-     * @param[in]     dataLength Total bytes to write.
-     * @return true if all pages written successfully, false otherwise.
+     * @param[in]     dataLength Bytes to write (1..CW_USER_DATA_PAGE_SIZE).
+     * @return true on success, false on closed session, bad parameters,
+     *         @p dataLength above one page, or transport / MAC failure.
      */
-    bool writeUserData(CW_SecureSession& session, uint8_t slot,
+    bool writeUserData(CW_SecureSession& session,
                        const uint8_t* data, uint16_t dataLength);
 
     /**
@@ -369,7 +405,8 @@ private:
     bool validateSignRequest(const CW_SignRequest& request, CW_SignResult& result);
     void buildSignPayload(const CW_SignRequest& request, uint8_t* data, uint16_t& dataLength);
     bool sendSignApdu(CW_SignRequest& request, const uint8_t* data, uint16_t dataLength,
-                      uint8_t* derResponse, uint16_t& derLength, CW_SignResult& result);
+                      uint8_t* derResponse, uint16_t derResponseSize,
+                      uint16_t& derLength, CW_SignResult& result);
     bool extractRawSignature(const uint8_t* derResponse, uint16_t derLength, CW_SignResult& result);
     void debugPrintSignature(const uint8_t* signature);
 };
