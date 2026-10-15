@@ -516,7 +516,19 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
     (void)CW_Utils::safe_memcpy(s_macBuf + offset, sizeof(s_macBuf) - static_cast<size_t>(offset), s_dataBuf, encryptedLength);
 
     /* GAP-01: +1 once per command; the same value authenticates its response.
-     * The card advances even when it answers a bare error SW, so stay in step. */
+     * The card advances even when it answers a bare error SW, so stay in step.
+     * (Kmac, counter) must never repeat: a wrap would let a recorded response
+     * verify again. The card's counter is 16 bytes, so 32 bits here is the bound;
+     * clearing the session forces a new ECDH, hence a fresh Kmac. */
+    if (session.macCounter == UINT32_MAX) {
+#if CW_DEBUG_LOGGING
+        _logger.println(F("Error: MAC counter exhausted — renegotiate the channel."));
+#endif
+        CW_Utils::secure_wipe(s_dataBuf, sizeof(s_dataBuf));
+        CW_Utils::secure_wipe(s_macBuf,  sizeof(s_macBuf));
+        session.clear();
+        return false;
+    }
     session.macCounter++;
     uint8_t macIv[AES_BLOCK_SIZE];
     macIvForCounter(session, macIv);
