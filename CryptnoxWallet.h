@@ -267,6 +267,39 @@ public:
     bool verifyPin(CW_SecureSession& session, const uint8_t* pin, uint8_t pinLength);
 
     /**
+     * @brief Read a public key from the card for a BIP32 derivation path.
+     *
+     * Sends an encrypted GET PUBLIC KEY APDU (@c 80 C2 P1 01) with the
+     * wire-format path as data, and returns the uncompressed key with the
+     * @c 0x04 SEC1 prefix stripped — the form
+     * @ref CW_Tron::addressFromPublicKey and the Ethereum address derivation
+     * both expect.
+     *
+     * Without this a terminal cannot learn which account the card in front of
+     * it owns, so the account has to be compiled in; with it, any card works.
+     *
+     * @param[in,out] session          Valid secure session.
+     * @param[in]     derivePath       Wire-format BIP32 path (5 big-endian
+     *                                 uint32 levels, hardened levels carrying
+     *                                 the high bit), or @c NULL to read the
+     *                                 card's current key.
+     * @param[in]     derivePathLength Length of @p derivePath in bytes; must be
+     *                                 a multiple of 4 and at most
+     *                                 @ref CW_MAX_DERIVE_PATH_LENGTH. Pass 0
+     *                                 with a @c NULL path.
+     * @param[out]    publicKey64      64-byte output: X || Y.
+     * @return true on success; false on bad arguments, a closed session, a
+     *         card refusal, or a response that is not an uncompressed key.
+     *
+     * @pre The PIN must already have been verified for this session (see
+     *      @ref verifyPin) — the card refuses the export otherwise, except on
+     *      the PIN-less path.
+     */
+    bool getPublicKey(CW_SecureSession& session,
+                      const uint8_t* derivePath, uint8_t derivePathLength,
+                      uint8_t* publicKey64);
+
+    /**
      * @brief Sign a 32-byte digest using a card-resident key.
      *
      * Builds the SIGN payload (hash || optional BIP32 path || optional PIN),
