@@ -136,9 +136,9 @@ public:
      * @param[out] fullEphemeralPubKey65 Optional 65-byte key including 0x04 prefix.
      * @return true on success, false otherwise.
      */
-    bool extractCardEphemeralKey(const uint8_t* cardCertificate,
-                                 uint8_t* cardEphemeralPubKey,
-                                 uint8_t* fullEphemeralPubKey65 = NULL);
+    static bool extractCardEphemeralKey(const uint8_t* cardCertificate,
+                                        uint8_t* cardEphemeralPubKey,
+                                        uint8_t* fullEphemeralPubKey65 = NULL);
 
     /**
      * @brief Send OPEN SECURE CHANNEL and retrieve the session salt.

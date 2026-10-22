@@ -537,7 +537,7 @@ bool CryptnoxWallet::parseDerSignature(const uint8_t* der, uint8_t derLength,
  * Private methods
  ******************************************************************/
 
-bool CryptnoxWallet::isSecureChannelOpen(const CW_SecureSession& session) const {
+bool CryptnoxWallet::isSecureChannelOpen(const CW_SecureSession& session) {
     uint8_t acc = 0U;
     for (uint8_t i = 0U; i < CW_AESKEY_SIZE; i++) {
         acc |= session.aesKey[i];

@@ -400,12 +400,12 @@ private:
     CW_Platform&     _platform; ///< Platform abstraction (sleep_ms).
     CW_SecureChannel _secure;   ///< Owned secure channel.
 
-    bool isSecureChannelOpen(const CW_SecureSession& session) const;
+    static bool isSecureChannelOpen(const CW_SecureSession& session);
     bool printPN532FirmwareVersion();
 
     /* Sign helper methods */
     bool validateSignRequest(const CW_SignRequest& request, CW_SignResult& result);
-    void buildSignPayload(const CW_SignRequest& request, uint8_t* data, uint16_t& dataLength);
+    static void buildSignPayload(const CW_SignRequest& request, uint8_t* data, uint16_t& dataLength);
     bool sendSignApdu(CW_SignRequest& request, const uint8_t* data, uint16_t dataLength,
                       uint8_t* derResponse, uint16_t derResponseSize,
                       uint16_t& derLength, CW_SignResult& result);
