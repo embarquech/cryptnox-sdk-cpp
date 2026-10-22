@@ -101,6 +101,12 @@ public:
     bool printFirmwareVersion();
 
     /**
+     * @brief Applet major version read at the last SELECT.
+     * @return 1 for 1.6.x, 2 for 2.x, 0 if unknown (no SELECT yet).
+     */
+    uint8_t appletMajor() const { return _appletMajor; }
+
+    /**
      * @brief Send the SELECT APDU to activate the Cryptnox application.
      *
      * Also records the applet major version (SELECT byte 1), which gates the

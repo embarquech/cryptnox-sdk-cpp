@@ -31,6 +31,14 @@ static bool cwSignNeedsPath(uint8_t keyType) {
     return (derivation == 1U) || (derivation == 2U);
 }
 
+/* GET PUBLIC KEY is a read: only current / derive on k1, r1, ed25519.
+ * Derive-and-make-current (low nibble 2) would change the card's current key. */
+static bool cwPubKeyTypeAllowed(uint8_t keyType) {
+    return (keyType == CW_SIGN_CURR_K1)      || (keyType == CW_SIGN_DERIVE_K1) ||
+           (keyType == CW_SIGN_CURR_R1)      || (keyType == CW_SIGN_DERIVE_R1) ||
+           (keyType == CW_SIGN_CURR_ED25519) || (keyType == CW_SIGN_DERIVE_ED25519);
+}
+
 /* Largest Ed25519 message that still fits one secure-channel page for THIS
  * request. buildSignPayload() lays the data field out as
  * [len(2)|msg|path?|pin(9)], so the room left for the message depends on the
@@ -430,6 +438,16 @@ bool CryptnoxWallet::getPublicKey(CW_SecureSession& session, uint8_t keyType,
         _logger.println(F("Error: Invalid output buffer for get public key."));
 #endif
     }
+    else if (!cwPubKeyTypeAllowed(keyType)) {
+#if CW_DEBUG_LOGGING
+        _logger.println(F("Error: Unsupported key type for get public key."));
+#endif
+    }
+    else if (cwIsEd25519(keyType) && (_secure.appletMajor() < 2U)) {
+#if CW_DEBUG_LOGGING
+        _logger.println(F("Error: Ed25519 requires applet 2.0+."));
+#endif
+    }
     else if (cwSignNeedsPath(keyType) &&
              ((derivePath == NULL) || (derivePathLength == 0U) ||
               (derivePathLength > CW_MAX_DERIVE_PATH_LENGTH) ||
@@ -545,6 +563,12 @@ bool CryptnoxWallet::validateSignRequest(const CW_SignRequest& request, CW_SignR
         _logger.println(F("Error: Invalid parameters for sign."));
 #endif
         result.errorCode = CW_SIGN_KEY_TOO_SHORT;
+    }
+    else if (cwIsEd25519(request.keyType) && (_secure.appletMajor() < 2U)) {
+#if CW_DEBUG_LOGGING
+        _logger.println(F("Error: Ed25519 requires applet 2.0+."));
+#endif
+        result.errorCode = CW_SIGN_UNSUPPORTED_KEY_TYPE;
     }
     /* Validate the path BEFORE sizing the message, which subtracts its length
      * from the page: an out-of-range path would make that subtraction wrap and

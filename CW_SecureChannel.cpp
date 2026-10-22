@@ -564,6 +564,7 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
 #endif
         CW_Utils::secure_wipe(s_dataBuf, sizeof(s_dataBuf));
         CW_Utils::secure_wipe(s_macBuf,  sizeof(s_macBuf));
+        session.clear(); /* counter already advanced: out of step with the card */
         return false;
     }
     uint16_t macEncryptedLength = _crypto.aesCbcEncrypt(s_macBuf, macDataLength, s_apduBuf,
@@ -577,6 +578,7 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
 #endif
         CW_Utils::secure_wipe(s_dataBuf, sizeof(s_dataBuf));
         CW_Utils::secure_wipe(s_macBuf, sizeof(s_macBuf));
+        session.clear();
         return false;
     }
 
@@ -593,6 +595,7 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
 #endif
         CW_Utils::secure_wipe(s_dataBuf, sizeof(s_dataBuf));
         CW_Utils::secure_wipe(s_macBuf,  sizeof(s_macBuf));
+        session.clear();
         return false;
     }
 
@@ -636,6 +639,8 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
 #if CW_DEBUG_LOGGING
         _logger.println(F("Secured APDU failed."));
 #endif
+        /* Transport failure: we cannot know whether the card advanced its counter. */
+        session.clear();
     }
 
     /* Wipe plaintext scratch buffers so they do not persist in .bss (MED-04). */

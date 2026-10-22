@@ -75,7 +75,7 @@ struct CW_SignRequest {
     uint8_t pin[CW_MAX_PIN_LENGTH] {};  /**< PIN bytes (4–9 ASCII digits). Zero-padded; cleared in the destructor. */
     bool pinLessMode {};                /**< false = PIN path, true = PIN-less path (requires @c keyType == @ref CW_SIGN_PINLESS_K1). */
     const uint8_t* hash {};             /**< Data to sign. For ECDSA: a digest (typically 32 bytes). For Ed25519 (@c CW_SIGN_*_ED25519): the RAW message — the card hashes it internally. */
-    uint8_t hashLength {};              /**< Length of @c hash. ECDSA: ≤ @ref CW_HASH_SIZE. Ed25519: ≤ @ref CW_MAX_ED25519_MESSAGE_LENGTH. */
+    uint8_t hashLength {};              /**< Length of @c hash. ECDSA: ≤ @ref CW_HASH_SIZE. Ed25519: whatever the page leaves after the length prefix, the path actually sent and the PIN — 197 B with the current key, 181 B with a 4-level path; @ref CW_MAX_ED25519_MESSAGE_LENGTH (177) is the worst case. */
     const uint8_t* derivePath {};       /**< BIP32 path bytes for DERIVE modes; @c NULL for CURR / PINLESS modes. */
     uint8_t derivePathLength {};        /**< Length of @c derivePath in bytes (must be a multiple of 4). */
 
@@ -314,6 +314,7 @@ public:
      * @retval CW_SIGN_KEY_TOO_SHORT                  Missing hash buffer / zero length.
      * @retval CW_SIGN_INVALID_PATH                   Bad derivation path.
      * @retval CW_SIGN_MESSAGE_TOO_LONG               Hash/message too long for the key type.
+     * @retval CW_SIGN_UNSUPPORTED_KEY_TYPE           Ed25519 key type on an applet older than 2.0.
      * @retval CW_SIGN_NO_KEY_LOADED                  Card rejected the SIGN APDU.
      * @retval CW_SIGN_PIN_INCORRECT                  PIN length out of range.
      * @retval CW_SIGN_KEY_TOO_SHORT_WITH_PINLESS_MODE
@@ -335,7 +336,8 @@ public:
      * for k1/r1 key types the 65-byte uncompressed point (0x04 || X[32] || Y[32]).
      *
      * @param[in,out] session          Valid secure session.
-     * @param[in]     keyType          One of the @c CW_SIGN_CURR_* / @c CW_SIGN_DERIVE_* constants.
+     * @param[in]     keyType          One of the @c CW_SIGN_CURR_* / @c CW_SIGN_DERIVE_* constants;
+     *                                 anything else (derive-and-make-current, PIN-less, unknown curve) is refused.
      * @param[in]     derivePath       BIP32 path bytes for DERIVE key types; @c NULL for current-key.
      * @param[in]     derivePathLength Length of @p derivePath (multiple of 4); 0 for current-key.
      * @param[out]    pubKey           Buffer to receive the raw key bytes.
@@ -344,8 +346,8 @@ public:
      * @return true on success, false on closed/invalid session, bad parameters,
      *         a buffer too small for the returned key, or transport / MAC failure.
      *
-     * @note Ed25519 key types require applet v2.0+. On an older applet the card
-     *       rejects the APDU and this returns false.
+     * @note Ed25519 key types require applet v2.0+. On an older applet this
+     *       returns false without sending anything.
      */
     bool getPublicKey(CW_SecureSession& session, uint8_t keyType,
                       const uint8_t* derivePath, uint8_t derivePathLength,

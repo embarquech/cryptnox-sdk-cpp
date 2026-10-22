@@ -111,6 +111,7 @@
 #define CW_SIGN_KEY_TOO_SHORT_WITH_PINLESS_MODE (0x83U)
 #define CW_SIGN_INVALID_PATH                   (0x84U)  /**< Derivation path missing, too long or not a multiple of 4 */
 #define CW_SIGN_MESSAGE_TOO_LONG               (0x85U)  /**< Hash/message longer than the key type allows */
+#define CW_SIGN_UNSUPPORTED_KEY_TYPE           (0x86U)  /**< Key type needs a newer applet (Ed25519 on < 2.0) */
 
 /* Size constants */
 #define CW_RAW_SIGNATURE_SIZE         (64U)    /**< Raw signature (r[32] + s[32], or Ed25519 R||S) */
