@@ -235,12 +235,20 @@ struct CW_SecureSession {
  *
  * This flag gates the chain check only. Providers must keep sha256() working at
  * 0: the applet 2.0 mutual-auth proof (SHA256(Kenc || challenge)) relies on it.
+ *
+ * 0 alone is a build error, so a stray -DCW_VERIFY_CERT=0 cannot reach a release.
+ * Bring-up builds must also pass -DCW_ALLOW_UNVERIFIED_CARD=1 to acknowledge it;
+ * that turns the error into a warning.
  */
 #ifndef CW_VERIFY_CERT
 #define CW_VERIFY_CERT 1
 #endif
 #if CW_VERIFY_CERT == 0
-#  warning "CW_VERIFY_CERT=0: card authenticity verification is compiled out (CRIT-02/H-07). Never ship this."
+#  if defined(CW_ALLOW_UNVERIFIED_CARD) && (CW_ALLOW_UNVERIFIED_CARD == 1)
+#    warning "CW_VERIFY_CERT=0: card authenticity verification is compiled out (CRIT-02/H-07). Never ship this."
+#  else
+#    error "CW_VERIFY_CERT=0 disables card authenticity verification (CRIT-02/H-07). Add -DCW_ALLOW_UNVERIFIED_CARD=1 for bring-up builds only."
+#  endif
 #endif
 
 /** Minimum applet major version accepted at SELECT (PR #27 review #9).
