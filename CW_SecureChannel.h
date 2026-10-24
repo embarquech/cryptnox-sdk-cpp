@@ -254,8 +254,8 @@ public:
      * Performs one secure messaging round-trip: pads and encrypts @p data
      * with Kenc using the current IV; computes a CMAC over (header || cipher)
      * with Kmac; sends the wrapped APDU; on the response, verifies the MAC
-     * and decrypts the payload. The new IV for the next call is taken from
-     * the last cipher block (rolling IV).
+     * and decrypts the payload. The new IV for the next call is the first
+     * 16 bytes of the response, i.e. the card's response MAC (rolling IV).
      *
      * @param[in,out] session               Secure session (Kenc / Kmac / IV).
      * @param[in]     apdu                  APDU header (CLA, INS, P1, P2).
@@ -268,15 +268,19 @@ public:
      *                does not fit is refused instead of overrunning the buffer.
      * @param[out]    decryptedOutputLength Receives the decrypted payload length, or NULL.
      * @return true if the APDU was sent and the response MAC verified +
-     *         decrypted successfully; false on bad parameters, transport
-     *         failure, MAC mismatch, unexpected status word, or an exhausted
-     *         MAC counter (the session is then cleared; renegotiate).
+     *         decrypted successfully; false otherwise. The session is cleared
+     *         (renegotiate) on an exhausted MAC counter, a MAC IV or MAC
+     *         computation failure, a send-length failure, a transport failure
+     *         or a bad response MAC. It is NOT cleared on bad parameters
+     *         rejected before anything is sent, or when the card answers
+     *         with a bare error status word.
      *
      * @pre @p session must be the output of a successful
      *      @ref mutuallyAuthenticate call.
-     * @warning Mutates @c session.iv. On any failure the IV may be left in
-     *          an undefined state — treat the session as broken and tear it
-     *          down with @ref CW_SecureSession::clear.
+     * @warning Mutates @c session.iv. The failures listed above clear the
+     *          session automatically. The one exception is a bare error
+     *          status word (no wrapped response): the session stays open and
+     *          in step with the card and can be reused.
      * @warning Reuses module-private static buffers (@c s_apduBuf, @c s_macBuf,
      *          @c s_dataBuf). Not safe to call concurrently from multiple
      *          tasks; serialise at the application level.

@@ -476,10 +476,10 @@ bool CW_SecureChannel::macIvForCounter(const CW_SecureSession& session, uint8_t*
  *      the response MAC against Kmac (using the request MAC as the IV per
  *      protocol) before decrypting under Kenc.
  *
- * IV update — on success, the last 16 bytes of the response ciphertext become
- * the new session IV (rolling IV). On any failure path the IV is left in an
- * undefined state, which is why the caller must treat a false return as a
- * dead session.
+ * IV update — on success, the first 16 bytes of the response (the card's
+ * response MAC) become the new session IV (rolling IV). Every failure after
+ * the MAC counter advances clears the session; a bare error SW leaves it open
+ * and in step with the card.
  */
 bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
                                      const uint8_t apdu[], uint16_t apduLength,
