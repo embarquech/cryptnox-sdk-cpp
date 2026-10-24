@@ -63,3 +63,10 @@ jobs:
             echo "::error::Uninitialised declaration(s) above: add '= { 0U }' or '{}'."
             exit 1
           fi
+
+      - name: Host tests
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I . \
+            tests/test_pr28.cpp CryptnoxWallet.cpp CW_SecureChannel.cpp CW_Utils.cpp \
+            -o test_pr28
+          ./test_pr28

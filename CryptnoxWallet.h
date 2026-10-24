@@ -295,16 +295,28 @@ public:
                       uint8_t* publicKey64);
 
     /**
-     * @brief Sign a 32-byte digest using a card-resident key.
+     * @brief Sign a digest or message using a card-resident key.
      *
-     * Builds the SIGN payload (hash || optional BIP32 path || optional PIN),
-     * sends it through the secure channel, parses the DER signature returned
-     * by the card, and unpacks it into the canonical 64-byte raw form
-     * (r[32] || s[32]).
+     * Builds the SIGN payload, sends it through the secure channel and
+     * returns the signature in its 64-byte raw form. Depending on the key and
+     * signature type:
+     *
+     * - **ECDSA** (@ref CW_SIGN_SIG_ECDSA_LOW_S / @ref CW_SIGN_SIG_ECDSA_EOSIO):
+     *   @c hash is a 32-byte digest. Payload: hash || optional BIP32 path ||
+     *   optional PIN. The card's DER signature is unpacked to r[32] || s[32].
+     * - **Ed25519** (@c CW_SIGN_*_ED25519, applet 2.0+): @c hash is the RAW
+     *   message, the card hashes it. Payload: len(2, big-endian) || message ||
+     *   optional path || optional PIN. P2 is forced to @ref CW_SIGN_SIG_EDDSA.
+     *   The card returns a raw 64-byte R[32] || S[32]. The maximum message
+     *   length depends on the path sent: 197 bytes with the current key,
+     *   181 bytes with a 4-level path.
+     * - **Schnorr BIP340** (@ref CW_SIGN_SIG_SCHNORR_BIP340): @c hash is a
+     *   32-byte digest; the card returns a raw 64-byte signature, no DER.
      *
      * @param[in] request Sign parameters — must reference a valid secure
-     *                    session, a 32-byte hash, the desired key/signature
-     *                    type, and the PIN (unless @c pinLessMode is set).
+     *                    session, the digest or message, the desired
+     *                    key/signature type, and the PIN (unless
+     *                    @c pinLessMode is set).
      * @return @ref CW_SignResult. On success @c errorCode is @ref CW_OK and
      *         @c signature holds the 64-byte raw signature. On failure the
      *         signature is zeroed and @c errorCode indicates the cause:
