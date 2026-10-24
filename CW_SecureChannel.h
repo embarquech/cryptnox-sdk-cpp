@@ -270,17 +270,18 @@ public:
      * @return true if the APDU was sent and the response MAC verified +
      *         decrypted successfully; false otherwise. The session is cleared
      *         (renegotiate) on an exhausted MAC counter, a MAC IV or MAC
-     *         computation failure, a send-length failure, a transport failure
-     *         or a bad response MAC. It is NOT cleared on bad parameters
-     *         rejected before anything is sent, or when the card answers
-     *         with a bare error status word.
+     *         computation failure, a send-length failure, a transport failure,
+     *         a bad response MAC, or any status word other than 9000. It is
+     *         NOT cleared on bad parameters rejected before anything is sent.
      *
      * @pre @p session must be the output of a successful
      *      @ref mutuallyAuthenticate call.
      * @warning Mutates @c session.iv. The failures listed above clear the
-     *          session automatically. The one exception is a bare error
-     *          status word (no wrapped response): the session stays open and
-     *          in step with the card and can be reused.
+     *          session automatically. That includes a card error such as a
+     *          wrong PIN (0x63Cn): a bare status word carries no MAC and may
+     *          be forged in the NFC path, and keeping the old IV would let
+     *          the card silently mis-decrypt the next command's first block.
+     *          Reconnect before the next command.
      * @warning Reuses module-private static buffers (@c s_apduBuf, @c s_macBuf,
      *          @c s_dataBuf). Not safe to call concurrently from multiple
      *          tasks; serialise at the application level.

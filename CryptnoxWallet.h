@@ -257,7 +257,8 @@ public:
      * @warning Each failed attempt decrements the card's PIN counter. Treat
      *          a false return as "wrong PIN" only after confirming session
      *          validity — a transport glitch should not be retried with a
-     *          new PIN.
+     *          new PIN. A wrong PIN or any card / transport failure clears @p session:
+     *          call @ref connect again before the next command.
      */
     bool verifyPin(CW_SecureSession& session, const uint8_t* pin, uint8_t pinLength);
 
