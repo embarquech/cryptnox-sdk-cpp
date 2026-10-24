@@ -32,7 +32,9 @@ static bool cwSignNeedsPath(uint8_t keyType) {
 }
 
 /* GET PUBLIC KEY is a read: only current / derive on k1, r1, ed25519.
- * Derive-and-make-current (low nibble 2) would change the card's current key. */
+ * Excluded:
+ *  - derive-and-make-current (low nibble 2): would change the card's current key;
+ *  - PIN-less path (low nibble 3, CW_SIGN_PINLESS_K1): a SIGN-only mode, not a key to read. */
 static bool cwPubKeyTypeAllowed(uint8_t keyType) {
     return (keyType == CW_SIGN_CURR_K1)      || (keyType == CW_SIGN_DERIVE_K1) ||
            (keyType == CW_SIGN_CURR_R1)      || (keyType == CW_SIGN_DERIVE_R1) ||
