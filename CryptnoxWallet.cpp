@@ -19,6 +19,58 @@
 #include "CryptnoxWallet.h"
 #include "CW_Utils.h"
 
+/* True for the Ed25519 key types (high nibble 0x2 = ed25519 curve). */
+static bool cwIsEd25519(uint8_t keyType) {
+    return (keyType & 0xF0U) == 0x20U;
+}
+
+/* True when the SIGN key type carries a BIP32 derivation path
+ * (low nibble 1 = derive, 2 = derive-and-make-current). */
+static bool cwSignNeedsPath(uint8_t keyType) {
+    uint8_t derivation = keyType & 0x0FU;
+    return (derivation == 1U) || (derivation == 2U);
+}
+
+/* GET PUBLIC KEY is a read: only current / derive on k1, r1, ed25519.
+ * Excluded:
+ *  - derive-and-make-current (low nibble 2): would change the card's current key;
+ *  - PIN-less path (low nibble 3, CW_SIGN_PINLESS_K1): a SIGN-only mode, not a key to read. */
+static bool cwPubKeyTypeAllowed(uint8_t keyType) {
+    return (keyType == CW_SIGN_CURR_K1)      || (keyType == CW_SIGN_DERIVE_K1) ||
+           (keyType == CW_SIGN_CURR_R1)      || (keyType == CW_SIGN_DERIVE_R1) ||
+           (keyType == CW_SIGN_CURR_ED25519) || (keyType == CW_SIGN_DERIVE_ED25519);
+}
+
+/* Largest Ed25519 message that still fits one secure-channel page for THIS
+ * request. buildSignPayload() lays the data field out as
+ * [len(2)|msg|path?|pin(9)], so the room left for the message depends on the
+ * path the request actually carries.
+ *
+ * CW_MAX_ED25519_MESSAGE_LENGTH assumes the worst case,
+ * CW_MAX_DERIVE_PATH_LENGTH (20), and so rejects messages that do fit: a 4-level
+ * Solana path is 16 bytes, which leaves room for 181 rather than 177. That
+ * difference is what decides whether a ~180-byte SPL transfer can be signed with
+ * the path inside the SIGN command (P1 0x21) instead of requiring the key to be
+ * made current beforehand.
+ *
+ * The card itself is not the limit here: the v2.0 SIGN spec allows up to 1200
+ * bytes of raw data for P1 0x20/0x21. The 208-byte ceiling is this SDK's
+ * single-page secure-channel buffer. */
+static uint16_t cwMaxEd25519Message(const CW_SignRequest& request) {
+    /* Callers must have rejected an over-long path first (validateSignRequest
+     * does), otherwise the subtraction below would wrap. */
+    uint16_t overhead = 2U;  /* big-endian message length prefix */
+
+    if (cwSignNeedsPath(request.keyType) && (request.derivePath != NULL)) {
+        overhead = (uint16_t)(overhead + request.derivePathLength);
+    }
+    if (!request.pinLessMode) {
+        overhead = (uint16_t)(overhead + CW_MAX_PIN_LENGTH);
+    }
+
+    return (uint16_t)(CW_USER_DATA_PAGE_SIZE - overhead);
+}
+
 /******************************************************************
  * Constructor
  ******************************************************************/
@@ -98,8 +150,16 @@ bool CryptnoxWallet::establishSecureChannel(CW_SecureSession& session) {
 #endif
         } else {
             if (_secure.getCardCertificate(cardCertificate, cardCertificateLength)) {
+#if CW_VERIFY_CERT
                 uint8_t certResult = _secure.verifyCertificateChain(cardCertificate,
                                                                     cardCertificateLength);
+#else
+                /* CW_VERIFY_CERT=0: the chain is not checked at all, so any card
+                 * is accepted and will sign whatever it is given. Logged outside
+                 * CW_DEBUG_LOGGING so the build can never do this silently. */
+                uint8_t certResult = CW_CERT_OK;
+                _logger.println(F("*** CW_VERIFY_CERT=0: card authenticity NOT verified."));
+#endif
                 if (certResult != CW_CERT_OK) {
 #if CW_DEBUG_LOGGING
                     _logger.print(F("Card authenticity check failed (code 0x"));
@@ -178,7 +238,7 @@ bool CryptnoxWallet::getCardInfo(CW_SecureSession& session, CW_CardInfo* info) {
 
     ret = _secure.aesCbcEncrypt(session, apdu, sizeof(apdu),
                                 data, sizeof(data),
-                                decrypted, &decryptedLen);
+                                decrypted, sizeof(decrypted), &decryptedLen);
 
     if (ret && (info != NULL)) {
         /* Response layout (Cryptnox basic_g1 spec):
@@ -238,7 +298,8 @@ bool CryptnoxWallet::verifyPin(CW_SecureSession& session, const uint8_t* pin, ui
     return ret;
 }
 
-bool CryptnoxWallet::writeUserData(CW_SecureSession& session, uint8_t slot,
+
+bool CryptnoxWallet::writeUserData(CW_SecureSession& session,
                                     const uint8_t* data, uint16_t dataLength) {
     bool ret = false;
 
@@ -252,39 +313,27 @@ bool CryptnoxWallet::writeUserData(CW_SecureSession& session, uint8_t slot,
         _logger.println(F("Error: Invalid data for write user data."));
 #endif
     }
+    else if (dataLength > CW_USER_DATA_PAGE_SIZE) {
+        /* The applet's WRITE (0xFC) P2 selects a 1200-byte logical page written
+         * at offset 1200*P2, not a chunk counter — so multiple single-APDU
+         * chunks cannot be concatenated over this transport. Reject anything
+         * that won't fit one page instead of silently corrupting the write. */
+#if CW_DEBUG_LOGGING
+        _logger.print(F("Error: user data exceeds one page ("));
+        _logger.print((uint8_t)CW_USER_DATA_PAGE_SIZE);
+        _logger.println(F(" B max for this transport)."));
+#endif
+    }
     else {
-        uint16_t offset = 0U;
-        uint8_t  page   = 0U;
-        ret = true;
-
-        while ((offset < dataLength) && ret) {
-            uint16_t chunkSize = dataLength - offset;
-            if (chunkSize > CW_USER_DATA_PAGE_SIZE) {
-                chunkSize = CW_USER_DATA_PAGE_SIZE;
-            }
-
-            uint8_t apdu[] = { 0x80U, 0xFCU, slot, page };
-
+        /* P1 = 0 (write user data slot; P1 is the applet's operation selector,
+         * not a slot index), P2 = 0 (logical page 0). */
+        uint8_t apdu[] = { 0x80U, 0xFCU, 0x00U, 0x00U };
+        ret = _secure.aesCbcEncrypt(session, apdu, sizeof(apdu), data, dataLength);
 #if CW_DEBUG_LOGGING
-            _logger.print(F("Writing user data page "));
-            _logger.print(page);
-            _logger.print(F(" ("));
-            _logger.print(chunkSize);
-            _logger.println(F(" bytes)..."));
-#endif
-
-            if (!_secure.aesCbcEncrypt(session, apdu, sizeof(apdu), data + offset, chunkSize)) {
-#if CW_DEBUG_LOGGING
-                _logger.print(F("Error: Write user data failed on page "));
-                _logger.println(page);
-#endif
-                ret = false;
-            }
-            else {
-                offset += chunkSize;
-                page++;
-            }
+        if (!ret) {
+            _logger.println(F("Error: Write user data failed."));
         }
+#endif
     }
 
     return ret;
@@ -295,39 +344,25 @@ bool CryptnoxWallet::getPublicKey(CW_SecureSession& session,
                                   uint8_t derivePathLength,
                                   uint8_t* publicKey64) {
     bool ret = false;
+    /* SEC1 uncompressed point: 0x04 || X || Y. Some applet versions answer
+     * with the bare coordinates, so accept both. */
+    uint8_t  key[CW_SEC1_PUBKEY_SIZE] = { 0U };
+    uint16_t keyLength = 0U;
+    const uint8_t keyType = (derivePath != NULL) ? CW_SIGN_DERIVE_K1 : CW_SIGN_CURR_K1;
 
     if ((publicKey64 == NULL) ||
-        ((derivePath == NULL) != (derivePathLength == 0U)) ||
-        ((derivePathLength % 4U) != 0U) ||
-        (derivePathLength > CW_MAX_DERIVE_PATH_LENGTH)) {
-        return false;
+        ((derivePath == NULL) != (derivePathLength == 0U))) {
+#if CW_DEBUG_LOGGING
+        _logger.println(F("Error: Invalid arguments for get public key."));
+#endif
     }
-    if (!isSecureChannelOpen(session)) {
-        return false;
-    }
-
-    /* P1 mirrors the SIGN APDU's key type byte (derivation | curve), P2 = 1
-     * selects the plain public key rather than the extended (BIP32) one. */
-    const uint8_t apdu[] = {
-        0x80U, 0xC2U,
-        (uint8_t)((derivePath != NULL) ? CW_SIGN_DERIVE_K1 : CW_SIGN_CURR_K1),
-        0x01U
-    };
-
-    uint8_t  response[255U] = { 0U };
-    uint16_t responseLength = 0U;
-
-    if (_secure.aesCbcEncrypt(session, apdu, sizeof(apdu),
-                              derivePath, derivePathLength,
-                              response, &responseLength)) {
-        /* SEC1 uncompressed: 0x04 || X || Y. Some applet versions answer with
-         * the bare coordinates, so accept both rather than fail on a key that
-         * is perfectly usable. */
-        if ((responseLength >= 65U) && (response[0] == 0x04U)) {
-            ret = CW_Utils::safe_memcpy(publicKey64, 64U, &response[1], 64U);
+    else if (getPublicKey(session, keyType, derivePath, derivePathLength,
+                          key, sizeof(key), keyLength)) {
+        if ((keyLength == CW_SEC1_PUBKEY_SIZE) && (key[0] == CW_SEC1_UNCOMPRESSED_TAG)) {
+            ret = CW_Utils::safe_memcpy(publicKey64, CW_RAW_PUBKEY_SIZE, &key[1], CW_RAW_PUBKEY_SIZE);
         }
-        else if (responseLength == 64U) {
-            ret = CW_Utils::safe_memcpy(publicKey64, 64U, response, 64U);
+        else if (keyLength == CW_RAW_PUBKEY_SIZE) {
+            ret = CW_Utils::safe_memcpy(publicKey64, CW_RAW_PUBKEY_SIZE, key, CW_RAW_PUBKEY_SIZE);
         }
         else {
 #if CW_DEBUG_LOGGING
@@ -336,20 +371,20 @@ bool CryptnoxWallet::getPublicKey(CW_SecureSession& session,
         }
     }
     else {
-#if CW_DEBUG_LOGGING
-        _logger.println(F("Get public key APDU failed."));
-#endif
+        /* getPublicKey() above already logged the cause. */
     }
 
-    CW_Utils::secure_wipe(response, sizeof(response));
+    CW_Utils::secure_wipe(key, sizeof(key));
     return ret;
 }
 
 CW_SignResult CryptnoxWallet::sign(CW_SignRequest& request) {
-    CW_SignResult result;
+    CW_SignResult result{};
 
     if (validateSignRequest(request, result)) {
-        uint8_t data[CW_HASH_SIZE + CW_MAX_DERIVE_PATH_LENGTH + CW_MAX_PIN_LENGTH] = { 0U };
+        /* One secure-channel page holds the largest framed payload for either
+         * scheme: ECDSA [hash|path|pin] or Ed25519 [len(2)|msg|path|pin]. */
+        uint8_t data[CW_USER_DATA_PAGE_SIZE] = { 0U };
         uint16_t dataLength = 0U;
 
         buildSignPayload(request, data, dataLength);
@@ -357,8 +392,26 @@ CW_SignResult CryptnoxWallet::sign(CW_SignRequest& request) {
         uint8_t derResponse[255U] = { 0U };
         uint16_t derLength = 0U;
 
-        if (sendSignApdu(request, data, dataLength, derResponse, derLength, result)) {
-            if (extractRawSignature(derResponse, derLength, result)) {
+        if (sendSignApdu(request, data, dataLength, derResponse, sizeof(derResponse),
+                         derLength, result)) {
+            /* Ed25519 (EdDSA) and Schnorr BIP340 both return a raw 64-byte
+             * R||S signature with no DER wrapper; ECDSA (low-S / EOSIO) returns
+             * a DER SEQUENCE that extractRawSignature() unpacks. */
+            const bool rawSig = cwIsEd25519(request.keyType) ||
+                                (request.signatureType == CW_SIGN_SIG_SCHNORR_BIP340);
+            if (rawSig) {
+                if (derLength == CW_RAW_SIGNATURE_SIZE) {
+                    (void)CW_Utils::safe_memcpy(result.signature, sizeof(result.signature),
+                                                derResponse, CW_RAW_SIGNATURE_SIZE);
+                    debugPrintSignature(result.signature);
+                    result.errorCode = CW_OK;
+                } else {
+#if CW_DEBUG_LOGGING
+                    _logger.println(F("Error: raw signature not 64 bytes."));
+#endif
+                    result.errorCode = CW_NOK;
+                }
+            } else if (extractRawSignature(derResponse, derLength, result)) {
                 debugPrintSignature(result.signature);
                 result.errorCode = CW_OK;
             }
@@ -368,6 +421,70 @@ CW_SignResult CryptnoxWallet::sign(CW_SignRequest& request) {
     }
 
     return result;
+}
+
+bool CryptnoxWallet::getPublicKey(CW_SecureSession& session, uint8_t keyType,
+                                   const uint8_t* derivePath, uint8_t derivePathLength,
+                                   uint8_t* pubKey, uint16_t pubKeyBufSize,
+                                   uint16_t& pubKeyLength) {
+    bool ret = false;
+    pubKeyLength = 0U;
+
+    if (!isSecureChannelOpen(session)) {
+#if CW_DEBUG_LOGGING
+        _logger.println(F("Error: Secure channel not open. Cannot get public key."));
+#endif
+    }
+    else if ((pubKey == NULL) || (pubKeyBufSize == 0U)) {
+#if CW_DEBUG_LOGGING
+        _logger.println(F("Error: Invalid output buffer for get public key."));
+#endif
+    }
+    else if (!cwPubKeyTypeAllowed(keyType)) {
+#if CW_DEBUG_LOGGING
+        _logger.println(F("Error: Unsupported key type for get public key."));
+#endif
+    }
+    else if (cwIsEd25519(keyType) && (_secure.appletMajor() < 2U)) {
+#if CW_DEBUG_LOGGING
+        _logger.println(F("Error: Ed25519 requires applet 2.0+."));
+#endif
+    }
+    else if (cwSignNeedsPath(keyType) &&
+             ((derivePath == NULL) || (derivePathLength == 0U) ||
+              (derivePathLength > CW_MAX_DERIVE_PATH_LENGTH) ||
+              ((derivePathLength % 4U) != 0U))) {
+#if CW_DEBUG_LOGGING
+        _logger.println(F("Error: Invalid derivation path for get public key."));
+#endif
+    }
+    else {
+        /* GET PUBLIC KEY (APDU 0x80C2): P1 = derivation|curve, P2 = 0x01.
+         * Data is the BIP32 path for DERIVE key types, empty for current-key. */
+        uint8_t apdu[] = { 0x80U, 0xC2U, keyType, 0x01U };
+        const uint8_t* data = cwSignNeedsPath(keyType) ? derivePath : NULL;
+        uint16_t dataLen = cwSignNeedsPath(keyType) ? derivePathLength : 0U;
+
+        uint8_t  decrypted[255U] = { 0U };
+        uint16_t decryptedLen    = 0U;
+
+        if (_secure.aesCbcEncrypt(session, apdu, sizeof(apdu), data, dataLen,
+                                  decrypted, sizeof(decrypted), &decryptedLen)) {
+            if ((decryptedLen > 0U) && (decryptedLen <= pubKeyBufSize)) {
+                (void)CW_Utils::safe_memcpy(pubKey, pubKeyBufSize, decrypted, decryptedLen);
+                pubKeyLength = decryptedLen;
+                ret = true;
+            }
+#if CW_DEBUG_LOGGING
+            else {
+                _logger.println(F("Error: public key buffer too small or empty response."));
+            }
+#endif
+        }
+        CW_Utils::secure_wipe(decrypted, sizeof(decrypted));
+    }
+
+    return ret;
 }
 
 /******************************************************************
@@ -422,7 +539,7 @@ bool CryptnoxWallet::parseDerSignature(const uint8_t* der, uint8_t derLength,
  * Private methods
  ******************************************************************/
 
-bool CryptnoxWallet::isSecureChannelOpen(const CW_SecureSession& session) const {
+bool CryptnoxWallet::isSecureChannelOpen(const CW_SecureSession& session) {
     uint8_t acc = 0U;
     for (uint8_t i = 0U; i < CW_AESKEY_SIZE; i++) {
         acc |= session.aesKey[i];
@@ -449,11 +566,31 @@ bool CryptnoxWallet::validateSignRequest(const CW_SignRequest& request, CW_SignR
 #endif
         result.errorCode = CW_SIGN_KEY_TOO_SHORT;
     }
-    else if (request.hashLength > CW_HASH_SIZE) {
+    else if (cwIsEd25519(request.keyType) && (_secure.appletMajor() < 2U)) {
 #if CW_DEBUG_LOGGING
-        _logger.println(F("Error: Hash too large."));
+        _logger.println(F("Error: Ed25519 requires applet 2.0+."));
 #endif
-        result.errorCode = CW_SIGN_KEY_TOO_SHORT;
+        result.errorCode = CW_SIGN_UNSUPPORTED_KEY_TYPE;
+    }
+    /* Validate the path BEFORE sizing the message, which subtracts its length
+     * from the page: an out-of-range path would make that subtraction wrap and
+     * report a nonsense cap. getPublicKey() already applies these same rules. */
+    else if (cwSignNeedsPath(request.keyType) &&
+             ((request.derivePath == NULL) || (request.derivePathLength == 0U) ||
+              (request.derivePathLength > CW_MAX_DERIVE_PATH_LENGTH) ||
+              ((request.derivePathLength % 4U) != 0U))) {
+#if CW_DEBUG_LOGGING
+        _logger.println(F("Error: Invalid derivation path for sign."));
+#endif
+        result.errorCode = CW_SIGN_INVALID_PATH;
+    }
+    else if (request.hashLength > (cwIsEd25519(request.keyType)
+                                       ? cwMaxEd25519Message(request)
+                                       : CW_HASH_SIZE)) {
+#if CW_DEBUG_LOGGING
+        _logger.println(F("Error: Message/hash too large to sign."));
+#endif
+        result.errorCode = CW_SIGN_MESSAGE_TOO_LONG;
     }
     else if ((request.pinLessMode) && (request.keyType != CW_SIGN_PINLESS_K1)) {
 #if CW_DEBUG_LOGGING
@@ -485,13 +622,27 @@ bool CryptnoxWallet::validateSignRequest(const CW_SignRequest& request, CW_SignR
 
 void CryptnoxWallet::buildSignPayload(const CW_SignRequest& request,
                                        uint8_t* data, uint16_t& dataLength) {
-    const size_t kDataBufSize = static_cast<size_t>(CW_HASH_SIZE) + static_cast<size_t>(CW_MAX_DERIVE_PATH_LENGTH) + static_cast<size_t>(CW_MAX_PIN_LENGTH);
-    dataLength = request.hashLength;
-    (void)CW_Utils::safe_memcpy(data, kDataBufSize, request.hash, request.hashLength);
+    const size_t kDataBufSize = static_cast<size_t>(CW_USER_DATA_PAGE_SIZE);
+    dataLength = 0U;
 
-    if ((request.keyType == CW_SIGN_DERIVE_K1 || request.keyType == CW_SIGN_DERIVE_R1) &&
+    if (cwIsEd25519(request.keyType)) {
+        /* EdDSA data field (docs.cryptnox.com v2.0 SIGN command):
+         *   [2-byte big-endian message length][raw message][path?][PIN(9B, 0x00-padded)]
+         * The card hashes the raw message internally, so the length prefix is
+         * what delimits the variable-length message from the trailing fields. */
+        data[0] = (uint8_t)((request.hashLength >> 8) & 0xFFU);
+        data[1] = (uint8_t)(request.hashLength & 0xFFU);
+        dataLength = 2U;
+    }
+
+    (void)CW_Utils::safe_memcpy(data + dataLength, kDataBufSize - static_cast<size_t>(dataLength),
+                                request.hash, request.hashLength);
+    dataLength += request.hashLength;
+
+    if (cwSignNeedsPath(request.keyType) &&
         (request.derivePath != NULL) && (request.derivePathLength > 0U)) {
-        (void)CW_Utils::safe_memcpy(data + dataLength, kDataBufSize - static_cast<size_t>(dataLength), request.derivePath, request.derivePathLength);
+        (void)CW_Utils::safe_memcpy(data + dataLength, kDataBufSize - static_cast<size_t>(dataLength),
+                                    request.derivePath, request.derivePathLength);
         dataLength += request.derivePathLength;
     }
 
@@ -502,7 +653,9 @@ void CryptnoxWallet::buildSignPayload(const CW_SignRequest& request,
             pinLength++;
         }
         if (pinLength > 0U) {
-            (void)CW_Utils::safe_memcpy(data + dataLength, kDataBufSize - static_cast<size_t>(dataLength), request.pin, CW_MAX_PIN_LENGTH);
+            /* PIN is a fixed 9-byte field, right-padded with 0x00. */
+            (void)CW_Utils::safe_memcpy(data + dataLength, kDataBufSize - static_cast<size_t>(dataLength),
+                                        request.pin, CW_MAX_PIN_LENGTH);
             dataLength += CW_MAX_PIN_LENGTH;
         }
     }
@@ -510,16 +663,19 @@ void CryptnoxWallet::buildSignPayload(const CW_SignRequest& request,
 
 bool CryptnoxWallet::sendSignApdu(CW_SignRequest& request, const uint8_t* data,
                                    uint16_t dataLength, uint8_t* derResponse,
+                                   uint16_t derResponseSize,
                                    uint16_t& derLength, CW_SignResult& result) {
     bool ret = false;
-    uint8_t apdu[] = { 0x80U, 0xC0U, request.keyType, request.signatureType };
+    /* Ed25519 forces P2 = EdDSA; the caller-supplied signatureType is ignored. */
+    uint8_t p2 = cwIsEd25519(request.keyType) ? CW_SIGN_SIG_EDDSA : request.signatureType;
+    uint8_t apdu[] = { 0x80U, 0xC0U, request.keyType, p2 };
 
 #if CW_DEBUG_LOGGING
     _logger.println(F("Sending SIGN APDU..."));
 #endif
 
     if (_secure.aesCbcEncrypt(request.session, apdu, sizeof(apdu), data, dataLength,
-                               derResponse, &derLength)) {
+                               derResponse, derResponseSize, &derLength)) {
         ret = true;
     }
     else {
