@@ -37,7 +37,7 @@ static_assert(!std::is_copy_assignable<CW_SecureSession>::value, "CW_SecureSessi
 static uint16_t xorCbc(const uint8_t* in, uint16_t len, uint8_t* out,
                        const uint8_t* key, uint8_t* iv, bool bitPadding) {
     uint8_t buf[512] = { 0U };
-    memcpy(buf, in, len);
+    if (len > 0U) { memcpy(buf, in, len); }   /* in may be NULL for an empty payload */
     uint16_t total = len;
     if (bitPadding) {
         buf[total++] = 0x80U;
