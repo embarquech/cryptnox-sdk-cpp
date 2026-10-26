@@ -44,6 +44,17 @@
  */
 class CW_CryptoProvider {
 public:
+    /* Security requirements on every implementation. The SDK relies on them
+     * and does not re-check:
+     *  - random(): CSPRNG only; return false rather than give weak output.
+     *  - makeKey(): keys from that CSPRNG, private key in [1, n-1].
+     *  - ecdh(): reject a point off the curve or at infinity; output the raw
+     *    32-byte X coordinate.
+     *  - ecdsaVerify(): reject r or s outside [1, n-1] and invalid public keys
+     *    (the CVE-2022-21449 class would accept r = s = 0 for any key).
+     *  - AES: return 0 on failure, never write past the padded length, and
+     *    with bitPadding the decrypt rejects (returns 0 for) bad padding. */
+
     /**
      * @brief Compute SHA-256 over a contiguous data buffer.
      *
@@ -75,7 +86,7 @@ public:
      * @param[in,out] iv      16-byte IV; updated to last cipher block on return.
      * @param[in]  bitPadding true = ISO/IEC 9797-1 Method 2 (Bit) padding;
      *                        false = Null padding (no padding added).
-     * @return Length of the ciphertext written to @p out.
+     * @return Length of the ciphertext written to @p out, 0 on failure.
      */
     virtual uint16_t aesCbcEncrypt(const uint8_t* in, uint16_t len, uint8_t* out,
                                    const uint8_t* key, uint8_t keyLen,
@@ -91,7 +102,7 @@ public:
      * @param[in]  keyLen     AES key length in bytes.
      * @param[in,out] iv      16-byte IV used as decrypt IV.
      * @param[in]  bitPadding true = Bit padding removal; false = Null padding (no removal).
-     * @return Length of the plaintext written to @p out.
+     * @return Length of the plaintext written to @p out, 0 on failure or bad padding.
      */
     virtual uint16_t aesCbcDecrypt(uint8_t* in, uint16_t len, uint8_t* out,
                                    const uint8_t* key, uint8_t keyLen,
@@ -137,7 +148,8 @@ public:
      * @param[in] hashLen   Length of the hash in bytes.
      * @param[in] sig       64-byte raw signature (r[32]||s[32]).
      * @param[in] curve     Curve identifier for the verification operation.
-     * @return true if the signature is valid, false otherwise.
+     * @return true if the signature is valid, false otherwise. MUST be false
+     *         when r or s is outside [1, n-1].
      */
     virtual bool ecdsaVerify(const uint8_t* pubKey64,
                              const uint8_t* hash, size_t hashLen,

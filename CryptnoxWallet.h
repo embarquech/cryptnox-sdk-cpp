@@ -72,11 +72,11 @@ struct CW_SignRequest {
     CW_SecureSession& session;       /**< Reference to an open secure session. */
     uint8_t keyType {};                 /**< Key / path type — one of the @c CW_SIGN_CURR_*, @c CW_SIGN_DERIVE_*, @c CW_SIGN_PINLESS_K1, @c CW_SIGN_*_ED25519 constants. */
     uint8_t signatureType {};           /**< Signature format — @c CW_SIGN_SIG_ECDSA_LOW_S / EOSIO / SCHNORR_BIP340. Ignored for Ed25519 key types (EdDSA is forced). */
-    uint8_t pin[CW_MAX_PIN_LENGTH] {};  /**< PIN bytes (4–9 ASCII digits). Zero-padded; cleared in the destructor. */
+    uint8_t pin[CW_MAX_PIN_LENGTH] {};  /**< PIN bytes (4–9 ASCII digits) up to the first 0x00; only those are sent. All zero = no PIN in the payload (PIN already verified with @ref CryptnoxWallet::verifyPin). Wiped by @ref CryptnoxWallet::sign and the destructor. */
     bool pinLessMode {};                /**< false = PIN path, true = PIN-less path (requires @c keyType == @ref CW_SIGN_PINLESS_K1). */
     const uint8_t* hash {};             /**< Data to sign. For ECDSA: a digest (typically 32 bytes). For Ed25519 (@c CW_SIGN_*_ED25519): the RAW message — the card hashes it internally. */
-    uint8_t hashLength {};              /**< Length of @c hash. ECDSA: ≤ @ref CW_HASH_SIZE. Ed25519: whatever the page leaves after the length prefix, the path actually sent and the PIN — 197 B with the current key, 181 B with a 4-level path; @ref CW_MAX_ED25519_MESSAGE_LENGTH (177) is the worst case. */
-    const uint8_t* derivePath {};       /**< BIP32 path bytes for DERIVE modes; @c NULL for CURR / PINLESS modes. */
+    uint8_t hashLength {};              /**< Length of @c hash. ECDSA / Schnorr: exactly @ref CW_HASH_SIZE. Ed25519: whatever the page leaves after the length prefix, the path actually sent and the PIN — 197 B with the current key, 181 B with a 4-level path; @ref CW_MAX_ED25519_MESSAGE_LENGTH (177) is the worst case. */
+    const uint8_t* derivePath {};       /**< BIP32 path bytes for DERIVE modes; must be @c NULL (length 0) for CURR / PINLESS modes. */
     uint8_t derivePathLength {};        /**< Length of @c derivePath in bytes (must be a multiple of 4). */
 
     /**
@@ -112,6 +112,7 @@ struct CW_SignRequest {
 struct CW_SignResult {
     uint8_t signature[CW_RAW_SIGNATURE_SIZE] {}; /**< Raw 64-byte signature: ECDSA r[32]||s[32], or Ed25519 R[32]||S[32]. Zero on failure. */
     uint8_t errorCode {};                        /**< @ref CW_OK on success, otherwise a @c CW_SIGN_* / @c CW_INVALID_SESSION code. */
+    uint16_t cardSw {};                          /**< Card status word once the SIGN APDU was sent (0x9000 on success, 0x63Cx on a wrong PIN with x tries left), 0 if none was received. A non-9000 SW is unauthenticated: see @ref CW_SecureChannel::lastCardSw. */
 
     /** @brief Construct a default-failure result. */
     CW_SignResult() : errorCode(CW_NOK) {
@@ -217,8 +218,8 @@ public:
      * Wipes any session keys and resets the NFC reader so the next card
      * detection cycle starts from a clean state.
      *
-     * @param[in,out] session Session to clear. Safe to pass a never-connected
-     *                        or partially-connected session.
+     * @param[in,out] session Session to clear (always wiped). Safe to pass a
+     *                        never-connected or partially-connected session.
      *
      * @pre Must be called at the end of every card-processing iteration —
      *      including iterations where @ref connect() failed — otherwise the
@@ -235,7 +236,9 @@ public:
      *                         succeeds, populated with the card's owner
      *                         name and email (ASCII, NUL-terminated).
      * @return true if the secure exchange completed and (when @c info is
-     *         non-NULL) parsing the name/email fields succeeded.
+     *         non-NULL) parsing the name/email fields succeeded. @p info is
+     *         only written on success; fields with bytes outside printable
+     *         ASCII are refused.
      */
     bool getCardInfo(CW_SecureSession& session, CW_CardInfo* info = NULL);
 
@@ -303,8 +306,9 @@ public:
      * signature type:
      *
      * - **ECDSA** (@ref CW_SIGN_SIG_ECDSA_LOW_S / @ref CW_SIGN_SIG_ECDSA_EOSIO):
-     *   @c hash is a 32-byte digest. Payload: hash || optional BIP32 path ||
-     *   optional PIN. The card's DER signature is unpacked to r[32] || s[32].
+     *   @c hash is exactly a 32-byte digest. Payload: hash || optional BIP32
+     *   path || optional PIN. The card's DER signature is unpacked to
+     *   r[32] || s[32]; zero or malformed r / s is refused.
      * - **Ed25519** (@c CW_SIGN_*_ED25519, applet 2.0+): @c hash is the RAW
      *   message, the card hashes it. Payload: len(2, big-endian) || message ||
      *   optional path || optional PIN. P2 is forced to @ref CW_SIGN_SIG_EDDSA.
@@ -324,20 +328,30 @@ public:
      *
      * @retval CW_OK                                  Signature valid.
      * @retval CW_INVALID_SESSION                     Secure channel not open.
-     * @retval CW_SIGN_KEY_TOO_SHORT                  Missing hash buffer / zero length.
-     * @retval CW_SIGN_INVALID_PATH                   Bad derivation path.
+     * @retval CW_SIGN_KEY_TOO_SHORT                  Missing hash buffer, zero length, or an
+     *                                                ECDSA / Schnorr digest that is not 32 bytes.
+     * @retval CW_SIGN_INVALID_PATH                   Bad derivation path, or a path with a
+     *                                                current-key / PIN-less key type.
      * @retval CW_SIGN_MESSAGE_TOO_LONG               Hash/message too long for the key type.
-     * @retval CW_SIGN_UNSUPPORTED_KEY_TYPE           Ed25519 key type on an applet older than 2.0.
-     * @retval CW_SIGN_NO_KEY_LOADED                  Card rejected the SIGN APDU.
-     * @retval CW_SIGN_PIN_INCORRECT                  PIN length out of range.
+     * @retval CW_SIGN_UNSUPPORTED_KEY_TYPE           Unknown key or signature type, derive-and-make-current,
+     *                                                or Ed25519 on an applet older than 2.0.
+     * @retval CW_SIGN_PIN_INCORRECT                  PIN malformed locally (1-3 bytes or not
+     *                                                ASCII digits); nothing was sent.
+     * @retval CW_SIGN_PIN_REJECTED                   Card refused the PIN (SW 63Cx, x = tries
+     *                                                left, in @c cardSw). Do not retry the same PIN.
+     * @retval CW_SIGN_NO_KEY_LOADED                  Card refused the SIGN APDU with another SW
+     *                                                (in @c cardSw).
+     * @retval CW_SIGN_CHANNEL_ERROR                  Transport, MAC or response-format failure;
+     *                                                the session is cleared, reconnect.
+     * @retval CW_NOK                                 Malformed signature in the card's answer.
      * @retval CW_SIGN_KEY_TOO_SHORT_WITH_PINLESS_MODE
-     *                                                PIN-less mode requested but
-     *                                                @c keyType is not
-     *                                                @ref CW_SIGN_PINLESS_K1.
+     *                                                @c pinLessMode and @ref CW_SIGN_PINLESS_K1
+     *                                                not used together.
      *
      * @warning When @c pinLessMode is false the @c request.pin field must be
-     *          populated. The destructor of @ref CW_SignRequest securely
-     *          wipes the PIN, but the caller must zero any other copy.
+     *          populated (or all zero after @ref verifyPin). sign() wipes
+     *          @c request.pin before returning, so set it again before reusing
+     *          the request; the caller must zero any other copy.
      */
     CW_SignResult sign(CW_SignRequest& request);
 
@@ -351,13 +365,15 @@ public:
      * @param[in,out] session          Valid secure session.
      * @param[in]     keyType          One of the @c CW_SIGN_CURR_* / @c CW_SIGN_DERIVE_* constants;
      *                                 anything else (derive-and-make-current, PIN-less, unknown curve) is refused.
-     * @param[in]     derivePath       BIP32 path bytes for DERIVE key types; @c NULL for current-key.
-     * @param[in]     derivePathLength Length of @p derivePath (multiple of 4); 0 for current-key.
+     * @param[in]     derivePath       BIP32 path bytes for DERIVE key types; must be @c NULL for current-key.
+     * @param[in]     derivePathLength Length of @p derivePath (multiple of 4); must be 0 for current-key.
      * @param[out]    pubKey           Buffer to receive the raw key bytes.
      * @param[in]     pubKeyBufSize    Size of @p pubKey (≥ 32 for Ed25519, ≥ 65 for k1/r1).
      * @param[out]    pubKeyLength     Actual number of key bytes written on success.
      * @return true on success, false on closed/invalid session, bad parameters,
-     *         a buffer too small for the returned key, or transport / MAC failure.
+     *         a buffer too small for the returned key, a key of the wrong length
+     *         or format (Ed25519: 32 bytes; k1/r1: 65 bytes starting 0x04, or a
+     *         bare 64-byte X || Y), or transport / MAC failure.
      *
      * @note Ed25519 key types require applet v2.0+. On an older applet this
      *       returns false without sending anything.
@@ -402,7 +418,9 @@ public:
      * @param[out] rLength   Actual r length written.
      * @param[out] s         Buffer for s (at least 33 bytes).
      * @param[out] sLength   Actual s length written.
-     * @return true on success, false on malformed DER.
+     * @return true on success, false on malformed DER: a missing tag or length
+     *         byte, an empty or over-long INTEGER, a 33-byte INTEGER without
+     *         the 0x00 pad, or r / s equal to 0.
      */
     static bool parseDerSignature(const uint8_t* der, uint8_t derLength,
                                   uint8_t* r, uint8_t& rLength,

@@ -1,7 +1,6 @@
 name: Static analysis
 permissions:
   contents: read
-  pull-requests: write
 on:
   push:
   pull_request:
@@ -67,6 +66,43 @@ jobs:
       - name: Host tests
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I . \
-            tests/test_pr28.cpp CryptnoxWallet.cpp CW_SecureChannel.cpp CW_Utils.cpp \
-            -o test_pr28
-          ./test_pr28
+            tests/test_host.cpp CryptnoxWallet.cpp CW_SecureChannel.cpp CW_Utils.cpp \
+            -o test_host
+          ./test_host
+
+      - name: Host tests (ASan + UBSan)
+        run: |
+          g++ -std=c++17 -g -O1 -fsanitize=address,undefined -fno-sanitize-recover=all -I . \
+            tests/test_host.cpp CryptnoxWallet.cpp CW_SecureChannel.cpp CW_Utils.cpp \
+            -o test_host_san
+          ./test_host_san
+
+      - name: TRON self-test
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -DCW_TRON_SELFTEST -I . \
+            CW_Tron.cpp CW_Utils.cpp -o cw_tron_selftest
+          ./cw_tron_selftest
+
+      # Each of these must FAIL to compile: disabling card verification needs
+      # the explicit opt-in, never in an NDEBUG build, and the applet gate
+      # must not silently truncate.
+      - name: Build-flag guards
+        run: |
+          for flags in "-DCW_VERIFY_CERT=0" "-DCW_VERIFY_CERT=0&&1" \
+                       "-DCW_VERIFY_CERT=0 -DCW_ALLOW_UNVERIFIED_CARD=1 -DNDEBUG" \
+                       "-DCW_MIN_APPLET_MAJOR=256"; do
+            if echo '#include "CW_Defs.h"' | g++ -x c++ -std=c++17 -fsyntax-only -I . $flags - 2>/dev/null; then
+              echo "::error::'$flags' compiled but must be refused."
+              exit 1
+            fi
+          done
+          echo '#include "CW_Defs.h"' | g++ -x c++ -std=c++17 -fsyntax-only -I . \
+            -DCW_VERIFY_CERT=0 -DCW_ALLOW_UNVERIFIED_CARD=1 -
+
+      - name: DER fuzzer (60 s)
+        run: |
+          sudo apt-get install -y clang
+          clang++ -std=c++17 -g -O1 -fsanitize=fuzzer,address,undefined \
+            -DCW_FUZZ_BUILD=1 -DCW_DEBUG_LOGGING=0 -I . fuzz/fuzz_der.cpp -o fuzz_der
+          mkdir -p fuzz-corpus
+          ./fuzz_der fuzz-corpus -max_total_time=60 -max_len=512

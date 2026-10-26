@@ -55,8 +55,8 @@
  * @defgroup util Utilities & shared definitions
  * @brief Platform-independent helpers and shared constants.
  *
- * Includes @ref CW_Utils (constant-time compare, secure wipe, safe memcpy,
- * RNG), the @c CW_CERT_* / @c CW_SIGN_* error codes, and the trusted-CA
+ * Includes @ref CW_Utils (constant-time compare, secure wipe, safe memcpy),
+ * the @c CW_CERT_* / @c CW_SIGN_* error codes, and the trusted-CA
  * key table (@ref CW_TrustedKeys.h).
  */
 
@@ -106,12 +106,14 @@
 
 /* SIGN-specific error codes */
 #define CW_SIGN_KEY_TOO_SHORT                  (0x80U)
-#define CW_SIGN_NO_KEY_LOADED                  (0x81U)
-#define CW_SIGN_PIN_INCORRECT                  (0x82U)
+#define CW_SIGN_NO_KEY_LOADED                  (0x81U)  /**< Card refused the SIGN command with an SW other than 63Cx; see CW_SignResult::cardSw */
+#define CW_SIGN_PIN_INCORRECT                  (0x82U)  /**< PIN malformed locally (1-3 bytes, or not ASCII digits); nothing was sent */
 #define CW_SIGN_KEY_TOO_SHORT_WITH_PINLESS_MODE (0x83U)
 #define CW_SIGN_INVALID_PATH                   (0x84U)  /**< Derivation path missing, too long or not a multiple of 4 */
 #define CW_SIGN_MESSAGE_TOO_LONG               (0x85U)  /**< Hash/message longer than the key type allows */
-#define CW_SIGN_UNSUPPORTED_KEY_TYPE           (0x86U)  /**< Key type needs a newer applet (Ed25519 on < 2.0) */
+#define CW_SIGN_UNSUPPORTED_KEY_TYPE           (0x86U)  /**< Unknown key / signature type, or one that needs a newer applet (Ed25519 on < 2.0) */
+#define CW_SIGN_PIN_REJECTED                   (0x87U)  /**< Card refused the PIN (SW 63Cx, x = tries left); see CW_SignResult::cardSw */
+#define CW_SIGN_CHANNEL_ERROR                  (0x88U)  /**< Transport, MAC or channel failure: the card's answer is unknown, CW_SignResult::cardSw is 0 */
 
 /* Size constants */
 #define CW_RAW_SIGNATURE_SIZE         (64U)    /**< Raw signature (r[32] + s[32], or Ed25519 R||S) */
@@ -206,6 +208,13 @@ struct CW_SecureSession {
     /** @brief Zero-initialise all session keys, IV and counter. */
     CW_SecureSession() = default;
 
+    /** @brief Wipes the keys when the session goes out of scope. */
+    ~CW_SecureSession() { clear(); }
+
+    /* Copies of Kenc/Kmac would survive disconnect(). */
+    CW_SecureSession(const CW_SecureSession&) = delete;
+    CW_SecureSession& operator=(const CW_SecureSession&) = delete;
+
     /** @brief Securely clear all session keys and IV. */
     void clear() {
         CW_Utils::secure_wipe(aesKey, sizeof(aesKey));
@@ -243,8 +252,11 @@ struct CW_SecureSession {
 #ifndef CW_VERIFY_CERT
 #define CW_VERIFY_CERT 1
 #endif
-#if CW_VERIFY_CERT == 0
-#  if defined(CW_ALLOW_UNVERIFIED_CARD) && (CW_ALLOW_UNVERIFIED_CARD == 1)
+/* !(...) rather than == 0: -DCW_VERIFY_CERT="0&&1" must not slip past. */
+#if !(CW_VERIFY_CERT)
+#  if defined(CW_ALLOW_UNVERIFIED_CARD) && (CW_ALLOW_UNVERIFIED_CARD == 1) && defined(NDEBUG)
+#    error "CW_ALLOW_UNVERIFIED_CARD=1 in an NDEBUG (release) build: card authenticity verification must stay on."
+#  elif defined(CW_ALLOW_UNVERIFIED_CARD) && (CW_ALLOW_UNVERIFIED_CARD == 1)
 #    warning "CW_VERIFY_CERT=0: card authenticity verification is compiled out (CRIT-02/H-07). Never ship this."
 #  else
 #    error "CW_VERIFY_CERT=0 disables card authenticity verification (CRIT-02/H-07). Add -DCW_ALLOW_UNVERIFIED_CARD=1 for bring-up builds only."
@@ -263,6 +275,9 @@ struct CW_SecureSession {
 #ifndef CW_MIN_APPLET_MAJOR
 #define CW_MIN_APPLET_MAJOR 0U
 #endif
+#if (CW_MIN_APPLET_MAJOR) > 255
+#  error "CW_MIN_APPLET_MAJOR must be 0..255 (the SELECT version byte); a larger value would truncate and disable the gate."
+#endif
 
 /**
  * Set to 1 to enable library-internal debug logging via CW_Logger.
@@ -272,8 +287,10 @@ struct CW_SecureSession {
  * of a 256 KB image on the Sign example). Same order of magnitude on
  * every constrained MCU.
  *
- * Also leaks session state over UART (SEC-012). Bring-up only, never in
- * release builds.
+ * No key, PIN, salt or plaintext is logged, but the output (status words,
+ * failure reasons) still helps someone probing the card. Bring-up only.
+ * The NDEBUG guard below only fires where the build defines NDEBUG, which
+ * Arduino, PlatformIO and default ESP-IDF builds do not.
  */
 #ifndef CW_DEBUG_LOGGING
 #  define CW_DEBUG_LOGGING 0
@@ -281,8 +298,7 @@ struct CW_SecureSession {
 
 #if CW_DEBUG_LOGGING && defined(NDEBUG)
 #  error "CW_DEBUG_LOGGING=1 is set but NDEBUG is defined (release/optimised build). " \
-         "Debug logging must not ship in production firmware — it leaks session state " \
-         "over UART.  Remove -DCW_DEBUG_LOGGING=1 from your release build flags (SEC-012)."
+         "Debug logging must not ship in production firmware.  Remove -DCW_DEBUG_LOGGING=1 from your release build flags (SEC-012)."
 #endif
 
 #endif // CW_DEFS_H

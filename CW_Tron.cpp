@@ -278,10 +278,13 @@ static bool tron_checksum(const uint8_t* addressBytes, CW_CryptoProvider& crypto
     return ret;
 }
 
-bool CW_Tron::addressBytesFromPublicKey(const uint8_t* publicKey64, uint8_t* out) {
+bool CW_Tron::addressBytesFromPublicKey(const uint8_t* publicKey64, size_t publicKeyLen,
+                                        uint8_t* out) {
     bool ret = false;
 
-    if ((publicKey64 != NULL) && (out != NULL)) {
+    /* Exactly X || Y: a 65-byte SEC1 key (0x04 prefix) would hash the wrong
+     * bytes into a valid-looking address nobody controls. */
+    if ((publicKey64 != NULL) && (out != NULL) && (publicKeyLen == PUBLIC_KEY_BYTES)) {
         uint8_t digest[KECCAK_DIGEST_BYTES] = { 0U };
         if (CW_Tron::keccak256(publicKey64, PUBLIC_KEY_BYTES, digest)) {
             out[0] = CW_TRON_ADDRESS_PREFIX;
@@ -318,7 +321,7 @@ bool CW_Tron::addressFromPublicKey(const uint8_t* publicKey64,
                                    char* out, size_t outSize) {
     uint8_t addressBytes[CW_TRON_ADDRESS_BYTES] = { 0U };
 
-    return CW_Tron::addressBytesFromPublicKey(publicKey64, addressBytes) &&
+    return CW_Tron::addressBytesFromPublicKey(publicKey64, PUBLIC_KEY_BYTES, addressBytes) &&
            CW_Tron::encodeAddress(addressBytes, crypto, out, outSize);
 }
 
@@ -327,7 +330,7 @@ bool CW_Tron::decodeAddress(const char* address, CW_CryptoProvider& crypto,
     bool ret = false;
 
     if ((address != NULL) && (out != NULL) &&
-        (strlen(address) == CW_TRON_ADDRESS_STR_LEN)) {
+        (strnlen(address, CW_TRON_ADDRESS_STR_SIZE) == CW_TRON_ADDRESS_STR_LEN)) {
 
         uint8_t payload[TRON_PAYLOAD_BYTES] = { 0U };
         uint8_t checksum[TRON_CHECKSUM_BYTES] = { 0U };
@@ -387,7 +390,8 @@ static void check_address_bytes(void) {
         0xFCU,0xB7U,0xB8U,0xC2U,0x65U,0x90U,0x29U,0x39U,0x5BU,0xDFU
     };
     uint8_t addr[21];
-    assert(CW_Tron::addressBytesFromPublicKey(pub, addr));
+    assert(CW_Tron::addressBytesFromPublicKey(pub, sizeof(pub), addr));
+    assert(!CW_Tron::addressBytesFromPublicKey(pub, 65U, addr));  /* SEC1 length refused */
     assert(memcmp(addr, expected, sizeof(expected)) == 0);
 }
 
