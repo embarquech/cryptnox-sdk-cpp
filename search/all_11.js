@@ -21,13 +21,14 @@ var searchData=
   ['sendsignapdu_18',['sendSignApdu',['../classCryptnoxWallet.html#a4dd3b06ea634ddf8805e6d5a0ece9199',1,'CryptnoxWallet']]],
   ['sent_19',['sent',['../classFakeNfc.html#a7309c94a2f72ed5d49b1ce0ee6b37ddb',1,'FakeNfc']]],
   ['session_20',['session',['../structCW__SignRequest.html#a2eeb94ed74e9a34babd32fd38c3cc251',1,'CW_SignRequest']]],
-  ['sha256_21',['sha256',['../classCW__CryptoProvider.html#ab4a15aeabc457d53b07dcd9a9966bd02',1,'CW_CryptoProvider::sha256()'],['../classFakeCrypto.html#af9493a9a68c74460674c75a21c76e6b1',1,'FakeCrypto::sha256()']]],
-  ['sha512_22',['sha512',['../classCW__CryptoProvider.html#a651c5581b03ab0227f591ade247ea753',1,'CW_CryptoProvider::sha512()'],['../classFakeCrypto.html#a28ad8019ca64eb6f464c71c422eb8432',1,'FakeCrypto::sha512()']]],
-  ['shared_20definitions_23',['Utilities &amp;amp; shared definitions',['../group__util.html',1,'']]],
-  ['sign_24',['sign',['../classCryptnoxWallet.html#a539f73749cce012f4a973840c76d1275',1,'CryptnoxWallet']]],
-  ['signature_25',['signature',['../structCW__SignResult.html#aefde572eb2e1e8778f602f46858c090f',1,'CW_SignResult']]],
-  ['signaturetype_26',['signatureType',['../structCW__SignRequest.html#a0324c690439b553d0458408430a8b905',1,'CW_SignRequest']]],
-  ['signwith_27',['signWith',['../test__pr28_8cpp.html#a2fabac3a428ec579e1e197389e190bb7',1,'test_pr28.cpp']]],
-  ['sleep_5fms_28',['sleep_ms',['../classCW__Platform.html#a35c85f735804035836a535c0d2fa8418',1,'CW_Platform::sleep_ms()'],['../classNullPlatform.html#af673832a639b05035c92933d97ae481b',1,'NullPlatform::sleep_ms()']]],
-  ['standalone_29',['Building standalone',['../index.html#autotoc_md10',1,'']]]
+  ['sessioniv_21',['sessionIv',['../classFakeCrypto.html#a11e2a0f02b50b4ddd6e89ecb7bd046cc',1,'FakeCrypto']]],
+  ['sha256_22',['sha256',['../classCW__CryptoProvider.html#ab4a15aeabc457d53b07dcd9a9966bd02',1,'CW_CryptoProvider::sha256()'],['../classFakeCrypto.html#af9493a9a68c74460674c75a21c76e6b1',1,'FakeCrypto::sha256()']]],
+  ['sha512_23',['sha512',['../classCW__CryptoProvider.html#a651c5581b03ab0227f591ade247ea753',1,'CW_CryptoProvider::sha512()'],['../classFakeCrypto.html#a28ad8019ca64eb6f464c71c422eb8432',1,'FakeCrypto::sha512()']]],
+  ['shared_20definitions_24',['Utilities &amp;amp; shared definitions',['../group__util.html',1,'']]],
+  ['sign_25',['sign',['../classCryptnoxWallet.html#a539f73749cce012f4a973840c76d1275',1,'CryptnoxWallet']]],
+  ['signature_26',['signature',['../structCW__SignResult.html#aefde572eb2e1e8778f602f46858c090f',1,'CW_SignResult']]],
+  ['signaturetype_27',['signatureType',['../structCW__SignRequest.html#a0324c690439b553d0458408430a8b905',1,'CW_SignRequest']]],
+  ['signwith_28',['signWith',['../test__pr28_8cpp.html#a2fabac3a428ec579e1e197389e190bb7',1,'test_pr28.cpp']]],
+  ['sleep_5fms_29',['sleep_ms',['../classCW__Platform.html#a35c85f735804035836a535c0d2fa8418',1,'CW_Platform::sleep_ms()'],['../classNullPlatform.html#af673832a639b05035c92933d97ae481b',1,'NullPlatform::sleep_ms()']]],
+  ['standalone_30',['Building standalone',['../index.html#autotoc_md10',1,'']]]
 ];

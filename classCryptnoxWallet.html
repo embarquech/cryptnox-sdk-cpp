@@ -173,8 +173,8 @@ Private Attributes</h2></td></tr>
 <div class="line">wallet.disconnect(session);   <span class="comment">// mandatory — even on connect() failure</span></div>
 <div class="ttc" id="aclassCryptnoxWallet_html_a440a5e156f543891a23f2e9668ddad91"><div class="ttname"><a href="#a440a5e156f543891a23f2e9668ddad91">CryptnoxWallet::CryptnoxWallet</a></div><div class="ttdeci">CryptnoxWallet(CW_NfcTransport &amp;driver, CW_Logger &amp;logger, CW_CryptoProvider &amp;crypto, CW_Platform &amp;platform)</div><div class="ttdoc">Construct a CryptnoxWallet.</div><div class="ttdef"><b>Definition</b> <a href="CryptnoxWallet_8cpp_source.html#l00079">CryptnoxWallet.cpp:79</a></div></div>
 <div class="ttc" id="astructCW__SecureSession_html"><div class="ttname"><a href="structCW__SecureSession.html">CW_SecureSession</a></div><div class="ttdoc">Holds cryptographic session state for reentrant secure channel operations.</div><div class="ttdef"><b>Definition</b> <a href="CW__Defs_8h_source.html#l00200">CW_Defs.h:200</a></div></div>
-<div class="ttc" id="atest__pr28_8cpp_html_a9b241c970a9a57b65d0d560c5b4c86d8"><div class="ttname"><a href="test__pr28_8cpp.html#a9b241c970a9a57b65d0d560c5b4c86d8">logger</a></div><div class="ttdeci">static NullLogger logger</div><div class="ttdef"><b>Definition</b> <a href="test__pr28_8cpp_source.html#l00130">test_pr28.cpp:130</a></div></div>
-<div class="ttc" id="atest__pr28_8cpp_html_ae13897b5c93ee69436c574b60fec7516"><div class="ttname"><a href="test__pr28_8cpp.html#ae13897b5c93ee69436c574b60fec7516">platform</a></div><div class="ttdeci">static NullPlatform platform</div><div class="ttdef"><b>Definition</b> <a href="test__pr28_8cpp_source.html#l00131">test_pr28.cpp:131</a></div></div>
+<div class="ttc" id="atest__pr28_8cpp_html_a9b241c970a9a57b65d0d560c5b4c86d8"><div class="ttname"><a href="test__pr28_8cpp.html#a9b241c970a9a57b65d0d560c5b4c86d8">logger</a></div><div class="ttdeci">static NullLogger logger</div><div class="ttdef"><b>Definition</b> <a href="test__pr28_8cpp_source.html#l00133">test_pr28.cpp:133</a></div></div>
+<div class="ttc" id="atest__pr28_8cpp_html_ae13897b5c93ee69436c574b60fec7516"><div class="ttname"><a href="test__pr28_8cpp.html#ae13897b5c93ee69436c574b60fec7516">platform</a></div><div class="ttdeci">static NullPlatform platform</div><div class="ttdef"><b>Definition</b> <a href="test__pr28_8cpp_source.html#l00134">test_pr28.cpp:134</a></div></div>
 </div><!-- fragment --></dd></dl>
 <dl class="section note"><dt>Note</dt><dd>Single-shot use — the class is non-copyable. Reuse the same <a class="el" href="classCryptnoxWallet.html">CryptnoxWallet</a> instance across multiple card sessions; do not construct one per APDU. </dd></dl>
 
@@ -222,7 +222,7 @@ Private Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00079">79</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00412">_logger</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00413">_platform</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00414">_secure</a>, <a class="el" href="test__pr28_8cpp_source.html#l00130">logger</a>, and <a class="el" href="test__pr28_8cpp_source.html#l00131">platform</a>.</p>
+<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00412">_logger</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00413">_platform</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00414">_secure</a>, <a class="el" href="test__pr28_8cpp_source.html#l00133">logger</a>, and <a class="el" href="test__pr28_8cpp_source.html#l00134">platform</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="#a4cfad878f6d5c649b83d30b5ecf23527">CryptnoxWallet()</a>, and <a class="el" href="#a58a42d63ad36000234d879e44f28fd8b">operator=()</a>.</p>
 
@@ -353,7 +353,7 @@ On false: <code class="param">session</code> is zero-wiped. </dd></dl>
 
 <p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00412">_logger</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00413">_platform</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00414">_secure</a>, <a class="el" href="CW__Defs_8h_source.html#l00210">CW_SecureSession::clear()</a>, <a class="el" href="CW__Defs_8h_source.html#l00145">CW_CONNECT_MAX_ATTEMPTS</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00127">establishSecureChannel()</a>, and <a class="el" href="platform__compat_8h_source.html#l00042">F</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="test__pr28_8cpp_source.html#l00239">selectOnly()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="test__pr28_8cpp_source.html#l00249">selectOnly()</a>.</p>
 
 </div>
 </div>
@@ -576,7 +576,7 @@ On false: <code class="param">session</code> is zero-wiped. </dd></dl>
 
 <p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00412">_logger</a>, <a class="el" href="CW__Defs_8h_source.html#l00120">CW_RAW_PUBKEY_SIZE</a>, <a class="el" href="CW__Defs_8h_source.html#l00121">CW_SEC1_PUBKEY_SIZE</a>, <a class="el" href="CW__Defs_8h_source.html#l00122">CW_SEC1_UNCOMPRESSED_TAG</a>, <a class="el" href="CW__Defs_8h_source.html#l00088">CW_SIGN_CURR_K1</a>, <a class="el" href="CW__Defs_8h_source.html#l00090">CW_SIGN_DERIVE_K1</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00342">getPublicKey()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="test__pr28_8cpp_source.html#l00295">check_ed25519_applet_gate()</a>, <a class="el" href="test__pr28_8cpp_source.html#l00249">check_pubkey_allow_list()</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00342">getPublicKey()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="test__pr28_8cpp_source.html#l00305">check_ed25519_applet_gate()</a>, <a class="el" href="test__pr28_8cpp_source.html#l00259">check_pubkey_allow_list()</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00342">getPublicKey()</a>.</p>
 
 </div>
 </div>
@@ -914,7 +914,7 @@ On false: <code class="param">session</code> is zero-wiped. </dd></dl>
 
 <p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00412">_logger</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00623">buildSignPayload()</a>, <a class="el" href="CW__Defs_8h_source.html#l00081">CW_NOK</a>, <a class="el" href="CW__Defs_8h_source.html#l00080">CW_OK</a>, <a class="el" href="CW__Defs_8h_source.html#l00117">CW_RAW_SIGNATURE_SIZE</a>, <a class="el" href="CW__Defs_8h_source.html#l00104">CW_SIGN_SIG_SCHNORR_BIP340</a>, <a class="el" href="CW__Defs_8h_source.html#l00141">CW_USER_DATA_PAGE_SIZE</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00023">cwIsEd25519()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00754">debugPrintSignature()</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00114">CW_SignResult::errorCode</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00691">extractRawSignature()</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00073">CW_SignRequest::keyType</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00664">sendSignApdu()</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00113">CW_SignResult::signature</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00074">CW_SignRequest::signatureType</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00554">validateSignRequest()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="test__pr28_8cpp_source.html#l00286">signWith()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="test__pr28_8cpp_source.html#l00296">signWith()</a>.</p>
 
 </div>
 </div>

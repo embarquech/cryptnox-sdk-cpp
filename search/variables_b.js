@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['maccounter_0',['macCounter',['../structCW__SecureSession.html#a966f0763d866b0ba93e80c4749f2af97',1,'CW_SecureSession']]],
-  ['mackey_1',['macKey',['../structCW__SecureSession.html#a1ed577efda4e4071cd585fbf1e922f88',1,'CW_SecureSession']]]
+  ['last_0',['last',['../classFakeNfc.html#a7782162dfa30f7643c39018ee2e39f42',1,'FakeNfc']]],
+  ['logger_1',['logger',['../test__pr28_8cpp.html#a9b241c970a9a57b65d0d560c5b4c86d8',1,'test_pr28.cpp']]]
 ];
