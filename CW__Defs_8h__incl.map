@@ -1,16 +1,16 @@
 <map id="CW_Defs.h" name="CW_Defs.h">
-<area shape="rect" id="Node000001" title="Shared constants, error codes, and session state for the SDK." alt="" coords="139,5,233,31"/>
-<area shape="rect" id="Node000002" href="$platform__compat_8h.html" title="Arduino compatibility shims for non&#45;Arduino (plain C++) builds." alt="" coords="113,152,259,177"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="184,32,173,79,173,110,180,138,175,139,168,110,167,78,179,30"/>
-<area shape="rect" id="Node000007" href="$CW__Utils_8h.html" title="Platform&#45;independent security and memory utilities." alt="" coords="182,79,275,104"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="195,30,217,66,213,68,191,32"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="5,225,76,251"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="164,180,78,222,75,217,161,175"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="101,225,175,251"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="180,179,156,216,151,213,176,176"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="200,225,271,251"/>
-<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="196,176,222,213,217,216,192,179"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="295,225,378,251"/>
-<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="211,175,301,217,298,222,209,180"/>
-<area shape="poly" id="edge7_Node000007_Node000002" title=" " alt="" coords="224,106,202,142,198,139,219,103"/>
+<area shape="rect" id="Node000001" title="Shared constants, error codes, and session state for the SDK." alt="" coords="138,5,231,33"/>
+<area shape="rect" id="Node000002" href="$platform__compat_8h.html" title="Arduino compatibility shims for non&#45;Arduino (plain C++) builds." alt="" coords="112,157,257,184"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="181,31,171,81,171,108,178,143,173,141,166,109,166,81,179,36"/>
+<area shape="rect" id="Node000007" href="$CW__Utils_8h.html" title="Platform&#45;independent security and memory utilities." alt="" coords="181,81,273,109"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="193,31,215,68,209,68,192,36"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,232,76,260"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="160,187,81,227,78,223,157,183"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="100,232,173,260"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="178,184,155,221,151,217,174,186"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="197,232,268,260"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="194,183,218,220,213,219,192,187"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="292,232,373,260"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="212,182,295,225,290,226,210,187"/>
+<area shape="poly" id="edge7_Node000007_Node000002" title=" " alt="" coords="222,107,202,145,198,142,218,111"/>
 </map>

@@ -1,15 +1,17 @@
 <map id="CW_CryptoProvider.h" name="CW_CryptoProvider.h">
-<area shape="rect" id="Node000001" title="Abstract cryptographic primitives interface." alt="" coords="264,5,423,31"/>
-<area shape="rect" id="Node000002" href="$CW__SecureChannel_8h.html" title="Cryptnox secure channel protocol over NFC." alt="" coords="189,79,349,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="323,42,283,80,279,77,320,38"/>
-<area shape="rect" id="Node000006" href="$CW__Tron_8h.html" title="TRON (TRX) network support — BIP44 path and Base58Check addresses." alt="" coords="373,79,463,104"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="367,38,408,77,404,80,363,42"/>
-<area shape="rect" id="Node000003" href="$CW__SecureChannel_8cpp.html" title="Implementation of the Cryptnox secure channel protocol." alt="" coords="5,152,180,177"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="229,112,122,154,120,149,227,107"/>
-<area shape="rect" id="Node000004" href="$CryptnoxWallet_8h.html" title="High&#45;level API for interacting with a Cryptnox Hardware Wallet over NFC." alt="" coords="204,152,339,177"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="272,118,274,152,268,152,267,118"/>
-<area shape="rect" id="Node000005" href="$CryptnoxWallet_8cpp.html" title="Implementation of the high&#45;level CryptnoxWallet API." alt="" coords="197,225,346,251"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="274,191,274,225,269,225,269,191"/>
-<area shape="rect" id="Node000007" href="$CW__Tron_8cpp.html" title="Implementation of TRON address derivation and Base58Check coding." alt="" coords="365,152,471,177"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="421,118,421,152,415,152,415,118"/>
+<area shape="rect" id="Node000001" title="Abstract cryptographic primitives interface." alt="" coords="261,5,420,33"/>
+<area shape="rect" id="Node000002" href="$CW__SecureChannel_8h.html" title="Cryptnox secure channel protocol over NFC." alt="" coords="188,81,347,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="319,43,282,83,278,79,315,46"/>
+<area shape="rect" id="Node000007" href="$CW__Tron_8h.html" title="TRON (TRX) network support — BIP44 path and Base58Check addresses." alt="" coords="370,81,460,109"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="365,42,405,81,399,80,364,47"/>
+<area shape="rect" id="Node000003" href="$CW__SecureChannel_8cpp.html" title="Implementation of the Cryptnox secure channel protocol." alt="" coords="5,157,180,184"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="220,117,125,159,122,154,224,113"/>
+<area shape="rect" id="Node000004" href="$CryptnoxWallet_8h.html" title="High&#45;level API for interacting with a Cryptnox Hardware Wallet over NFC." alt="" coords="203,157,336,184"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="270,122,272,157,267,155,267,127"/>
+<area shape="rect" id="Node000005" href="$CryptnoxWallet_8cpp.html" title="Implementation of the high&#45;level CryptnoxWallet API." alt="" coords="110,232,259,260"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="245,194,201,234,198,230,240,196"/>
+<area shape="rect" id="Node000006" href="$test__pr28_8cpp.html" title=" " alt="" coords="282,232,428,260"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="298,192,343,232,337,231,296,197"/>
+<area shape="rect" id="Node000008" href="$CW__Tron_8cpp.html" title="Implementation of TRON address derivation and Base58Check coding." alt="" coords="363,157,467,184"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="417,122,417,158,413,155,413,127"/>
 </map>

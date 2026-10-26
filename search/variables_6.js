@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['hash_0',['hash',['../structCW__SignRequest.html#a76ad3bbaf6808649883e60297aedd8ab',1,'CW_SignRequest']]],
-  ['hashlength_1',['hashLength',['../structCW__SignRequest.html#a60f7cef1c6aa6d327a678ae554365164',1,'CW_SignRequest']]]
+  ['failmac_0',['failMac',['../classFakeCrypto.html#a0811b8980d43c38003ee8f2c2c54898d',1,'FakeCrypto']]],
+  ['failmaciv_1',['failMacIv',['../classFakeCrypto.html#ad233c356f9595901a9e2224f25970005',1,'FakeCrypto']]]
 ];

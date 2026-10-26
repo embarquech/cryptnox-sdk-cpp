@@ -1,13 +1,13 @@
 <map id="CW_TrustedKeys.h" name="CW_TrustedKeys.h">
-<area shape="rect" id="Node000001" title="Cryptnox CA public keys used for offline certificate verification." alt="" coords="115,5,257,31"/>
-<area shape="rect" id="Node000002" href="$platform__compat_8h.html" title="Arduino compatibility shims for non&#45;Arduino (plain C++) builds." alt="" coords="113,79,259,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="189,31,189,65,183,65,183,31"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="5,152,76,177"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="164,106,78,148,75,144,161,102"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="101,152,175,177"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="180,106,156,142,151,139,176,103"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="200,152,271,177"/>
-<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="196,103,222,139,217,142,192,106"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="295,152,378,177"/>
-<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="211,102,301,144,298,148,209,106"/>
+<area shape="rect" id="Node000001" title="Cryptnox CA public keys used for offline certificate verification." alt="" coords="114,5,255,33"/>
+<area shape="rect" id="Node000002" href="$platform__compat_8h.html" title="Arduino compatibility shims for non&#45;Arduino (plain C++) builds." alt="" coords="112,81,257,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="186,31,187,66,182,64,183,36"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,157,76,184"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="160,111,81,152,78,147,157,107"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="100,157,173,184"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="178,108,155,146,151,142,174,111"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="197,157,268,184"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="194,107,218,144,213,143,192,112"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="292,157,373,184"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="212,107,295,149,290,150,210,112"/>
 </map>

@@ -137,7 +137,7 @@ What's inside</h2>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">File  </th><th class="markdownTableHeadNone">Role  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt"><a class="el" href="classCryptnoxWallet.html" title="High-level interface for interacting with a Cryptnox Hardware Wallet over NFC.">CryptnoxWallet</a>.{h,cpp}</span>  </td><td class="markdownTableBodyNone">High-level API: <span class="tt">begin</span>, <span class="tt">connect</span>, <span class="tt">verifyPin</span>, <span class="tt">sign</span>, <span class="tt">writeUserData</span>, <span class="tt">disconnect</span>  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt"><a class="el" href="classCryptnoxWallet.html" title="High-level interface for interacting with a Cryptnox Hardware Wallet over NFC.">CryptnoxWallet</a>.{h,cpp}</span>  </td><td class="markdownTableBodyNone">High-level API: <span class="tt">begin</span>, <span class="tt">connect</span>, <span class="tt">verifyPin</span>, <span class="tt">sign</span>, <span class="tt">getPublicKey</span>, <span class="tt">writeUserData</span>, <span class="tt">disconnect</span>  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt"><a class="el" href="classCW__SecureChannel.html" title="Implements the Cryptnox secure channel protocol over NFC.">CW_SecureChannel</a>.{h,cpp}</span>  </td><td class="markdownTableBodyNone">Secure channel protocol (mutual auth, session keys, encrypted APDU exchange)  </td></tr>
 <tr class="markdownTableRowOdd">
@@ -167,10 +167,10 @@ Integrating the core</h2>
 <div class="line"><span class="comment">//   - MyCryptoProvider : public CW_CryptoProvider</span></div>
 <div class="line"><span class="comment">//   - MyLogger         : public CW_Logger</span></div>
 <div class="line"> </div>
-<div class="line">MyLogger          logger;</div>
+<div class="line">MyLogger          <a class="code hl_variable" href="test__pr28_8cpp.html#a9b241c970a9a57b65d0d560c5b4c86d8">logger</a>;</div>
 <div class="line">MyCryptoProvider  crypto;</div>
 <div class="line">MyNfcTransport    transport(<span class="comment">/* platform-specific args */</span>);</div>
-<div class="line"><a class="code hl_class" href="classCryptnoxWallet.html">CryptnoxWallet</a>    wallet(transport, logger, crypto);</div>
+<div class="line"><a class="code hl_class" href="classCryptnoxWallet.html">CryptnoxWallet</a>    wallet(transport, <a class="code hl_variable" href="test__pr28_8cpp.html#a9b241c970a9a57b65d0d560c5b4c86d8">logger</a>, crypto);</div>
 <div class="line"> </div>
 <div class="line"><span class="keywordflow">if</span> (!wallet.begin()) { <span class="comment">/* reader init failed */</span> }</div>
 <div class="line"> </div>
@@ -180,8 +180,9 @@ Integrating the core</h2>
 <div class="line">    wallet.disconnect(session);</div>
 <div class="line">}</div>
 <div class="ttc" id="aCryptnoxWallet_8h_html"><div class="ttname"><a href="CryptnoxWallet_8h.html">CryptnoxWallet.h</a></div><div class="ttdoc">High-level API for interacting with a Cryptnox Hardware Wallet over NFC.</div></div>
-<div class="ttc" id="aclassCryptnoxWallet_html"><div class="ttname"><a href="classCryptnoxWallet.html">CryptnoxWallet</a></div><div class="ttdoc">High-level interface for interacting with a Cryptnox Hardware Wallet over NFC.</div><div class="ttdef"><b>Definition</b> <a href="CryptnoxWallet_8h_source.html#l00160">CryptnoxWallet.h:160</a></div></div>
-<div class="ttc" id="astructCW__SecureSession_html"><div class="ttname"><a href="structCW__SecureSession.html">CW_SecureSession</a></div><div class="ttdoc">Holds cryptographic session state for reentrant secure channel operations.</div><div class="ttdef"><b>Definition</b> <a href="CW__Defs_8h_source.html#l00168">CW_Defs.h:168</a></div></div>
+<div class="ttc" id="aclassCryptnoxWallet_html"><div class="ttname"><a href="classCryptnoxWallet.html">CryptnoxWallet</a></div><div class="ttdoc">High-level interface for interacting with a Cryptnox Hardware Wallet over NFC.</div><div class="ttdef"><b>Definition</b> <a href="CryptnoxWallet_8h_source.html#l00155">CryptnoxWallet.h:155</a></div></div>
+<div class="ttc" id="astructCW__SecureSession_html"><div class="ttname"><a href="structCW__SecureSession.html">CW_SecureSession</a></div><div class="ttdoc">Holds cryptographic session state for reentrant secure channel operations.</div><div class="ttdef"><b>Definition</b> <a href="CW__Defs_8h_source.html#l00200">CW_Defs.h:200</a></div></div>
+<div class="ttc" id="atest__pr28_8cpp_html_a9b241c970a9a57b65d0d560c5b4c86d8"><div class="ttname"><a href="test__pr28_8cpp.html#a9b241c970a9a57b65d0d560c5b4c86d8">logger</a></div><div class="ttdeci">static NullLogger logger</div><div class="ttdef"><b>Definition</b> <a href="test__pr28_8cpp_source.html#l00130">test_pr28.cpp:130</a></div></div>
 </div><!-- fragment --><p>Full runnable examples (PIN verify, transaction signing, full ESP-IDF / Arduino boilerplate) live in the platform SDKs linked above.</p>
 <hr  />
 <h2 class="doxsection"><a class="anchor" id="autotoc_md10"></a>

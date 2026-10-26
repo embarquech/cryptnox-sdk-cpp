@@ -101,12 +101,12 @@ $(function(){initNavTree('classCW__SecureChannel.html','','classCW__SecureChanne
 <div class="dynheader">
 Collaboration diagram for CW_SecureChannel:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCW__SecureChannel__coll__graph.svg" width="567" height="132"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="classCW__SecureChannel__coll__graph.svg" width="564" height="139"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a00f625c359bb036485ccdd5728a9b6f6" id="r_a00f625c359bb036485ccdd5728a9b6f6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a00f625c359bb036485ccdd5728a9b6f6">CW_SecureChannel</a> (<a class="el" href="classCW__NfcTransport.html">CW_NfcTransport</a> &amp;driver, <a class="el" href="classCW__Logger.html">CW_Logger</a> &amp;logger, <a class="el" href="classCW__CryptoProvider.html">CW_CryptoProvider</a> &amp;crypto, <a class="el" href="classCW__Platform.html">CW_Platform</a> &amp;platform)</td></tr>
+<tr class="memitem:a00f625c359bb036485ccdd5728a9b6f6" id="r_a00f625c359bb036485ccdd5728a9b6f6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a00f625c359bb036485ccdd5728a9b6f6">CW_SecureChannel</a> (<a class="el" href="classCW__NfcTransport.html">CW_NfcTransport</a> &amp;driver, <a class="el" href="classCW__Logger.html">CW_Logger</a> &amp;<a class="el" href="test__pr28_8cpp.html#a9b241c970a9a57b65d0d560c5b4c86d8">logger</a>, <a class="el" href="classCW__CryptoProvider.html">CW_CryptoProvider</a> &amp;crypto, <a class="el" href="classCW__Platform.html">CW_Platform</a> &amp;<a class="el" href="test__pr28_8cpp.html#ae13897b5c93ee69436c574b60fec7516">platform</a>)</td></tr>
 <tr class="memdesc:a00f625c359bb036485ccdd5728a9b6f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a <a class="el" href="classCW__SecureChannel.html" title="Implements the Cryptnox secure channel protocol over NFC.">CW_SecureChannel</a>.  <br /></td></tr>
 <tr class="memitem:a72d545800d6614545f37d80741e14628" id="r_a72d545800d6614545f37d80741e14628"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a72d545800d6614545f37d80741e14628">CW_SecureChannel</a> (const <a class="el" href="classCW__SecureChannel.html">CW_SecureChannel</a> &amp;)=delete</td></tr>
 <tr class="memitem:a0954f7ac239499b82b72f5561c5bb2b8" id="r_a0954f7ac239499b82b72f5561c5bb2b8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCW__SecureChannel.html">CW_SecureChannel</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0954f7ac239499b82b72f5561c5bb2b8">operator=</a> (const <a class="el" href="classCW__SecureChannel.html">CW_SecureChannel</a> &amp;)=delete</td></tr>
@@ -118,12 +118,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a8af37c9549a51edffcfb28ef6b15772b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset the NFC reader hardware.  <br /></td></tr>
 <tr class="memitem:afdfc840a2aff15d6fe41a3eb9a826cad" id="r_afdfc840a2aff15d6fe41a3eb9a826cad"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afdfc840a2aff15d6fe41a3eb9a826cad">printFirmwareVersion</a> ()</td></tr>
 <tr class="memdesc:afdfc840a2aff15d6fe41a3eb9a826cad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the NFC reader firmware version to the logger.  <br /></td></tr>
+<tr class="memitem:aa38ee09005d2659c089cd94f43922a37" id="r_aa38ee09005d2659c089cd94f43922a37"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa38ee09005d2659c089cd94f43922a37">appletMajor</a> () const</td></tr>
+<tr class="memdesc:aa38ee09005d2659c089cd94f43922a37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applet major version read at the last SELECT.  <br /></td></tr>
 <tr class="memitem:a7afa1f7bbd9c0e45069893b00883fd11" id="r_a7afa1f7bbd9c0e45069893b00883fd11"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7afa1f7bbd9c0e45069893b00883fd11">selectApdu</a> ()</td></tr>
 <tr class="memdesc:a7afa1f7bbd9c0e45069893b00883fd11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send the SELECT APDU to activate the Cryptnox application.  <br /></td></tr>
 <tr class="memitem:a72983a22674a33744054095eb7e9d3f9" id="r_a72983a22674a33744054095eb7e9d3f9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a72983a22674a33744054095eb7e9d3f9">getCardCertificate</a> (uint8_t *cardCertificate, uint8_t &amp;cardCertificateLength)</td></tr>
 <tr class="memdesc:a72983a22674a33744054095eb7e9d3f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the card's ephemeral public key via GET CARD CERTIFICATE.  <br /></td></tr>
-<tr class="memitem:aa8ec1e3ccb023a4fef012675d7fe9388" id="r_aa8ec1e3ccb023a4fef012675d7fe9388"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa8ec1e3ccb023a4fef012675d7fe9388">extractCardEphemeralKey</a> (const uint8_t *cardCertificate, uint8_t *cardEphemeralPubKey, uint8_t *fullEphemeralPubKey65=NULL)</td></tr>
-<tr class="memdesc:aa8ec1e3ccb023a4fef012675d7fe9388"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract the card's ephemeral EC P-256 public key from a certificate.  <br /></td></tr>
 <tr class="memitem:a1e8132bd74fe103ee41ab6c0e449b446" id="r_a1e8132bd74fe103ee41ab6c0e449b446"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1e8132bd74fe103ee41ab6c0e449b446">openSecureChannel</a> (uint8_t *salt, uint8_t *clientPublicKey, uint8_t *clientPrivateKey, <a class="el" href="group__util.html#ga158c7b96043aa1683f003e9c17d9cf0d">CW_Curve</a> sessionCurve)</td></tr>
 <tr class="memdesc:a1e8132bd74fe103ee41ab6c0e449b446"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send OPEN SECURE CHANNEL and retrieve the session salt.  <br /></td></tr>
 <tr class="memitem:a2561fd15dadb9c6cef938e344e645c22" id="r_a2561fd15dadb9c6cef938e344e645c22"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2561fd15dadb9c6cef938e344e645c22">mutuallyAuthenticate</a> (<a class="el" href="structCW__SecureSession.html">CW_SecureSession</a> &amp;session, const uint8_t *salt, uint8_t *clientPublicKey, const uint8_t *clientPrivateKey, <a class="el" href="group__util.html#ga158c7b96043aa1683f003e9c17d9cf0d">CW_Curve</a> sessionCurve, const uint8_t *cardEphemeralPubKey)</td></tr>
@@ -134,15 +134,24 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a69db1ab1f96e51c248a6427684d02816"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fetch and cache the manufacturer certificate before <a class="el" href="#a72983a22674a33744054095eb7e9d3f9" title="Retrieve the card&#39;s ephemeral public key via GET CARD CERTIFICATE.">getCardCertificate()</a>.  <br /></td></tr>
 <tr class="memitem:a8368b07ac2f5885dbe68a4ac5e2973b9" id="r_a8368b07ac2f5885dbe68a4ac5e2973b9"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8368b07ac2f5885dbe68a4ac5e2973b9">verifyCertificateChain</a> (const uint8_t *cardCert, uint8_t cardCertLen)</td></tr>
 <tr class="memdesc:a8368b07ac2f5885dbe68a4ac5e2973b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verify the full card certificate chain against the trusted CA.  <br /></td></tr>
-<tr class="memitem:a272659530c5fdb5323296887484125f0" id="r_a272659530c5fdb5323296887484125f0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a272659530c5fdb5323296887484125f0">aesCbcEncrypt</a> (<a class="el" href="structCW__SecureSession.html">CW_SecureSession</a> &amp;session, const uint8_t apdu[], uint16_t apduLength, const uint8_t data[], uint16_t dataLength, uint8_t *decryptedOutput=NULL, uint16_t *decryptedOutputLength=NULL)</td></tr>
-<tr class="memdesc:a272659530c5fdb5323296887484125f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">AES-CBC encrypt + MAC, send APDU, and decrypt response.  <br /></td></tr>
-<tr class="memitem:a4199b486cfc6b91eb2d8290295a552b0" id="r_a4199b486cfc6b91eb2d8290295a552b0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4199b486cfc6b91eb2d8290295a552b0">aesCbcDecrypt</a> (const <a class="el" href="structCW__SecureSession.html">CW_SecureSession</a> &amp;session, uint8_t *response, size_t responseLen, uint8_t *macValue, uint8_t *decryptedOutput=NULL, uint16_t *decryptedOutputLength=NULL)</td></tr>
-<tr class="memdesc:a4199b486cfc6b91eb2d8290295a552b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verify MAC and decrypt an encrypted APDU response.  <br /></td></tr>
+<tr class="memitem:ad36597824b83c7a110f369a99d32d6fe" id="r_ad36597824b83c7a110f369a99d32d6fe"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad36597824b83c7a110f369a99d32d6fe">aesCbcEncrypt</a> (<a class="el" href="structCW__SecureSession.html">CW_SecureSession</a> &amp;session, const uint8_t apdu[], uint16_t apduLength, const uint8_t data[], uint16_t dataLength, uint8_t *decryptedOutput, uint16_t decryptedOutputSize, uint16_t *decryptedOutputLength)</td></tr>
+<tr class="memdesc:ad36597824b83c7a110f369a99d32d6fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">AES-CBC encrypt + MAC, send APDU, and decrypt response.  <br /></td></tr>
+<tr class="memitem:a4f0c8aa2f6b94744be8dfc45f9ace8ff" id="r_a4f0c8aa2f6b94744be8dfc45f9ace8ff"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4f0c8aa2f6b94744be8dfc45f9ace8ff">aesCbcEncrypt</a> (<a class="el" href="structCW__SecureSession.html">CW_SecureSession</a> &amp;session, const uint8_t apdu[], uint16_t apduLength, const uint8_t data[], uint16_t dataLength)</td></tr>
+<tr class="memdesc:a4f0c8aa2f6b94744be8dfc45f9ace8ff"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="#ad36597824b83c7a110f369a99d32d6fe">aesCbcEncrypt</a> for a command whose response payload is discarded.  <br /></td></tr>
+<tr class="memitem:a7adcde38cdd4fd85f3cb09c16f8138c2" id="r_a7adcde38cdd4fd85f3cb09c16f8138c2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7adcde38cdd4fd85f3cb09c16f8138c2">aesCbcDecrypt</a> (const <a class="el" href="structCW__SecureSession.html">CW_SecureSession</a> &amp;session, uint8_t *response, size_t responseLen, uint8_t *macValue, uint8_t *decryptedOutput, uint16_t decryptedOutputSize, uint16_t *decryptedOutputLength)</td></tr>
+<tr class="memdesc:a7adcde38cdd4fd85f3cb09c16f8138c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verify MAC and decrypt an encrypted APDU response.  <br /></td></tr>
 <tr class="memitem:a6519c02590facc1346b1a84882ddfd04" id="r_a6519c02590facc1346b1a84882ddfd04"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6519c02590facc1346b1a84882ddfd04">checkStatusWord</a> (const uint8_t *response, uint16_t responseLength, uint8_t sw1Expected, uint8_t sw2Expected)</td></tr>
 <tr class="memdesc:a6519c02590facc1346b1a84882ddfd04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verify the SW1/SW2 status word at the end of an APDU response.  <br /></td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:aa8ec1e3ccb023a4fef012675d7fe9388" id="r_aa8ec1e3ccb023a4fef012675d7fe9388"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa8ec1e3ccb023a4fef012675d7fe9388">extractCardEphemeralKey</a> (const uint8_t *cardCertificate, uint8_t *cardEphemeralPubKey, uint8_t *fullEphemeralPubKey65=NULL)</td></tr>
+<tr class="memdesc:aa8ec1e3ccb023a4fef012675d7fe9388"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract the card's ephemeral EC P-256 public key from a certificate.  <br /></td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:ab383c509c399c2eaf093c1afacb51136" id="r_ab383c509c399c2eaf093c1afacb51136"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab383c509c399c2eaf093c1afacb51136">macIvForCounter</a> (const <a class="el" href="structCW__SecureSession.html">CW_SecureSession</a> &amp;session, uint8_t *macIv)</td></tr>
+<tr class="memdesc:ab383c509c399c2eaf093c1afacb51136"><td class="mdescLeft">&#160;</td><td class="mdescRight">MAC IV for the current counter (zero on 1.6.x).  <br /></td></tr>
 <tr class="memitem:a4bf5fd741bbbd15e00f37d5362e4e1a5" id="r_a4bf5fd741bbbd15e00f37d5362e4e1a5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4bf5fd741bbbd15e00f37d5362e4e1a5">verifyEcdsaSha256</a> (const uint8_t *pubKey64, const uint8_t *message, uint16_t msgLen, const uint8_t *derSig, uint8_t derSigLen)</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-static-methods" class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
@@ -159,10 +168,12 @@ Private Attributes</h2></td></tr>
 <tr class="memdesc:aac4780f24c18f75e7b1b304fe2445178"><td class="mdescLeft">&#160;</td><td class="mdescRight">Crypto operations (AES, SHA, ECDH, RNG).  <br /></td></tr>
 <tr class="memitem:a7e1adb1e7b6c67020eca8af092711e44" id="r_a7e1adb1e7b6c67020eca8af092711e44"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCW__Platform.html">CW_Platform</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7e1adb1e7b6c67020eca8af092711e44">_platform</a></td></tr>
 <tr class="memdesc:a7e1adb1e7b6c67020eca8af092711e44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Platform abstraction (sleep_ms).  <br /></td></tr>
-<tr class="memitem:aa75e706991a8a9f0238fa953eecc78fd" id="r_aa75e706991a8a9f0238fa953eecc78fd"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa75e706991a8a9f0238fa953eecc78fd">_lastNonce</a> [<a class="el" href="CW__Defs_8h.html#a9bd1c342a843f48ace5a8cadda6b7339">CW_CERT_NONCE_SIZE</a>]</td></tr>
+<tr class="memitem:aa75e706991a8a9f0238fa953eecc78fd" id="r_aa75e706991a8a9f0238fa953eecc78fd"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa75e706991a8a9f0238fa953eecc78fd">_lastNonce</a> [<a class="el" href="CW__Defs_8h.html#a9bd1c342a843f48ace5a8cadda6b7339">CW_CERT_NONCE_SIZE</a>] {}</td></tr>
 <tr class="memdesc:aa75e706991a8a9f0238fa953eecc78fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Nonce sent in the last <a class="el" href="#a72983a22674a33744054095eb7e9d3f9" title="Retrieve the card&#39;s ephemeral public key via GET CARD CERTIFICATE.">getCardCertificate()</a> call; checked in <a class="el" href="#a8368b07ac2f5885dbe68a4ac5e2973b9" title="Verify the full card certificate chain against the trusted CA.">verifyCertificateChain()</a>.  <br /></td></tr>
-<tr class="memitem:a740f78dd7b634d1c4f1c707e3d463473" id="r_a740f78dd7b634d1c4f1c707e3d463473"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a740f78dd7b634d1c4f1c707e3d463473">_cachedMfCertLen</a></td></tr>
+<tr class="memitem:a740f78dd7b634d1c4f1c707e3d463473" id="r_a740f78dd7b634d1c4f1c707e3d463473"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a740f78dd7b634d1c4f1c707e3d463473">_cachedMfCertLen</a> {}</td></tr>
 <tr class="memdesc:a740f78dd7b634d1c4f1c707e3d463473"><td class="mdescLeft">&#160;</td><td class="mdescRight">Non-zero when s_mfCertBuf holds a valid pre-fetched manufacturer certificate.  <br /></td></tr>
+<tr class="memitem:a94074effa8080d555c5ed621b75c1dc0" id="r_a94074effa8080d555c5ed621b75c1dc0"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a94074effa8080d555c5ed621b75c1dc0">_appletMajor</a> {}</td></tr>
+<tr class="memdesc:a94074effa8080d555c5ed621b75c1dc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applet major version from the last SELECT (0 = unknown → legacy channel).  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Implements the Cryptnox secure channel protocol over NFC. </p>
@@ -217,9 +228,9 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00087">87</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00091">91</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00322">_cachedMfCertLen</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00315">_crypto</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00313">_driver</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00319">_lastNonce</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00314">_logger</a>, and <a class="el" href="CW__SecureChannel_8h_source.html#l00316">_platform</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00356">_appletMajor</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00353">_cachedMfCertLen</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00346">_crypto</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00344">_driver</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00345">_logger</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00347">_platform</a>, <a class="el" href="test__pr28_8cpp_source.html#l00130">logger</a>, and <a class="el" href="test__pr28_8cpp_source.html#l00131">platform</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="#a72d545800d6614545f37d80741e14628">CW_SecureChannel()</a>, and <a class="el" href="#a0954f7ac239499b82b72f5561c5bb2b8">operator=()</a>.</p>
 
@@ -248,13 +259,13 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8cpp_source.html#l00087">CW_SecureChannel()</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8cpp_source.html#l00091">CW_SecureChannel()</a>.</p>
 
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
-<a id="a4199b486cfc6b91eb2d8290295a552b0" name="a4199b486cfc6b91eb2d8290295a552b0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4199b486cfc6b91eb2d8290295a552b0">&#9670;&#160;</a></span>aesCbcDecrypt()</h2>
+<a id="a7adcde38cdd4fd85f3cb09c16f8138c2" name="a7adcde38cdd4fd85f3cb09c16f8138c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7adcde38cdd4fd85f3cb09c16f8138c2">&#9670;&#160;</a></span>aesCbcDecrypt()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -282,42 +293,100 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint8_t *</td>          <td class="paramname"><span class="paramname"><em>decryptedOutput</em></span><span class="paramdefsep"> = </span><span class="paramdefval">NULL</span>, </td>
+          <td class="paramtype">uint8_t *</td>          <td class="paramname"><span class="paramname"><em>decryptedOutput</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint16_t *</td>          <td class="paramname"><span class="paramname"><em>decryptedOutputLength</em></span><span class="paramdefsep"> = </span><span class="paramdefval">NULL</span>&#160;)</td>
+          <td class="paramtype">uint16_t</td>          <td class="paramname"><span class="paramname"><em>decryptedOutputSize</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t *</td>          <td class="paramname"><span class="paramname"><em>decryptedOutputLength</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Verify MAC and decrypt an encrypted APDU response. </p>
-<p>Internal helper called from <a class="el" href="#a272659530c5fdb5323296887484125f0">aesCbcEncrypt</a> — exposed for the fuzz harness. Verifies the response MAC against Kmac, then decrypts the payload with Kenc using the supplied IV (which is the MAC of the sent request, by protocol).</p>
+<p>Internal helper called from <a class="el" href="#ad36597824b83c7a110f369a99d32d6fe">aesCbcEncrypt</a> — exposed for the fuzz harness. Verifies the response MAC against Kmac, then decrypts the payload with Kenc using the supplied IV (which is the MAC of the sent request, by protocol).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in,out]</td><td class="paramname">session</td><td>Secure session. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">response</td><td>Encrypted response buffer (MAC || cipher || SW). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">responseLen</td><td>Response length. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">macValue</td><td>MAC of the request — used as decrypt IV. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">decryptedOutput</td><td>Optional plaintext output buffer. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">decryptedOutputLength</td><td>Optional plaintext output length. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">decryptedOutput</td><td>Plaintext output buffer, or NULL. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">decryptedOutputSize</td><td>Capacity of <code class="param">decryptedOutput</code>; see <a class="el" href="#ad36597824b83c7a110f369a99d32d6fe">aesCbcEncrypt</a>. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">decryptedOutputLength</td><td>Plaintext output length, or NULL. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if MAC matched and decryption succeeded, false otherwise.</dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>A false return indicates either tampering or a corrupted channel — the session must not be reused without renegotiation. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00625">625</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00660">660</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00315">_crypto</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00314">_logger</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00045">AES_BLOCK_SIZE</a>, <a class="el" href="CW__Defs_8h_source.html#l00169">CW_SecureSession::aesKey</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="platform__compat_8h_source.html#l00035">HEX</a>, <a class="el" href="CW__Defs_8h_source.html#l00170">CW_SecureSession::macKey</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00060">s_apduBuf</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00062">s_dataBuf</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00061">s_macBuf</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00022">CW_Utils::secure_compare()</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00346">_crypto</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00345">_logger</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00045">AES_BLOCK_SIZE</a>, <a class="el" href="CW__Defs_8h_source.html#l00201">CW_SecureSession::aesKey</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="platform__compat_8h_source.html#l00035">HEX</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00444">macIvForCounter()</a>, <a class="el" href="CW__Defs_8h_source.html#l00202">CW_SecureSession::macKey</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00064">s_apduBuf</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00066">s_dataBuf</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00065">s_macBuf</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00022">CW_Utils::secure_compare()</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00501">aesCbcEncrypt()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00489">aesCbcEncrypt()</a>.</p>
 
 </div>
 </div>
-<a id="a272659530c5fdb5323296887484125f0" name="a272659530c5fdb5323296887484125f0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a272659530c5fdb5323296887484125f0">&#9670;&#160;</a></span>aesCbcEncrypt()</h2>
+<a id="a4f0c8aa2f6b94744be8dfc45f9ace8ff" name="a4f0c8aa2f6b94744be8dfc45f9ace8ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f0c8aa2f6b94744be8dfc45f9ace8ff">&#9670;&#160;</a></span>aesCbcEncrypt() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool CW_SecureChannel::aesCbcEncrypt </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structCW__SecureSession.html">CW_SecureSession</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>session</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint8_t</td>          <td class="paramname"><span class="paramname"><em>apdu</em></span>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t</td>          <td class="paramname"><span class="paramname"><em>apduLength</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint8_t</td>          <td class="paramname"><span class="paramname"><em>data</em></span>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t</td>          <td class="paramname"><span class="paramname"><em>dataLength</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="#ad36597824b83c7a110f369a99d32d6fe">aesCbcEncrypt</a> for a command whose response payload is discarded. </p>
+<p>The output buffer and its capacity come as a pair in the full overload, so there is no way to pass one without the other.</p>
+<p>One secure-messaging round-trip is built in five stages, reusing module- private scratch buffers (<code>s_apduBuf</code>, <code>s_macBuf</code>, <code>s_dataBuf</code>) to keep the call-site stack frame small:</p>
+<ol type="1">
+<li>Plaintext padding — ISO/IEC 9797-1 Method 2 (bit padding) is appended to <code class="param">data</code> so the length is a multiple of the AES block size.</li>
+<li>Encryption — AES-256-CBC under Kenc with the current rolling IV.</li>
+<li>MAC computation — AES-CMAC over (APDU header || Lc || ciphertext) under Kmac. The MAC's last 8 bytes are prepended to the ciphertext in the outgoing APDU.</li>
+<li>Transport — the assembled APDU goes to the card; the response is structured as (MAC[8] || cipher || SW1 SW2).</li>
+<li>Response decryption — delegated to <a class="el" href="#a7adcde38cdd4fd85f3cb09c16f8138c2">aesCbcDecrypt</a>, which verifies the response MAC against Kmac (using the request MAC as the IV per protocol) before decrypting under Kenc.</li>
+</ol>
+<p>IV update — on success, the first 16 bytes of the response (the card's response MAC) become the new session IV (rolling IV). Every failure after the MAC counter advances clears the session, a non-9000 SW included. </p>
+
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00483">483</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="CW__SecureChannel_8cpp_source.html#l00489">aesCbcEncrypt()</a>.</p>
+
+</div>
+</div>
+<a id="ad36597824b83c7a110f369a99d32d6fe" name="ad36597824b83c7a110f369a99d32d6fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad36597824b83c7a110f369a99d32d6fe">&#9670;&#160;</a></span>aesCbcEncrypt() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -350,18 +419,23 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint8_t *</td>          <td class="paramname"><span class="paramname"><em>decryptedOutput</em></span><span class="paramdefsep"> = </span><span class="paramdefval">NULL</span>, </td>
+          <td class="paramtype">uint8_t *</td>          <td class="paramname"><span class="paramname"><em>decryptedOutput</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint16_t *</td>          <td class="paramname"><span class="paramname"><em>decryptedOutputLength</em></span><span class="paramdefsep"> = </span><span class="paramdefval">NULL</span>&#160;)</td>
+          <td class="paramtype">uint16_t</td>          <td class="paramname"><span class="paramname"><em>decryptedOutputSize</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t *</td>          <td class="paramname"><span class="paramname"><em>decryptedOutputLength</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>AES-CBC encrypt + MAC, send APDU, and decrypt response. </p>
-<p>Performs one secure messaging round-trip: pads and encrypts <code class="param">data</code> with Kenc using the current IV; computes a CMAC over (header || cipher) with Kmac; sends the wrapped APDU; on the response, verifies the MAC and decrypts the payload. The new IV for the next call is taken from the last cipher block (rolling IV).</p>
+<p>Performs one secure messaging round-trip: pads and encrypts <code class="param">data</code> with Kenc using the current IV; computes a CMAC over (header || cipher) with Kmac; sends the wrapped APDU; on the response, verifies the MAC and decrypts the payload. The new IV for the next call is the first 16 bytes of the response, i.e. the card's response MAC (rolling IV).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in,out]</td><td class="paramname">session</td><td>Secure session (Kenc / Kmac / IV). </td></tr>
@@ -369,29 +443,55 @@ Private Attributes</h2></td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">apduLength</td><td>Header length (must be 4). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">data</td><td>Plaintext payload. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">dataLength</td><td>Plaintext length (≤ <a class="el" href="CW__Defs_8h.html#a6085fa47786e4251e9d24e22bed82ba5">CW_USER_DATA_PAGE_SIZE</a>). </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">decryptedOutput</td><td>Optional buffer for the decrypted response payload. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">decryptedOutputLength</td><td>Optional pointer to receive the decrypted payload length. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">decryptedOutput</td><td>Buffer for the decrypted response payload, or NULL. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">decryptedOutputSize</td><td>Capacity of <code class="param">decryptedOutput</code>. Only the card decides how long its answer is, so pass the real size: a payload that does not fit is refused instead of overrunning the buffer. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">decryptedOutputLength</td><td>Receives the decrypted payload length, or NULL. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true if the APDU was sent and the response MAC verified + decrypted successfully; false on bad parameters, transport failure, MAC mismatch, or unexpected status word.</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the APDU was sent and the response MAC verified + decrypted successfully; false otherwise. The session is cleared (renegotiate) on an exhausted MAC counter, a MAC IV or MAC computation failure, a send-length failure, a transport failure, a bad response MAC, or any status word other than 9000. It is NOT cleared on bad parameters rejected before anything is sent.</dd></dl>
 <dl class="section pre"><dt>Precondition</dt><dd><code class="param">session</code> must be the output of a successful <a class="el" href="#a2561fd15dadb9c6cef938e344e645c22">mutuallyAuthenticate</a> call. </dd></dl>
-<dl class="section warning"><dt>Warning</dt><dd>Mutates <code>session.iv</code>. On any failure the IV may be left in an undefined state — treat the session as broken and tear it down with <a class="el" href="structCW__SecureSession.html#a4cc397558babedde4c0f070fb2763836">CW_SecureSession::clear</a>. </dd>
+<dl class="section warning"><dt>Warning</dt><dd>Mutates <code>session.iv</code>. The failures listed above clear the session automatically. That includes a card error such as a wrong PIN (0x63Cn): a bare status word carries no MAC and may be forged in the NFC path, and keeping the old IV would let the card silently mis-decrypt the next command's first block. Reconnect before the next command. </dd>
 <dd>
-Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</code>, <code>s_dataBuf</code>). Not safe to call concurrently from multiple tasks; serialise at the application level.</dd></dl>
-<p>One secure-messaging round-trip is built in five stages, reusing module- private scratch buffers (<code>s_apduBuf</code>, <code>s_macBuf</code>, <code>s_dataBuf</code>) to keep the call-site stack frame small:</p>
-<ol type="1">
-<li>Plaintext padding — ISO/IEC 9797-1 Method 2 (bit padding) is appended to <code class="param">data</code> so the length is a multiple of the AES block size.</li>
-<li>Encryption — AES-256-CBC under Kenc with the current rolling IV.</li>
-<li>MAC computation — AES-CMAC over (APDU header || Lc || ciphertext) under Kmac. The MAC's last 8 bytes are prepended to the ciphertext in the outgoing APDU.</li>
-<li>Transport — the assembled APDU goes to the card; the response is structured as (MAC[8] || cipher || SW1 SW2).</li>
-<li>Response decryption — delegated to <a class="el" href="#a4199b486cfc6b91eb2d8290295a552b0">aesCbcDecrypt</a>, which verifies the response MAC against Kmac (using the request MAC as the IV per protocol) before decrypting under Kenc.</li>
-</ol>
-<p>IV update — on success, the last 16 bytes of the response ciphertext become the new session IV (rolling IV). On any failure path the IV is left in an undefined state, which is why the caller must treat a false return as a dead session. </p>
+Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</code>, <code>s_dataBuf</code>). Not safe to call concurrently from multiple tasks; serialise at the application level. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00501">501</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00489">489</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00315">_crypto</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00313">_driver</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00314">_logger</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00045">AES_BLOCK_SIZE</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00625">aesCbcDecrypt()</a>, <a class="el" href="CW__Defs_8h_source.html#l00169">CW_SecureSession::aesKey</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00047">APDU_LC_LEN</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00120">checkStatusWord()</a>, <a class="el" href="CW__Defs_8h_source.html#l00181">CW_SecureSession::clear()</a>, <a class="el" href="CW__Defs_8h_source.html#l00077">CW_IV_SIZE</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="platform__compat_8h_source.html#l00035">HEX</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00049">INPUT_BUFFER_LIMIT</a>, <a class="el" href="CW__Defs_8h_source.html#l00171">CW_SecureSession::iv</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00048">MAC_APDU_LEN</a>, <a class="el" href="CW__Defs_8h_source.html#l00170">CW_SecureSession::macKey</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00051">MAX_MAC_DATA_LEN</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00060">s_apduBuf</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00062">s_dataBuf</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00061">s_macBuf</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00052">SEND_APDU_MAX_LEN</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00346">_crypto</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00344">_driver</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00345">_logger</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00045">AES_BLOCK_SIZE</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00660">aesCbcDecrypt()</a>, <a class="el" href="CW__Defs_8h_source.html#l00201">CW_SecureSession::aesKey</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00047">APDU_LC_LEN</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00123">checkStatusWord()</a>, <a class="el" href="CW__Defs_8h_source.html#l00210">CW_SecureSession::clear()</a>, <a class="el" href="CW__Defs_8h_source.html#l00077">CW_IV_SIZE</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="platform__compat_8h_source.html#l00035">HEX</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00049">INPUT_BUFFER_LIMIT</a>, <a class="el" href="CW__Defs_8h_source.html#l00203">CW_SecureSession::iv</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00048">MAC_APDU_LEN</a>, <a class="el" href="CW__Defs_8h_source.html#l00204">CW_SecureSession::macCounter</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00444">macIvForCounter()</a>, <a class="el" href="CW__Defs_8h_source.html#l00202">CW_SecureSession::macKey</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00051">MAX_MAC_DATA_LEN</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00064">s_apduBuf</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00066">s_dataBuf</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00065">s_macBuf</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00052">SEND_APDU_MAX_LEN</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00483">aesCbcEncrypt()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00348">mutuallyAuthenticate()</a>.</p>
+
+</div>
+</div>
+<a id="aa38ee09005d2659c089cd94f43922a37" name="aa38ee09005d2659c089cd94f43922a37"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa38ee09005d2659c089cd94f43922a37">&#9670;&#160;</a></span>appletMajor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t CW_SecureChannel::appletMajor </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Applet major version read at the last SELECT. </p>
+<dl class="section return"><dt>Returns</dt><dd>1 for 1.6.x, 2 for 2.x, 0 if unknown (no SELECT yet). </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00107">107</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
+
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00356">_appletMajor</a>.</p>
 
 </div>
 </div>
@@ -413,9 +513,9 @@ Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</co
 <p>Initialize the NFC transport module. </p>
 <dl class="section return"><dt>Returns</dt><dd>true if the module was successfully initialised, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00100">100</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00103">103</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00313">_driver</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00344">_driver</a>.</p>
 
 </div>
 </div>
@@ -460,11 +560,11 @@ Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</co
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if last two bytes match expectations, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00120">120</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00123">123</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00314">_logger</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, and <a class="el" href="platform__compat_8h_source.html#l00035">HEX</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00345">_logger</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, and <a class="el" href="platform__compat_8h_source.html#l00035">HEX</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00501">aesCbcEncrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00184">getCardCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l01098">getManufacturerCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00334">mutuallyAuthenticate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00265">openSecureChannel()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00155">selectApdu()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00489">aesCbcEncrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00200">getCardCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l01164">getManufacturerCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00281">openSecureChannel()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00158">selectApdu()</a>.</p>
 
 </div>
 </div>
@@ -473,6 +573,9 @@ Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</co
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool CW_SecureChannel::extractCardEphemeralKey </td>
@@ -490,6 +593,11 @@ Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</co
           <td class="paramtype">uint8_t *</td>          <td class="paramname"><span class="paramname"><em>fullEphemeralPubKey65</em></span><span class="paramdefsep"> = </span><span class="paramdefval">NULL</span>&#160;)</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Extract the card's ephemeral EC P-256 public key from a certificate. </p>
@@ -503,7 +611,7 @@ Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</co
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true on success, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00232">232</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00248">248</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
 </div>
 </div>
@@ -537,9 +645,9 @@ Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</co
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true on success, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00184">184</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00200">200</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00315">_crypto</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00313">_driver</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00319">_lastNonce</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00314">_logger</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00120">checkStatusWord()</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00038">GETCARDCERTIFICATE_IN_BYTES</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00040">RANDOM_BYTES</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00027">RESPONSE_GETCARDCERTIFICATE_IN_BYTES</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00035">RESPONSE_STATUS_WORDS_IN_BYTES</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00346">_crypto</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00344">_driver</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00350">_lastNonce</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00345">_logger</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00123">checkStatusWord()</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00038">GETCARDCERTIFICATE_IN_BYTES</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00040">RANDOM_BYTES</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00027">RESPONSE_GETCARDCERTIFICATE_IN_BYTES</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00034">RESPONSE_STATUS_WORDS_IN_BYTES</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>.</p>
 
 </div>
 </div>
@@ -572,11 +680,11 @@ Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</co
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true on success, false if APDU fails or buffer too small. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l01098">1098</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l01164">1164</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00313">_driver</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00314">_logger</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00120">checkStatusWord()</a>, <a class="el" href="CW__Defs_8h_source.html#l00136">CW_MANUF_CERT_MAX_BYTES</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00031">RESPONSE_GETMANUFACTURERCERT_PAGE_IN_BYTES</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00035">RESPONSE_STATUS_WORDS_IN_BYTES</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00344">_driver</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00345">_logger</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00123">checkStatusWord()</a>, <a class="el" href="CW__Defs_8h_source.html#l00168">CW_MANUF_CERT_MAX_BYTES</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00031">RESPONSE_GETMANUFACTURERCERT_PAGE_IN_BYTES</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00034">RESPONSE_STATUS_WORDS_IN_BYTES</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l01194">preFetchManufacturerCert()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l01227">verifyCertificateChain()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l01260">preFetchManufacturerCert()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l01293">verifyCertificateChain()</a>.</p>
 
 </div>
 </div>
@@ -598,9 +706,47 @@ Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</co
 <p>Detect a passive NFC target (ISO-DEP card). </p>
 <dl class="section return"><dt>Returns</dt><dd>true if a card was found, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00104">104</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00107">107</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00313">_driver</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00344">_driver</a>.</p>
+
+</div>
+</div>
+<a id="ab383c509c399c2eaf093c1afacb51136" name="ab383c509c399c2eaf093c1afacb51136"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab383c509c399c2eaf093c1afacb51136">&#9670;&#160;</a></span>macIvForCounter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool CW_SecureChannel::macIvForCounter </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structCW__SecureSession.html">CW_SecureSession</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>session</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t *</td>          <td class="paramname"><span class="paramname"><em>macIv</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>MAC IV for the current counter (zero on 1.6.x). </p>
+<dl class="section return"><dt>Returns</dt><dd>false if AES failed. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00444">444</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00356">_appletMajor</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00346">_crypto</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00045">AES_BLOCK_SIZE</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00035">APPLET_MAJOR_V2</a>, <a class="el" href="CW__Defs_8h_source.html#l00204">CW_SecureSession::macCounter</a>, and <a class="el" href="CW__Defs_8h_source.html#l00202">CW_SecureSession::macKey</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00660">aesCbcDecrypt()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00489">aesCbcEncrypt()</a>.</p>
 
 </div>
 </div>
@@ -646,9 +792,9 @@ Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</co
 <p>Perform ECDH derivation and MUTUALLY AUTHENTICATE with the card. </p>
 <p>Final step of the secure channel handshake:</p><ol type="1">
 <li>ECDH shared secret = clientPrivateKey · cardEphemeralPubKey</li>
-<li>(Kenc || Kmac || IV) ← SHA-512(salt || pairingKey || sharedSecret)</li>
-<li>Encrypts a 16-byte random challenge with the new Kenc and sends it inside the MUTUALLY AUTHENTICATE APDU</li>
-<li>Verifies the card returns the same plaintext when re-encrypting its own counter — this proves the card knows Kenc</li>
+<li>(Kenc || Kmac) ← SHA-512(sharedSecret || pairingKey || salt); initial IV = Kenc[:16], MAC counter = 0</li>
+<li>Sends a 32-byte random challenge as the first wrapped command (MUTUALLY AUTHENTICATE, MAC counter 1); the response MAC is verified</li>
+<li>Applet 2.0+: checks the response equals SHA256(Kenc || challenge), proving the card holds this session's Kenc. 1.6.x replies random bytes and only the length is checked.</li>
 </ol>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -663,29 +809,24 @@ Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</co
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true on success, false if ECDH failed, the card's challenge response did not match, or any APDU exchange failed.</dd></dl>
 <dl class="section pre"><dt>Precondition</dt><dd><a class="el" href="#a1e8132bd74fe103ee41ab6c0e449b446">openSecureChannel</a> must have been called and returned true. </dd></dl>
-<dl class="section post"><dt>Postcondition</dt><dd>On true: <code class="param">session</code> has Kenc, Kmac, and rolling IV ready for <a class="el" href="#a272659530c5fdb5323296887484125f0">aesCbcEncrypt</a>. On false: <code class="param">session</code> is left untouched and must not be used. </dd></dl>
+<dl class="section post"><dt>Postcondition</dt><dd>On true: <code class="param">session</code> has Kenc, Kmac, and rolling IV ready for <a class="el" href="#ad36597824b83c7a110f369a99d32d6fe">aesCbcEncrypt</a>. On false: <code class="param">session</code> is left untouched and must not be used. </dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>All ephemeral key material in the caller's stack (<code class="param">clientPrivateKey</code>, <code class="param">salt</code>) must be wiped after this call.</dd></dl>
 <p>Cryptographic flow:</p><ol type="1">
 <li>Compute the ECDH shared secret S = ECDH(clientPrivateKey,
     cardEphemeralPubKey) on the negotiated curve.</li>
-<li>Derive 80 bytes of keying material via SHA-512 over (salt || S || pairingDataHash) and split into:<ul>
+<li>Derive 64 bytes of keying material via SHA-512 over (S || pairingData || salt) and split into:<ul>
 <li>Kenc[32]: AES-256 session encryption key</li>
-<li>Kmac[32]: AES-256 session MAC key</li>
-<li>IV[16] : initial rolling IV</li>
+<li>Kmac[32]: AES-256 session MAC key The initial encryption IV is Kenc[:16] (the card does the same), and the anti-replay MAC counter starts at 0.</li>
 </ul>
 </li>
-<li>Send MUTUALLY AUTHENTICATE with a random 16-byte challenge encrypted under Kenc / IV. The card must answer with the same 16 bytes re-encrypted with the new IV — a verification that fails fast on any key-derivation mismatch.</li>
-<li>On success, populate <code class="param">session</code> and wipe <code class="param">sharedSecret</code> from the stack.</li>
+<li>Send MUTUALLY AUTHENTICATE as the first wrapped command (counter 1) with a random 32-byte challenge. <a class="el" href="#ad36597824b83c7a110f369a99d32d6fe">aesCbcEncrypt</a> verifies the response MAC.</li>
+<li>Applet 2.0+: the response must equal SHA256(Kenc || challenge), proving the card holds this session's Kenc. 1.6.x answers random bytes, so only the length is checked there.</li>
 </ol>
-<p>Failure modes that cause an early-exit with a wiped session:</p><ul>
-<li>ECDH returned zero or invalid (curve mismatch)</li>
-<li>APDU transport failure</li>
-<li>Card challenge response mismatch (active attacker or wrong card) </li>
-</ul>
+<p>Any failure leaves <code class="param">session</code> cleared. </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00334">334</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00348">348</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00315">_crypto</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00313">_driver</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00314">_logger</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00045">AES_BLOCK_SIZE</a>, <a class="el" href="CW__Defs_8h_source.html#l00169">CW_SecureSession::aesKey</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00046">APDU_HEADER_LEN</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00047">APDU_LC_LEN</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00120">checkStatusWord()</a>, <a class="el" href="CW__Defs_8h_source.html#l00181">CW_SecureSession::clear()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00041">COMMON_PAIRING_DATA</a>, <a class="el" href="CW__Defs_8h_source.html#l00075">CW_AESKEY_SIZE</a>, <a class="el" href="CW__Defs_8h_source.html#l00077">CW_IV_SIZE</a>, <a class="el" href="CW__Defs_8h_source.html#l00076">CW_MACKEY_SIZE</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CW__Defs_8h_source.html#l00171">CW_SecureSession::iv</a>, <a class="el" href="CW__Defs_8h_source.html#l00170">CW_SecureSession::macKey</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00033">REQUEST_MUTUALLYAUTHENTICATE_IN_BYTES</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00034">RESPONSE_MUTUALLYAUTHENTICATE_IN_BYTES</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00356">_appletMajor</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00346">_crypto</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00345">_logger</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00489">aesCbcEncrypt()</a>, <a class="el" href="CW__Defs_8h_source.html#l00201">CW_SecureSession::aesKey</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00035">APPLET_MAJOR_V2</a>, <a class="el" href="CW__Defs_8h_source.html#l00210">CW_SecureSession::clear()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00041">COMMON_PAIRING_DATA</a>, <a class="el" href="CW__Defs_8h_source.html#l00075">CW_AESKEY_SIZE</a>, <a class="el" href="CW__Defs_8h_source.html#l00077">CW_IV_SIZE</a>, <a class="el" href="CW__Defs_8h_source.html#l00076">CW_MACKEY_SIZE</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00050">ENC_BUF_MAX_LEN</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CW__Defs_8h_source.html#l00203">CW_SecureSession::iv</a>, <a class="el" href="CW__Defs_8h_source.html#l00204">CW_SecureSession::macCounter</a>, <a class="el" href="CW__Defs_8h_source.html#l00202">CW_SecureSession::macKey</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00033">MUTUALAUTH_CHALLENGE_IN_BYTES</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00022">CW_Utils::secure_compare()</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>.</p>
 
 </div>
 </div>
@@ -733,9 +874,9 @@ Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</co
 <dl class="section pre"><dt>Precondition</dt><dd><a class="el" href="#a7afa1f7bbd9c0e45069893b00883fd11">selectApdu</a> must have been called successfully. </dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd><code class="param">clientPrivateKey</code> is sensitive — the caller MUST wipe it via <a class="el" href="classCW__Utils.html#a62a40b0e4577c7d716caf48016b40cb2">CW_Utils::secure_wipe</a> on every exit path. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00265">265</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00281">281</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00315">_crypto</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00313">_driver</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00314">_logger</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00120">checkStatusWord()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00043">CLIENT_PUBLIC_KEY_SIZE</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00037">OPENSECURECHANNEL_SALT_IN_BYTES</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00032">RESPONSE_OPENSECURECHANNEL_IN_BYTES</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00346">_crypto</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00344">_driver</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00345">_logger</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00123">checkStatusWord()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00043">CLIENT_PUBLIC_KEY_SIZE</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00037">OPENSECURECHANNEL_SALT_IN_BYTES</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00032">RESPONSE_OPENSECURECHANNEL_IN_BYTES</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>.</p>
 
 </div>
 </div>
@@ -762,7 +903,7 @@ Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</co
 </table>
 </div><div class="memdoc">
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8cpp_source.html#l00087">CW_SecureChannel()</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8cpp_source.html#l00091">CW_SecureChannel()</a>.</p>
 
 </div>
 </div>
@@ -798,11 +939,11 @@ Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</co
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l01018">1018</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l01084">1084</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l01082">verifyEcdsaSha256()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l01148">verifyEcdsaSha256()</a>.</p>
 
 </div>
 </div>
@@ -825,9 +966,9 @@ Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</co
 <p>The Cryptnox card state machine advances after GET_CARD_CERTIFICATE (INS=F8) and will not respond to GET_MANUFACTURER_CERTIFICATE (INS=F7) after that point. Call this method immediately after <a class="el" href="#a7afa1f7bbd9c0e45069893b00883fd11" title="Send the SELECT APDU to activate the Cryptnox application.">selectApdu()</a> and before <a class="el" href="#a72983a22674a33744054095eb7e9d3f9" title="Retrieve the card&#39;s ephemeral public key via GET CARD CERTIFICATE.">getCardCertificate()</a> so that <a class="el" href="#a8368b07ac2f5885dbe68a4ac5e2973b9" title="Verify the full card certificate chain against the trusted CA.">verifyCertificateChain()</a> can use the cached copy without an APDU.</p>
 <dl class="section return"><dt>Returns</dt><dd>true if the certificate was fetched and cached, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l01194">1194</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l01260">1260</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00322">_cachedMfCertLen</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l01098">getManufacturerCertificate()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00065">s_mfCertBuf</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00353">_cachedMfCertLen</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l01164">getManufacturerCertificate()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00069">s_mfCertBuf</a>.</p>
 
 </div>
 </div>
@@ -849,9 +990,9 @@ Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</co
 <p>Print the NFC reader firmware version to the logger. </p>
 <dl class="section return"><dt>Returns</dt><dd>true on success, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00112">112</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00115">115</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00313">_driver</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00344">_driver</a>.</p>
 
 </div>
 </div>
@@ -872,9 +1013,9 @@ Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</co
 
 <p>Reset the NFC reader hardware. </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00108">108</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00111">111</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00313">_driver</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00344">_driver</a>.</p>
 
 </div>
 </div>
@@ -894,11 +1035,11 @@ Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</co
 </div><div class="memdoc">
 
 <p>Send the SELECT APDU to activate the Cryptnox application. </p>
-<dl class="section return"><dt>Returns</dt><dd>true on success, false otherwise. </dd></dl>
+<p>Also records the applet major version (SELECT byte 1), which gates the 2.0 channel features: the anti-replay MAC counter and the mutual-auth proof. </p><dl class="section return"><dt>Returns</dt><dd>true on success, false otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00155">155</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l00158">158</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00313">_driver</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00314">_logger</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00120">checkStatusWord()</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00029">RESPONSE_SELECT_IN_BYTES</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00356">_appletMajor</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00344">_driver</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00345">_logger</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00123">checkStatusWord()</a>, <a class="el" href="CW__Defs_8h_source.html#l00264">CW_MIN_APPLET_MAJOR</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00029">RESPONSE_SELECT_IN_BYTES</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00034">RESPONSE_STATUS_WORDS_IN_BYTES</a>.</p>
 
 </div>
 </div>
@@ -952,9 +1093,9 @@ Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</co
 </ol>
 <p>Both signatures are SHA-256-then-ECDSA over the relevant TBS bytes. Any TLV parsing error short-circuits with <a class="el" href="CW__Defs_8h.html#a3c7163177e0aa80127ec2c2dba1295b0">CW_CERT_FORMAT_ERROR</a> rather than touching the verifier — DER parsing is the largest attack surface here and is independently fuzzed (see <span class="tt">fuzz/fuzz_der.cpp</span>). </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l01227">1227</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l01293">1293</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00322">_cachedMfCertLen</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00319">_lastNonce</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00314">_logger</a>, <a class="el" href="CW__Defs_8h_source.html#l00130">CW_CERT_CARD_SIG_INVALID</a>, <a class="el" href="CW__Defs_8h_source.html#l00128">CW_CERT_FORMAT_ERROR</a>, <a class="el" href="CW__Defs_8h_source.html#l00132">CW_CERT_KEY_NOT_FOUND</a>, <a class="el" href="CW__Defs_8h_source.html#l00131">CW_CERT_MANUF_SIG_INVALID</a>, <a class="el" href="CW__Defs_8h_source.html#l00129">CW_CERT_NONCE_MISMATCH</a>, <a class="el" href="CW__Defs_8h_source.html#l00124">CW_CERT_NONCE_SIZE</a>, <a class="el" href="CW__Defs_8h_source.html#l00127">CW_CERT_OK</a>, <a class="el" href="CW__TrustedKeys_8h_source.html#l00046">CW_TRUSTED_CA_COUNT</a>, <a class="el" href="CW__TrustedKeys_8h_source.html#l00050">CW_TRUSTED_CA_KEYS</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00791">derWalkMfCert()</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l01098">getManufacturerCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00065">s_mfCertBuf</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00022">CW_Utils::secure_compare()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l01082">verifyEcdsaSha256()</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00353">_cachedMfCertLen</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00350">_lastNonce</a>, <a class="el" href="CW__SecureChannel_8h_source.html#l00345">_logger</a>, <a class="el" href="CW__Defs_8h_source.html#l00162">CW_CERT_CARD_SIG_INVALID</a>, <a class="el" href="CW__Defs_8h_source.html#l00160">CW_CERT_FORMAT_ERROR</a>, <a class="el" href="CW__Defs_8h_source.html#l00164">CW_CERT_KEY_NOT_FOUND</a>, <a class="el" href="CW__Defs_8h_source.html#l00163">CW_CERT_MANUF_SIG_INVALID</a>, <a class="el" href="CW__Defs_8h_source.html#l00161">CW_CERT_NONCE_MISMATCH</a>, <a class="el" href="CW__Defs_8h_source.html#l00156">CW_CERT_NONCE_SIZE</a>, <a class="el" href="CW__Defs_8h_source.html#l00159">CW_CERT_OK</a>, <a class="el" href="CW__TrustedKeys_8h_source.html#l00046">CW_TRUSTED_CA_COUNT</a>, <a class="el" href="CW__TrustedKeys_8h_source.html#l00050">CW_TRUSTED_CA_KEYS</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00857">derWalkMfCert()</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l01164">getManufacturerCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00069">s_mfCertBuf</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00022">CW_Utils::secure_compare()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l01148">verifyEcdsaSha256()</a>.</p>
 
 </div>
 </div>
@@ -1000,15 +1141,43 @@ Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</co
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l01082">1082</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8cpp_source.html#l01148">1148</a> of file <a class="el" href="CW__SecureChannel_8cpp_source.html">CW_SecureChannel.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00315">_crypto</a>, <a class="el" href="CW__Defs_8h_source.html#l00152">CW_CURVE_SECP256R1</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l01018">parseDerSigToRaw()</a>.</p>
+<p class="reference">References <a class="el" href="CW__SecureChannel_8h_source.html#l00346">_crypto</a>, <a class="el" href="CW__Defs_8h_source.html#l00184">CW_CURVE_SECP256R1</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l01084">parseDerSigToRaw()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l01227">verifyCertificateChain()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l01293">verifyCertificateChain()</a>.</p>
 
 </div>
 </div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="a94074effa8080d555c5ed621b75c1dc0" name="a94074effa8080d555c5ed621b75c1dc0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a94074effa8080d555c5ed621b75c1dc0">&#9670;&#160;</a></span>_appletMajor</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t CW_SecureChannel::_appletMajor {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Applet major version from the last SELECT (0 = unknown → legacy channel). </p>
+
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00356">356</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8h_source.html#l00107">appletMajor()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00091">CW_SecureChannel()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00444">macIvForCounter()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00348">mutuallyAuthenticate()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00158">selectApdu()</a>.</p>
+
+</div>
+</div>
 <a id="a740f78dd7b634d1c4f1c707e3d463473" name="a740f78dd7b634d1c4f1c707e3d463473"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a740f78dd7b634d1c4f1c707e3d463473">&#9670;&#160;</a></span>_cachedMfCertLen</h2>
 
@@ -1019,7 +1188,7 @@ Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</co
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">uint16_t CW_SecureChannel::_cachedMfCertLen</td>
+          <td class="memname">uint16_t CW_SecureChannel::_cachedMfCertLen {}</td>
         </tr>
       </table>
   </td>
@@ -1031,9 +1200,9 @@ Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</co
 
 <p>Non-zero when s_mfCertBuf holds a valid pre-fetched manufacturer certificate. </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00322">322</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00353">353</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00087">CW_SecureChannel()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l01194">preFetchManufacturerCert()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l01227">verifyCertificateChain()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00091">CW_SecureChannel()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l01260">preFetchManufacturerCert()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l01293">verifyCertificateChain()</a>.</p>
 
 </div>
 </div>
@@ -1059,9 +1228,9 @@ Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</co
 
 <p>Crypto operations (AES, SHA, ECDH, RNG). </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00315">315</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00346">346</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00625">aesCbcDecrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00501">aesCbcEncrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00087">CW_SecureChannel()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00184">getCardCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00334">mutuallyAuthenticate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00265">openSecureChannel()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l01082">verifyEcdsaSha256()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00660">aesCbcDecrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00489">aesCbcEncrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00091">CW_SecureChannel()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00200">getCardCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00444">macIvForCounter()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00348">mutuallyAuthenticate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00281">openSecureChannel()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l01148">verifyEcdsaSha256()</a>.</p>
 
 </div>
 </div>
@@ -1087,9 +1256,9 @@ Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</co
 
 <p>NFC transport for APDU exchange. </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00313">313</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00344">344</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00501">aesCbcEncrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00100">begin()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00087">CW_SecureChannel()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00184">getCardCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l01098">getManufacturerCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00104">inListPassiveTarget()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00334">mutuallyAuthenticate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00265">openSecureChannel()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00112">printFirmwareVersion()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00108">resetReader()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00155">selectApdu()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00489">aesCbcEncrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00103">begin()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00091">CW_SecureChannel()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00200">getCardCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l01164">getManufacturerCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00107">inListPassiveTarget()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00281">openSecureChannel()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00115">printFirmwareVersion()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00111">resetReader()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00158">selectApdu()</a>.</p>
 
 </div>
 </div>
@@ -1103,7 +1272,7 @@ Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</co
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t CW_SecureChannel::_lastNonce[<a class="el" href="CW__Defs_8h.html#a9bd1c342a843f48ace5a8cadda6b7339">CW_CERT_NONCE_SIZE</a>]</td>
+          <td class="memname">uint8_t CW_SecureChannel::_lastNonce[<a class="el" href="CW__Defs_8h.html#a9bd1c342a843f48ace5a8cadda6b7339">CW_CERT_NONCE_SIZE</a>] {}</td>
         </tr>
       </table>
   </td>
@@ -1115,9 +1284,9 @@ Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</co
 
 <p>Nonce sent in the last <a class="el" href="#a72983a22674a33744054095eb7e9d3f9" title="Retrieve the card&#39;s ephemeral public key via GET CARD CERTIFICATE.">getCardCertificate()</a> call; checked in <a class="el" href="#a8368b07ac2f5885dbe68a4ac5e2973b9" title="Verify the full card certificate chain against the trusted CA.">verifyCertificateChain()</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00319">319</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00350">350</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00087">CW_SecureChannel()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00184">getCardCertificate()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l01227">verifyCertificateChain()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00200">getCardCertificate()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l01293">verifyCertificateChain()</a>.</p>
 
 </div>
 </div>
@@ -1143,9 +1312,9 @@ Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</co
 
 <p>Logging interface. </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00314">314</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00345">345</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00625">aesCbcDecrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00501">aesCbcEncrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00120">checkStatusWord()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00087">CW_SecureChannel()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00184">getCardCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l01098">getManufacturerCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00334">mutuallyAuthenticate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00265">openSecureChannel()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00155">selectApdu()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l01227">verifyCertificateChain()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00660">aesCbcDecrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00489">aesCbcEncrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00123">checkStatusWord()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00091">CW_SecureChannel()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00200">getCardCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l01164">getManufacturerCertificate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00348">mutuallyAuthenticate()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00281">openSecureChannel()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00158">selectApdu()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l01293">verifyCertificateChain()</a>.</p>
 
 </div>
 </div>
@@ -1171,9 +1340,9 @@ Reuses module-private static buffers (<code>s_apduBuf</code>, <code>s_macBuf</co
 
 <p>Platform abstraction (sleep_ms). </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00316">316</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__SecureChannel_8h_source.html#l00347">347</a> of file <a class="el" href="CW__SecureChannel_8h_source.html">CW_SecureChannel.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00087">CW_SecureChannel()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00091">CW_SecureChannel()</a>.</p>
 
 </div>
 </div>

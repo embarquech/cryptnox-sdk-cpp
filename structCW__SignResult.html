@@ -106,14 +106,14 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:aefde572eb2e1e8778f602f46858c090f" id="r_aefde572eb2e1e8778f602f46858c090f"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aefde572eb2e1e8778f602f46858c090f">signature</a> [<a class="el" href="CW__Defs_8h.html#a0e37cc7186bb38a7f2a248ba98f9d4c2">CW_RAW_SIGNATURE_SIZE</a>]</td></tr>
-<tr class="memitem:a75988aa74d72c0d8923e8b30765f251c" id="r_a75988aa74d72c0d8923e8b30765f251c"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a75988aa74d72c0d8923e8b30765f251c">errorCode</a></td></tr>
+<tr class="memitem:aefde572eb2e1e8778f602f46858c090f" id="r_aefde572eb2e1e8778f602f46858c090f"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aefde572eb2e1e8778f602f46858c090f">signature</a> [<a class="el" href="CW__Defs_8h.html#a0e37cc7186bb38a7f2a248ba98f9d4c2">CW_RAW_SIGNATURE_SIZE</a>] {}</td></tr>
+<tr class="memitem:a75988aa74d72c0d8923e8b30765f251c" id="r_a75988aa74d72c0d8923e8b30765f251c"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a75988aa74d72c0d8923e8b30765f251c">errorCode</a> {}</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Result of <a class="el" href="classCryptnoxWallet.html#a539f73749cce012f4a973840c76d1275">CryptnoxWallet::sign</a>. </p>
 <p>The error code is checked first: when it is <a class="el" href="CW__Defs_8h.html#a7f7a5a8c51b74f2b976654cb18097914">CW_OK</a> the signature is valid raw (r || s) on secp256k1 / secp256r1 (depending on the <code>keyType</code> used). On any other code <code>signature</code> is left zero. </p>
 
-<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8h_source.html#l00116">116</a> of file <a class="el" href="CryptnoxWallet_8h_source.html">CryptnoxWallet.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8h_source.html#l00112">112</a> of file <a class="el" href="CryptnoxWallet_8h_source.html">CryptnoxWallet.h</a>.</p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a28561e0290c5e493651ce16879b5594b" name="a28561e0290c5e493651ce16879b5594b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a28561e0290c5e493651ce16879b5594b">&#9670;&#160;</a></span>CW_SignResult()</h2>
@@ -140,9 +140,9 @@ Public Attributes</h2></td></tr>
 
 <p>Construct a default-failure result. </p>
 
-<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8h_source.html#l00121">121</a> of file <a class="el" href="CryptnoxWallet_8h_source.html">CryptnoxWallet.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8h_source.html#l00117">117</a> of file <a class="el" href="CryptnoxWallet_8h_source.html">CryptnoxWallet.h</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__Defs_8h_source.html#l00081">CW_NOK</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00118">errorCode</a>, and <a class="el" href="CryptnoxWallet_8h_source.html#l00117">signature</a>.</p>
+<p class="reference">References <a class="el" href="CW__Defs_8h_source.html#l00081">CW_NOK</a>, and <a class="el" href="CryptnoxWallet_8h_source.html#l00114">errorCode</a>.</p>
 
 </div>
 </div>
@@ -154,15 +154,15 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t CW_SignResult::errorCode</td>
+          <td class="memname">uint8_t CW_SignResult::errorCode {}</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p><a class="el" href="CW__Defs_8h.html#a7f7a5a8c51b74f2b976654cb18097914">CW_OK</a> on success, otherwise a <code>CW_SIGN_*</code> / <code>CW_INVALID_SESSION</code> code. </p>
 
-<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8h_source.html#l00118">118</a> of file <a class="el" href="CryptnoxWallet_8h_source.html">CryptnoxWallet.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8h_source.html#l00114">114</a> of file <a class="el" href="CryptnoxWallet_8h_source.html">CryptnoxWallet.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8h_source.html#l00121">CW_SignResult()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00535">CryptnoxWallet::extractRawSignature()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00511">CryptnoxWallet::sendSignApdu()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00348">CryptnoxWallet::sign()</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00437">CryptnoxWallet::validateSignRequest()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8h_source.html#l00117">CW_SignResult()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00691">CryptnoxWallet::extractRawSignature()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00664">CryptnoxWallet::sendSignApdu()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00381">CryptnoxWallet::sign()</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00554">CryptnoxWallet::validateSignRequest()</a>.</p>
 
 </div>
 </div>
@@ -173,15 +173,15 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t CW_SignResult::signature[<a class="el" href="CW__Defs_8h.html#a0e37cc7186bb38a7f2a248ba98f9d4c2">CW_RAW_SIGNATURE_SIZE</a>]</td>
+          <td class="memname">uint8_t CW_SignResult::signature[<a class="el" href="CW__Defs_8h.html#a0e37cc7186bb38a7f2a248ba98f9d4c2">CW_RAW_SIGNATURE_SIZE</a>] {}</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Raw 64-byte signature: r[32] || s[32]. Zero on failure. </p>
+<p>Raw 64-byte signature: ECDSA r[32]||s[32], or Ed25519 R[32]||S[32]. Zero on failure. </p>
 
-<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8h_source.html#l00117">117</a> of file <a class="el" href="CryptnoxWallet_8h_source.html">CryptnoxWallet.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8h_source.html#l00113">113</a> of file <a class="el" href="CryptnoxWallet_8h_source.html">CryptnoxWallet.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8h_source.html#l00121">CW_SignResult()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00535">CryptnoxWallet::extractRawSignature()</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00348">CryptnoxWallet::sign()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00691">CryptnoxWallet::extractRawSignature()</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00381">CryptnoxWallet::sign()</a>.</p>
 
 </div>
 </div>

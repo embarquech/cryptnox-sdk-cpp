@@ -29,6 +29,7 @@ var NAVTREE =
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
+      [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", null ],
         [ "Functions", "functions_func.html", null ],
@@ -52,7 +53,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "CW__CryptoProvider_8h.html",
-"globals_defs.html"
+"classCryptnoxWallet.html#a4dd3b06ea634ddf8805e6d5a0ece9199"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

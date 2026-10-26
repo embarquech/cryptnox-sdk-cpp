@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['writeuserdata_0',['writeUserData',['../classCryptnoxWallet.html#a4ec22fccb95ebf3ad536fa0fb50577d1',1,'CryptnoxWallet']]]
+  ['writeuserdata_0',['writeUserData',['../classCryptnoxWallet.html#ac2eea53c09988a2401be2d18661bdaf4',1,'CryptnoxWallet']]]
 ];

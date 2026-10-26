@@ -1,0 +1,5 @@
+<map id="CW_Logger" name="CW_Logger">
+<area shape="rect" id="Node000001" title="Abstract interface for serial/debug output." alt="" coords="5,5,100,33"/>
+<area shape="rect" id="Node000002" href="$classNullLogger.html" title=" " alt="" coords="7,81,98,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="54,47,55,81,50,80,51,51"/>
+</map>

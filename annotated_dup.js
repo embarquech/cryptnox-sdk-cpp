@@ -12,5 +12,10 @@ var annotated_dup =
     [ "CW_SignRequest", "structCW__SignRequest.html", "structCW__SignRequest" ],
     [ "CW_SignResult", "structCW__SignResult.html", "structCW__SignResult" ],
     [ "CW_Tron", "classCW__Tron.html", "classCW__Tron" ],
-    [ "CW_Utils", "classCW__Utils.html", "classCW__Utils" ]
+    [ "CW_Utils", "classCW__Utils.html", "classCW__Utils" ],
+    [ "FakeCrypto", "classFakeCrypto.html", "classFakeCrypto" ],
+    [ "FakeNfc", "classFakeNfc.html", "classFakeNfc" ],
+    [ "NullLogger", "classNullLogger.html", "classNullLogger" ],
+    [ "NullPlatform", "classNullPlatform.html", "classNullPlatform" ],
+    [ "Rig", "structRig.html", "structRig" ]
 ];

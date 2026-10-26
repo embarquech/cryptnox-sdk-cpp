@@ -1,15 +1,15 @@
 <map id="CW_Utils.cpp" name="CW_Utils.cpp">
-<area shape="rect" id="Node000001" title="Implementation of the platform&#45;independent utility helpers." alt="" coords="132,5,240,31"/>
-<area shape="rect" id="Node000002" href="$CW__Utils_8h.html" title="Platform&#45;independent security and memory utilities." alt="" coords="139,79,233,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="189,31,189,65,183,65,183,31"/>
-<area shape="rect" id="Node000003" href="$platform__compat_8h.html" title="Arduino compatibility shims for non&#45;Arduino (plain C++) builds." alt="" coords="113,152,259,177"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="189,104,189,138,183,138,183,104"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="5,225,76,251"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="164,180,78,222,75,217,161,175"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="101,225,175,251"/>
-<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="180,179,156,216,151,213,176,176"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="200,225,271,251"/>
-<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="196,176,222,213,217,216,192,179"/>
-<area shape="rect" id="Node000007" title=" " alt="" coords="295,225,378,251"/>
-<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="211,175,301,217,298,222,209,180"/>
+<area shape="rect" id="Node000001" title="Implementation of the platform&#45;independent utility helpers." alt="" coords="131,5,238,33"/>
+<area shape="rect" id="Node000002" href="$CW__Utils_8h.html" title="Platform&#45;independent security and memory utilities." alt="" coords="138,81,231,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="186,31,187,66,182,65,183,36"/>
+<area shape="rect" id="Node000003" href="$platform__compat_8h.html" title="Arduino compatibility shims for non&#45;Arduino (plain C++) builds." alt="" coords="112,157,257,184"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="186,107,187,142,182,140,183,111"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,232,76,260"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="160,187,81,227,78,223,157,183"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="100,232,173,260"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="178,184,155,221,151,217,174,186"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="197,232,268,260"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="194,183,218,220,213,219,192,187"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="292,232,373,260"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="212,182,295,225,290,226,210,187"/>
 </map>

@@ -1,7 +1,7 @@
 var group__api =
 [
     [ "CW_CardInfo", "structCW__CardInfo.html", [
-      [ "CW_CardInfo", "structCW__CardInfo.html#ae7bca225f4e7609bf03b369c8442e747", null ],
+      [ "CW_CardInfo", "structCW__CardInfo.html#a9107b8b23d001b465fd0f3704e0bb743", null ],
       [ "email", "structCW__CardInfo.html#a590f9b4badd408ac548437381e497cf9", null ],
       [ "name", "structCW__CardInfo.html#a127fbcca2102755f6d494330e6897ebf", null ]
     ] ],
@@ -30,24 +30,26 @@ var group__api =
       [ "extractRawSignature", "classCryptnoxWallet.html#a6a683e324d4e03eda442248a5a0d4fd0", null ],
       [ "getCardInfo", "classCryptnoxWallet.html#a8331fe2f662397916749769e17d68ecd", null ],
       [ "getPublicKey", "classCryptnoxWallet.html#a4a250b97782d932a604ec45ce7a87bc3", null ],
-      [ "isSecureChannelOpen", "classCryptnoxWallet.html#a08c6fa72f255be4cff6113187f8e3218", null ],
+      [ "getPublicKey", "classCryptnoxWallet.html#aa2c8bf152658cfb47746b67ec2ede815", null ],
+      [ "isSecureChannelOpen", "classCryptnoxWallet.html#a4338b672ed4cacef20656cc64bd91b97", null ],
       [ "operator=", "classCryptnoxWallet.html#a58a42d63ad36000234d879e44f28fd8b", null ],
       [ "parseDerSignature", "classCryptnoxWallet.html#a03e08d9bb6e9e5af10a886e715c05237", null ],
       [ "printPN532FirmwareVersion", "classCryptnoxWallet.html#a9342637fe7352965de1aefb74f082a6c", null ],
-      [ "sendSignApdu", "classCryptnoxWallet.html#aacd6bbaf21d650b9eb17762d8934cc92", null ],
+      [ "sendSignApdu", "classCryptnoxWallet.html#a4dd3b06ea634ddf8805e6d5a0ece9199", null ],
       [ "sign", "classCryptnoxWallet.html#a539f73749cce012f4a973840c76d1275", null ],
       [ "validateSignRequest", "classCryptnoxWallet.html#a9a4781470793bc69b62150894e10d301", null ],
       [ "verifyPin", "classCryptnoxWallet.html#acfae75a7be8662c18d2e6af829ef77a0", null ],
-      [ "writeUserData", "classCryptnoxWallet.html#a4ec22fccb95ebf3ad536fa0fb50577d1", null ],
+      [ "writeUserData", "classCryptnoxWallet.html#ac2eea53c09988a2401be2d18661bdaf4", null ],
       [ "_logger", "classCryptnoxWallet.html#a538b17a2655f1ad640cc37e806f01a70", null ],
       [ "_platform", "classCryptnoxWallet.html#a055dbbf78dfdf00fa5a4fab36857de6f", null ],
       [ "_secure", "classCryptnoxWallet.html#a0e62a45d25b98c3b0b48c8060d684908", null ]
     ] ],
     [ "CW_SecureSession", "structCW__SecureSession.html", [
-      [ "CW_SecureSession", "structCW__SecureSession.html#a7159bf5062a3e31ac518f449738df46a", null ],
+      [ "CW_SecureSession", "structCW__SecureSession.html#aca8e13c552b9d4b5572e7fa9dc9b0921", null ],
       [ "clear", "structCW__SecureSession.html#a4cc397558babedde4c0f070fb2763836", null ],
       [ "aesKey", "structCW__SecureSession.html#a7f5784e87376b41e263a187709ae9208", null ],
       [ "iv", "structCW__SecureSession.html#ace70404b860b19c6a961c993eedd469b", null ],
+      [ "macCounter", "structCW__SecureSession.html#a966f0763d866b0ba93e80c4749f2af97", null ],
       [ "macKey", "structCW__SecureSession.html#a1ed577efda4e4071cd585fbf1e922f88", null ]
     ] ]
 ];

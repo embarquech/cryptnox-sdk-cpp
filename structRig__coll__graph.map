@@ -1,0 +1,21 @@
+<map id="Rig" name="Rig">
+<area shape="rect" id="Node000001" title=" " alt="" coords="330,207,373,234"/>
+<area shape="rect" id="Node000002" href="$classFakeNfc.html" title=" " alt="" coords="83,106,156,134"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="165,137,332,209,328,212,164,143"/>
+<area shape="rect" id="Node000003" href="$classCW__NfcTransport.html" title="Abstract interface for NFC transport operations." alt="" coords="5,5,138,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="79,45,95,81,111,105,106,106,90,83,79,50"/>
+<area shape="rect" id="Node000006" href="$classCW__SecureChannel.html" title="Implements the Cryptnox secure channel protocol over NFC." alt="" coords="206,106,353,134"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="99,40,130,61,162,80,228,105,223,106,160,84,127,65,99,45"/>
+<area shape="rect" id="Node000004" href="$classFakeCrypto.html" title=" " alt="" coords="377,106,470,134"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="408,145,363,208,360,204,403,147"/>
+<area shape="rect" id="Node000005" href="$classCW__CryptoProvider.html" title="Abstract interface for cryptographic operations used by CW_SecureChannel." alt="" coords="410,5,557,33"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="480,47,467,83,444,108,441,103,463,81,476,50"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="436,39,405,59,393,72,380,84,328,108,326,103,377,80,389,68,402,55,432,41"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="299,144,344,207,339,206,296,148"/>
+<area shape="rect" id="Node000007" href="$classCW__Logger.html" title="Abstract interface for serial/debug output." alt="" coords="162,5,256,33"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="217,45,235,80,261,106,256,106,231,84,215,50"/>
+<area shape="rect" id="Node000008" href="$classCW__Platform.html" title="Abstract interface for platform&#45;specific operations used by the SDK." alt="" coords="280,5,386,33"/>
+<area shape="poly" id="edge9_Node000006_Node000008" title=" " alt="" coords="316,44,310,58,287,107,282,104,305,56,312,48"/>
+<area shape="rect" id="Node000009" href="$structCW__SecureSession.html" title="Holds cryptographic session state for reentrant secure channel operations." alt="" coords="494,106,638,134"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="533,141,451,185,374,215,372,210,449,180,528,142"/>
+</map>

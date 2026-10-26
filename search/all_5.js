@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['ecdh_0',['ecdh',['../classCW__CryptoProvider.html#aae68c4a93ee9045c5250b58744326cfd',1,'CW_CryptoProvider']]],
-  ['ecdsaverify_1',['ecdsaVerify',['../classCW__CryptoProvider.html#a756db119bc97e5e36e7b24d260e4fab4',1,'CW_CryptoProvider']]],
+  ['ecdh_0',['ecdh',['../classCW__CryptoProvider.html#aae68c4a93ee9045c5250b58744326cfd',1,'CW_CryptoProvider::ecdh()'],['../classFakeCrypto.html#a63db3c8f0991be8883e72300331e8ac8',1,'FakeCrypto::ecdh()']]],
+  ['ecdsaverify_1',['ecdsaVerify',['../classCW__CryptoProvider.html#a756db119bc97e5e36e7b24d260e4fab4',1,'CW_CryptoProvider::ecdsaVerify()'],['../classFakeCrypto.html#a5e70346fd2dfe6c9602c47d6fc74562b',1,'FakeCrypto::ecdsaVerify()']]],
   ['email_2',['email',['../structCW__CardInfo.html#a590f9b4badd408ac548437381e497cf9',1,'CW_CardInfo']]],
   ['enc_5fbuf_5fmax_5flen_3',['ENC_BUF_MAX_LEN',['../CW__SecureChannel_8cpp.html#aed7638aad5cb447691c51f0d6c48a14f',1,'CW_SecureChannel.cpp']]],
   ['encodeaddress_4',['encodeAddress',['../classCW__Tron.html#ab7df0ef41ab92e059ac170d24b45f213',1,'CW_Tron']]],

@@ -101,25 +101,26 @@ $(function(){initNavTree('structCW__SecureSession.html','','structCW__SecureSess
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a7159bf5062a3e31ac518f449738df46a" id="r_a7159bf5062a3e31ac518f449738df46a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7159bf5062a3e31ac518f449738df46a">CW_SecureSession</a> ()</td></tr>
-<tr class="memdesc:a7159bf5062a3e31ac518f449738df46a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zero-initialise all session keys and IV.  <br /></td></tr>
+<tr class="memitem:aca8e13c552b9d4b5572e7fa9dc9b0921" id="r_aca8e13c552b9d4b5572e7fa9dc9b0921"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aca8e13c552b9d4b5572e7fa9dc9b0921">CW_SecureSession</a> ()=default</td></tr>
+<tr class="memdesc:aca8e13c552b9d4b5572e7fa9dc9b0921"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zero-initialise all session keys, IV and counter.  <br /></td></tr>
 <tr class="memitem:a4cc397558babedde4c0f070fb2763836" id="r_a4cc397558babedde4c0f070fb2763836"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4cc397558babedde4c0f070fb2763836">clear</a> ()</td></tr>
 <tr class="memdesc:a4cc397558babedde4c0f070fb2763836"><td class="mdescLeft">&#160;</td><td class="mdescRight">Securely clear all session keys and IV.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a7f5784e87376b41e263a187709ae9208" id="r_a7f5784e87376b41e263a187709ae9208"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7f5784e87376b41e263a187709ae9208">aesKey</a> [<a class="el" href="CW__Defs_8h.html#ab2cbf807dca2732cdf52cc1f7ea7eed7">CW_AESKEY_SIZE</a>]</td></tr>
-<tr class="memitem:a1ed577efda4e4071cd585fbf1e922f88" id="r_a1ed577efda4e4071cd585fbf1e922f88"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ed577efda4e4071cd585fbf1e922f88">macKey</a> [<a class="el" href="CW__Defs_8h.html#a788f3618a3b011dafdeac9a4be0e4511">CW_MACKEY_SIZE</a>]</td></tr>
-<tr class="memitem:ace70404b860b19c6a961c993eedd469b" id="r_ace70404b860b19c6a961c993eedd469b"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace70404b860b19c6a961c993eedd469b">iv</a> [<a class="el" href="CW__Defs_8h.html#a0174789c51339e421a8fd1b10570bd9d">CW_IV_SIZE</a>]</td></tr>
+<tr class="memitem:a7f5784e87376b41e263a187709ae9208" id="r_a7f5784e87376b41e263a187709ae9208"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7f5784e87376b41e263a187709ae9208">aesKey</a> [<a class="el" href="CW__Defs_8h.html#ab2cbf807dca2732cdf52cc1f7ea7eed7">CW_AESKEY_SIZE</a>] {}</td></tr>
+<tr class="memitem:a1ed577efda4e4071cd585fbf1e922f88" id="r_a1ed577efda4e4071cd585fbf1e922f88"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ed577efda4e4071cd585fbf1e922f88">macKey</a> [<a class="el" href="CW__Defs_8h.html#a788f3618a3b011dafdeac9a4be0e4511">CW_MACKEY_SIZE</a>] {}</td></tr>
+<tr class="memitem:ace70404b860b19c6a961c993eedd469b" id="r_ace70404b860b19c6a961c993eedd469b"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace70404b860b19c6a961c993eedd469b">iv</a> [<a class="el" href="CW__Defs_8h.html#a0174789c51339e421a8fd1b10570bd9d">CW_IV_SIZE</a>] {}</td></tr>
+<tr class="memitem:a966f0763d866b0ba93e80c4749f2af97" id="r_a966f0763d866b0ba93e80c4749f2af97"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a966f0763d866b0ba93e80c4749f2af97">macCounter</a> {}</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Holds cryptographic session state for reentrant secure channel operations. </p>
 <p>Encapsulates all session-specific cryptographic material (Kenc, Kmac, rolling IV), allowing functions to be reentrant by passing session state as a parameter. </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00168">168</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00200">200</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a7159bf5062a3e31ac518f449738df46a" name="a7159bf5062a3e31ac518f449738df46a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7159bf5062a3e31ac518f449738df46a">&#9670;&#160;</a></span>CW_SecureSession()</h2>
+<a id="aca8e13c552b9d4b5572e7fa9dc9b0921" name="aca8e13c552b9d4b5572e7fa9dc9b0921"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca8e13c552b9d4b5572e7fa9dc9b0921">&#9670;&#160;</a></span>CW_SecureSession()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -136,16 +137,12 @@ Public Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel default">default</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Zero-initialise all session keys and IV. </p>
-
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00174">174</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
-
-<p class="reference">References <a class="el" href="CW__Defs_8h_source.html#l00169">aesKey</a>, <a class="el" href="CW__Defs_8h_source.html#l00171">iv</a>, and <a class="el" href="CW__Defs_8h_source.html#l00170">macKey</a>.</p>
+<p>Zero-initialise all session keys, IV and counter. </p>
 
 </div>
 </div>
@@ -175,11 +172,11 @@ Public Attributes</h2></td></tr>
 
 <p>Securely clear all session keys and IV. </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00181">181</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00210">210</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
-<p class="reference">References <a class="el" href="CW__Defs_8h_source.html#l00169">aesKey</a>, <a class="el" href="CW__Defs_8h_source.html#l00171">iv</a>, <a class="el" href="CW__Defs_8h_source.html#l00170">macKey</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>.</p>
+<p class="reference">References <a class="el" href="CW__Defs_8h_source.html#l00201">aesKey</a>, <a class="el" href="CW__Defs_8h_source.html#l00203">iv</a>, <a class="el" href="CW__Defs_8h_source.html#l00204">macCounter</a>, <a class="el" href="CW__Defs_8h_source.html#l00202">macKey</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00501">CW_SecureChannel::aesCbcEncrypt()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00044">CryptnoxWallet::connect()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00158">CryptnoxWallet::disconnect()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00334">CW_SecureChannel::mutuallyAuthenticate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00489">CW_SecureChannel::aesCbcEncrypt()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00096">CryptnoxWallet::connect()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00218">CryptnoxWallet::disconnect()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00348">CW_SecureChannel::mutuallyAuthenticate()</a>, and <a class="el" href="test__pr28_8cpp_source.html#l00133">openSession()</a>.</p>
 
 </div>
 </div>
@@ -191,15 +188,15 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t CW_SecureSession::aesKey[<a class="el" href="CW__Defs_8h.html#ab2cbf807dca2732cdf52cc1f7ea7eed7">CW_AESKEY_SIZE</a>]</td>
+          <td class="memname">uint8_t CW_SecureSession::aesKey[<a class="el" href="CW__Defs_8h.html#ab2cbf807dca2732cdf52cc1f7ea7eed7">CW_AESKEY_SIZE</a>] {}</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>AES-256 session encryption key (Kenc) </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00169">169</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00201">201</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00625">CW_SecureChannel::aesCbcDecrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00501">CW_SecureChannel::aesCbcEncrypt()</a>, <a class="el" href="CW__Defs_8h_source.html#l00181">clear()</a>, <a class="el" href="CW__Defs_8h_source.html#l00174">CW_SecureSession()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00425">CryptnoxWallet::isSecureChannelOpen()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00334">CW_SecureChannel::mutuallyAuthenticate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00660">CW_SecureChannel::aesCbcDecrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00489">CW_SecureChannel::aesCbcEncrypt()</a>, <a class="el" href="CW__Defs_8h_source.html#l00210">clear()</a>, <a class="el" href="test__pr28_8cpp_source.html#l00140">isCleared()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00542">CryptnoxWallet::isSecureChannelOpen()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00348">CW_SecureChannel::mutuallyAuthenticate()</a>, and <a class="el" href="test__pr28_8cpp_source.html#l00133">openSession()</a>.</p>
 
 </div>
 </div>
@@ -210,15 +207,34 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t CW_SecureSession::iv[<a class="el" href="CW__Defs_8h.html#a0174789c51339e421a8fd1b10570bd9d">CW_IV_SIZE</a>]</td>
+          <td class="memname">uint8_t CW_SecureSession::iv[<a class="el" href="CW__Defs_8h.html#a0174789c51339e421a8fd1b10570bd9d">CW_IV_SIZE</a>] {}</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>Current AES-CBC IV (rolling IV) </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00171">171</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00203">203</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00501">CW_SecureChannel::aesCbcEncrypt()</a>, <a class="el" href="CW__Defs_8h_source.html#l00181">clear()</a>, <a class="el" href="CW__Defs_8h_source.html#l00174">CW_SecureSession()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00334">CW_SecureChannel::mutuallyAuthenticate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00489">CW_SecureChannel::aesCbcEncrypt()</a>, <a class="el" href="CW__Defs_8h_source.html#l00210">clear()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00348">CW_SecureChannel::mutuallyAuthenticate()</a>, and <a class="el" href="test__pr28_8cpp_source.html#l00133">openSession()</a>.</p>
+
+</div>
+</div>
+<a id="a966f0763d866b0ba93e80c4749f2af97" name="a966f0763d866b0ba93e80c4749f2af97"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a966f0763d866b0ba93e80c4749f2af97">&#9670;&#160;</a></span>macCounter</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t CW_SecureSession::macCounter {}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>GAP-01 anti-replay counter (applet 2.0+): +1 per wrapped command, folded into both MACs, never sent </p>
+
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00204">204</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00489">CW_SecureChannel::aesCbcEncrypt()</a>, <a class="el" href="test__pr28_8cpp_source.html#l00169">check_session_clearing()</a>, <a class="el" href="CW__Defs_8h_source.html#l00210">clear()</a>, <a class="el" href="test__pr28_8cpp_source.html#l00140">isCleared()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00444">CW_SecureChannel::macIvForCounter()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00348">CW_SecureChannel::mutuallyAuthenticate()</a>.</p>
 
 </div>
 </div>
@@ -229,15 +245,15 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t CW_SecureSession::macKey[<a class="el" href="CW__Defs_8h.html#a788f3618a3b011dafdeac9a4be0e4511">CW_MACKEY_SIZE</a>]</td>
+          <td class="memname">uint8_t CW_SecureSession::macKey[<a class="el" href="CW__Defs_8h.html#a788f3618a3b011dafdeac9a4be0e4511">CW_MACKEY_SIZE</a>] {}</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>AES-256 session MAC key (Kmac) </p>
 
-<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00170">170</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CW__Defs_8h_source.html#l00202">202</a> of file <a class="el" href="CW__Defs_8h_source.html">CW_Defs.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00625">CW_SecureChannel::aesCbcDecrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00501">CW_SecureChannel::aesCbcEncrypt()</a>, <a class="el" href="CW__Defs_8h_source.html#l00181">clear()</a>, <a class="el" href="CW__Defs_8h_source.html#l00174">CW_SecureSession()</a>, and <a class="el" href="CW__SecureChannel_8cpp_source.html#l00334">CW_SecureChannel::mutuallyAuthenticate()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CW__SecureChannel_8cpp_source.html#l00660">CW_SecureChannel::aesCbcDecrypt()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00489">CW_SecureChannel::aesCbcEncrypt()</a>, <a class="el" href="CW__Defs_8h_source.html#l00210">clear()</a>, <a class="el" href="test__pr28_8cpp_source.html#l00140">isCleared()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00444">CW_SecureChannel::macIvForCounter()</a>, <a class="el" href="CW__SecureChannel_8cpp_source.html#l00348">CW_SecureChannel::mutuallyAuthenticate()</a>, and <a class="el" href="test__pr28_8cpp_source.html#l00133">openSession()</a>.</p>
 
 </div>
 </div>

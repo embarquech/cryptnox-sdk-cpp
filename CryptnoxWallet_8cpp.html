@@ -101,16 +101,145 @@ $(function(){initNavTree('CryptnoxWallet_8cpp.html','',''); });
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for CryptnoxWallet.cpp:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="CryptnoxWallet_8cpp__incl.svg" width="882" height="550"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="CryptnoxWallet_8cpp__incl.svg" width="874" height="568"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 <p><a href="CryptnoxWallet_8cpp_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ab43f3a06dae47a5028398fa5b1ba929c" id="r_ab43f3a06dae47a5028398fa5b1ba929c"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab43f3a06dae47a5028398fa5b1ba929c">cwIsEd25519</a> (uint8_t keyType)</td></tr>
+<tr class="memitem:aad28ff31c7c8b6aad2ee610b132d0a6f" id="r_aad28ff31c7c8b6aad2ee610b132d0a6f"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aad28ff31c7c8b6aad2ee610b132d0a6f">cwSignNeedsPath</a> (uint8_t keyType)</td></tr>
+<tr class="memitem:a6fc61ec757531509827ba0723ae6ad8f" id="r_a6fc61ec757531509827ba0723ae6ad8f"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6fc61ec757531509827ba0723ae6ad8f">cwPubKeyTypeAllowed</a> (uint8_t keyType)</td></tr>
+<tr class="memitem:a61cff5312517c5e8afe08a1fdb01cd24" id="r_a61cff5312517c5e8afe08a1fdb01cd24"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a61cff5312517c5e8afe08a1fdb01cd24">cwMaxEd25519Message</a> (const <a class="el" href="structCW__SignRequest.html">CW_SignRequest</a> &amp;request)</td></tr>
+</table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Implementation of the high-level <a class="el" href="classCryptnoxWallet.html" title="High-level interface for interacting with a Cryptnox Hardware Wallet over NFC.">CryptnoxWallet</a> API. </p>
 <p>Coordinates the secure channel layer (<a class="el" href="classCW__SecureChannel.html">CW_SecureChannel</a>) with the higher-level wallet operations declared in <a class="el" href="CryptnoxWallet_8h.html">CryptnoxWallet.h</a>. Handles connection retries, sensitive buffer wiping on every exit path, PIN/sign payload assembly, and DER signature parsing. </p>
 
 <p class="definition">Definition in file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
-</div></div><!-- contents -->
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a id="ab43f3a06dae47a5028398fa5b1ba929c" name="ab43f3a06dae47a5028398fa5b1ba929c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab43f3a06dae47a5028398fa5b1ba929c">&#9670;&#160;</a></span>cwIsEd25519()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cwIsEd25519 </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>keyType</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00023">23</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00623">CryptnoxWallet::buildSignPayload()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00426">CryptnoxWallet::getPublicKey()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00664">CryptnoxWallet::sendSignApdu()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00381">CryptnoxWallet::sign()</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00554">CryptnoxWallet::validateSignRequest()</a>.</p>
+
+</div>
+</div>
+<a id="a61cff5312517c5e8afe08a1fdb01cd24" name="a61cff5312517c5e8afe08a1fdb01cd24"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61cff5312517c5e8afe08a1fdb01cd24">&#9670;&#160;</a></span>cwMaxEd25519Message()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t cwMaxEd25519Message </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structCW__SignRequest.html">CW_SignRequest</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>request</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00059">59</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="CW__Defs_8h_source.html#l00140">CW_MAX_PIN_LENGTH</a>, <a class="el" href="CW__Defs_8h_source.html#l00141">CW_USER_DATA_PAGE_SIZE</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00029">cwSignNeedsPath()</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00079">CW_SignRequest::derivePath</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00080">CW_SignRequest::derivePathLength</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00073">CW_SignRequest::keyType</a>, and <a class="el" href="CryptnoxWallet_8h_source.html#l00076">CW_SignRequest::pinLessMode</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00554">CryptnoxWallet::validateSignRequest()</a>.</p>
+
+</div>
+</div>
+<a id="a6fc61ec757531509827ba0723ae6ad8f" name="a6fc61ec757531509827ba0723ae6ad8f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6fc61ec757531509827ba0723ae6ad8f">&#9670;&#160;</a></span>cwPubKeyTypeAllowed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cwPubKeyTypeAllowed </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>keyType</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00038">38</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
+
+<p class="reference">References <a class="el" href="CW__Defs_8h_source.html#l00093">CW_SIGN_CURR_ED25519</a>, <a class="el" href="CW__Defs_8h_source.html#l00088">CW_SIGN_CURR_K1</a>, <a class="el" href="CW__Defs_8h_source.html#l00089">CW_SIGN_CURR_R1</a>, <a class="el" href="CW__Defs_8h_source.html#l00094">CW_SIGN_DERIVE_ED25519</a>, <a class="el" href="CW__Defs_8h_source.html#l00090">CW_SIGN_DERIVE_K1</a>, and <a class="el" href="CW__Defs_8h_source.html#l00091">CW_SIGN_DERIVE_R1</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00426">CryptnoxWallet::getPublicKey()</a>.</p>
+
+</div>
+</div>
+<a id="aad28ff31c7c8b6aad2ee610b132d0a6f" name="aad28ff31c7c8b6aad2ee610b132d0a6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad28ff31c7c8b6aad2ee610b132d0a6f">&#9670;&#160;</a></span>cwSignNeedsPath()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cwSignNeedsPath </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t</td>          <td class="paramname"><span class="paramname"><em>keyType</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00029">29</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00623">CryptnoxWallet::buildSignPayload()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00059">cwMaxEd25519Message()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00426">CryptnoxWallet::getPublicKey()</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00554">CryptnoxWallet::validateSignRequest()</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <div id="page-nav" class="page-nav-panel">
 <div id="page-nav-resize-handle"></div>
