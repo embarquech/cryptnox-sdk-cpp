@@ -66,7 +66,7 @@ useful references for a complete port.
 
 | File | Role |
 |------|------|
-| `CryptnoxWallet.{h,cpp}`        | High-level API: `begin`, `connect`, `verifyPin`, `sign`, `writeUserData`, `disconnect` |
+| `CryptnoxWallet.{h,cpp}`        | High-level API: `begin`, `connect`, `verifyPin`, `sign`, `getPublicKey`, `writeUserData`, `disconnect` |
 | `CW_SecureChannel.{h,cpp}`      | Secure channel protocol (mutual auth, session keys, encrypted APDU exchange) |
 | `CW_NfcTransport.h`             | **Adapter interface** — NFC reader contract |
 | `CW_CryptoProvider.h`           | **Adapter interface** — SHA-256/512, AES-CBC, ECDH, EC keygen, RNG |

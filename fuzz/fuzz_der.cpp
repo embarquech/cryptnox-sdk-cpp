@@ -30,9 +30,11 @@
  *   anything else   → both parsers receive the same payload
  */
 
-/* Must be defined before including CW_SecureChannel.h so the friend
- * declaration for DerFuzzTarget is compiled in.                        */
-#define CW_FUZZ_BUILD 1
+/* Host-only harness, opt-in: CW_FUZZ_BUILD is set by fuzz/CMakeLists.txt
+ * (it also compiles in the DerFuzzTarget friend in CW_SecureChannel.h).
+ * Any other build that globs every source file (Arduino IDE, PlatformIO,
+ * ESP-IDF) gets an empty TU instead of duplicate symbols and stub clashes. */
+#if defined(CW_FUZZ_BUILD)
 
 #include <stdint.h>
 #include <stddef.h>
@@ -162,3 +164,5 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
 
     return 0;
 }
+
+#endif /* CW_FUZZ_BUILD */
