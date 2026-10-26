@@ -294,9 +294,6 @@ bool CryptnoxWallet::getCardInfo(CW_SecureSession& session, CW_CardInfo* info) {
                                 decrypted, sizeof(decrypted), &decryptedLen);
 
     if (ret && (info != NULL)) {
-        /* Parse into a scratch copy: *info is written only when both fields
-         * are valid printable ASCII (they may be shown on a display). */
-        CW_CardInfo parsed{};
         /* Response layout (Cryptnox basic_g1 spec):
          *   [byte0] [name_len(1)] [name(name_len)]
          *           [email_len(1)] [email(email_len)] [... more fields ...]
@@ -309,6 +306,9 @@ bool CryptnoxWallet::getCardInfo(CW_SecureSession& session, CW_CardInfo* info) {
             if ((nameLen <= CW_CARD_NAME_MAX_LEN) &&
                 ((uint16_t)(pos + nameLen + 1U) <= decryptedLen) &&
                 cwIsPrintable(decrypted + pos, nameLen)) {
+                /* Parse into a scratch copy: *info is written only when both fields
+                 * are valid printable ASCII (they may be shown on a display). */
+                CW_CardInfo parsed{};
                 (void)CW_Utils::safe_memcpy(reinterpret_cast<uint8_t*>(parsed.name),
                                             sizeof(parsed.name),
                                             decrypted + pos, nameLen);
