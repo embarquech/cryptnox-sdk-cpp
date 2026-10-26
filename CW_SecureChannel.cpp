@@ -476,10 +476,9 @@ bool CW_SecureChannel::macIvForCounter(const CW_SecureSession& session, uint8_t*
  *      the response MAC against Kmac (using the request MAC as the IV per
  *      protocol) before decrypting under Kenc.
  *
- * IV update — on success, the last 16 bytes of the response ciphertext become
- * the new session IV (rolling IV). On any failure path the IV is left in an
- * undefined state, which is why the caller must treat a false return as a
- * dead session.
+ * IV update — on success, the first 16 bytes of the response (the card's
+ * response MAC) become the new session IV (rolling IV). Every failure after
+ * the MAC counter advances clears the session, a non-9000 SW included.
  */
 bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
                                      const uint8_t apdu[], uint16_t apduLength,
@@ -624,16 +623,24 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
             } else {
                 session.clear();
             }
-        } else if (responseLength >= 2U) {
+        } else {
+#if CW_DEBUG_LOGGING
             /* Card-level error: surface the SW so the caller can diagnose
              * common cases (e.g. 0x63Cn = wrong PIN with n retries left). */
-#if CW_DEBUG_LOGGING
-            _logger.print(F("Secured APDU: bad SW 0x"));
-            if (response[responseLength - 2U] < 0x10U) { _logger.print(F("0")); }
-            _logger.print(response[responseLength - 2U], HEX);
-            if (response[responseLength - 1U] < 0x10U) { _logger.print(F("0")); }
-            _logger.println(response[responseLength - 1U], HEX);
+            if (responseLength >= 2U) {
+                _logger.print(F("Secured APDU: bad SW 0x"));
+                if (response[responseLength - 2U] < 0x10U) { _logger.print(F("0")); }
+                _logger.print(response[responseLength - 2U], HEX);
+                if (response[responseLength - 1U] < 0x10U) { _logger.print(F("0")); }
+                _logger.println(response[responseLength - 1U], HEX);
+            }
 #endif
+            /* A bare SW carries no MAC, so it may be forged in the NFC path: the
+             * card may have run the command and moved its IV to the response MAC
+             * we never saw. Keeping our old IV would make the card decrypt the
+             * next command's first block wrongly, and silently (the MAC does not
+             * cover the IV). Clear, so the caller renegotiates. */
+            session.clear();
         }
     } else {
 #if CW_DEBUG_LOGGING
