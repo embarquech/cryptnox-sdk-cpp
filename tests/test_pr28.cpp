@@ -200,14 +200,22 @@ static void check_session_clearing(void) {
         CHECK(!r.send(DATA, sizeof(DATA)));
         CHECK(isCleared(r.s));
     }
-    { /* Bare error SW: session kept, counter advanced in step with the card. */
+    { /* Bare error SW (unauthenticated, may be injected): cleared, so the next
+       * command cannot go out with a stale IV. */
         Rig r;
         r.nfc.sendOk = true;
-        r.nfc.resp[0] = 0x69U;
-        r.nfc.resp[1] = 0x82U;
+        r.nfc.resp[0] = 0x6FU;
+        r.nfc.resp[1] = 0x00U;
         r.nfc.respLen = 2U;
         CHECK(!r.send(DATA, sizeof(DATA)));
-        CHECK(!isCleared(r.s) && (r.s.macCounter == 1U));
+        CHECK(isCleared(r.s));
+    }
+    { /* Response too short to hold an SW: cleared. */
+        Rig r;
+        r.nfc.sendOk = true;
+        r.nfc.respLen = 1U;
+        CHECK(!r.send(DATA, sizeof(DATA)));
+        CHECK(isCleared(r.s));
     }
     { /* Oversized payload, rejected before anything is sent: session kept. */
         static const uint8_t big[CW_USER_DATA_PAGE_SIZE + 1U] = { 0U };
