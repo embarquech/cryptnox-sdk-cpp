@@ -466,7 +466,8 @@ bool CW_SecureChannel::macIvForCounter(const CW_SecureSession& session, uint8_t*
  *
  *   1. Plaintext padding — ISO/IEC 9797-1 Method 2 (bit padding) is appended
  *      to @p data so the length is a multiple of the AES block size.
- *   2. Encryption — AES-256-CBC under Kenc with the current rolling IV.
+ *   2. Encryption — AES-256-CBC under Kenc with a local copy of the current
+ *      rolling IV, so the session IV is only written after a verified response.
  *   3. MAC computation — AES-CMAC over (APDU header || Lc || ciphertext)
  *      under Kmac. The MAC's last 8 bytes are prepended to the ciphertext
  *      in the outgoing APDU.
@@ -501,10 +502,15 @@ bool CW_SecureChannel::aesCbcEncrypt(CW_SecureSession& session,
         return false;
     }
 
-    /* 1. Encrypt data with Kenc (Bit padding) */
+    /* 1. Encrypt data with Kenc (Bit padding). The provider advances the IV it
+     * is given ([in,out]), so hand it a copy: session.iv only moves once a
+     * response MAC verifies, never on an early return below (M1). */
+    uint8_t encIv[CW_IV_SIZE] = { 0U };
+    (void)CW_Utils::safe_memcpy(encIv, sizeof(encIv), session.iv, CW_IV_SIZE);
     uint16_t encryptedLength = _crypto.aesCbcEncrypt(data, dataLength, s_dataBuf,
                                                      session.aesKey, sizeof(session.aesKey),
-                                                     session.iv, true);
+                                                     encIv, true);
+    CW_Utils::secure_wipe(encIv, sizeof(encIv));
 
     uint16_t lcValue = encryptedLength + (uint16_t)AES_BLOCK_SIZE;
     /* lcValue must fit in uint8_t: with INPUT_BUFFER_LIMIT=208, max encryptedLength=224,

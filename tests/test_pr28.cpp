@@ -59,6 +59,8 @@ class FakeCrypto : public CW_CryptoProvider {
 public:
     bool failMacIv = false;   /* fail the 16-byte counter block encryption (v2 MAC IV) */
     bool failMac   = false;   /* fail the MAC computation itself */
+    const uint8_t* sessionIv = NULL;   /* session.iv, to spot it being handed to the provider */
+    bool gotSessionIv = false;         /* data encryption was given session.iv itself */
 
     bool sha256(const uint8_t*, size_t, uint8_t* out) override { memset(out, 0, 32); return true; }
     bool sha512(const uint8_t*, size_t, uint8_t* out) override { memset(out, 0, 64); return true; }
@@ -71,6 +73,7 @@ public:
                            const uint8_t* key, uint8_t, uint8_t* iv, bool bitPadding) override {
         if (!bitPadding && (len == 16U) && failMacIv) { return 0U; }
         if (!bitPadding && (len > 16U) && failMac) { return 0U; }
+        if (bitPadding && (iv == sessionIv)) { gotSessionIv = true; }
         uint8_t buf[512] = { 0U };
         memcpy(buf, in, len);
         uint16_t total = len;
@@ -222,6 +225,13 @@ static void check_session_clearing(void) {
         Rig r;
         CHECK(!r.send(big, sizeof(big)));
         CHECK(!isCleared(r.s) && (r.s.macCounter == 0U) && (r.nfc.sent == 0U));
+    }
+    { /* The provider advances the IV it is given: it must get a copy, so
+       * session.iv only moves after a verified response (M1). */
+        Rig r;
+        r.crypto.sessionIv = r.s.iv;
+        (void)r.send(DATA, sizeof(DATA));
+        CHECK(!r.crypto.gotSessionIv);
     }
 }
 
