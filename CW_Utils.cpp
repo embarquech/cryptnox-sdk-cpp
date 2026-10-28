@@ -51,7 +51,10 @@ bool CW_Utils::safe_memcpy(uint8_t* dst, size_t dstSize,
                                  const uint8_t* src, size_t count) {
     bool ret = false;
     if ((dst != NULL) && (src != NULL) && (count > 0U) && (count <= dstSize)) {
-        bool overlap = (dst < (src + count)) && (src < (dst + dstSize));
+        /* Integer compare: < on pointers to unrelated objects is unspecified. */
+        const uintptr_t d = reinterpret_cast<uintptr_t>(dst);
+        const uintptr_t s = reinterpret_cast<uintptr_t>(src);
+        bool overlap = (d < (s + count)) && (s < (d + dstSize));
         if (!overlap) {
             memcpy(dst, src, count);
             ret = true;

@@ -84,11 +84,16 @@ public:
      *
      * Computes @c 0x41 || keccak256(publicKey64)[12..32].
      *
-     * @param[in]  publicKey64 64-byte public key (X||Y, no @c 0x04 prefix).
-     * @param[out] out         21-byte output buffer.
-     * @return true on success, false if either pointer is @c NULL.
+     * @param[in]  publicKey64  64-byte public key (X||Y, no @c 0x04 prefix).
+     * @param[in]  publicKeyLen Length of @p publicKey64; must be 64. A 65-byte
+     *                          SEC1 key (as the generic
+     *                          @ref CryptnoxWallet::getPublicKey returns) is
+     *                          refused: strip the @c 0x04 first.
+     * @param[out] out          21-byte output buffer.
+     * @return true on success, false if a pointer is @c NULL or the length is not 64.
      */
     static bool addressBytesFromPublicKey(const uint8_t* publicKey64,
+                                          size_t publicKeyLen,
                                           uint8_t* out);
 
     /**

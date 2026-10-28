@@ -48,7 +48,12 @@ static const uint8_t CW_CA_DLT_PUBKEY[64] = {
 #define CW_TRUSTED_CA_COUNT (1U)
 
 /* Table of all trusted CA public keys (each 64 bytes, X||Y).
- * verifyCertificateChain() tries every entry until one succeeds. */
+ * verifyCertificateChain() tries every entry until one succeeds.
+ *
+ * Production CAs only. Only the CA signature over the manufacturer TBS is
+ * checked: no algorithm OIDs, validity, keyUsage or revocation. Any device or
+ * test certificate a listed CA ever signed stays accepted for ever, so a dev
+ * CA left in a release build accepts every card it signed. */
 static const uint8_t* const CW_TRUSTED_CA_KEYS[CW_TRUSTED_CA_COUNT] = {
     CW_CA_DLT_PUBKEY
 };

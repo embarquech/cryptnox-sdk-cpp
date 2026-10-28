@@ -5,13 +5,12 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # fuzz_der: single-TU harness that includes CW_SecureChannel.cpp and
-# CW_Utils.cpp directly, so only the SDK and uECC header directories
-# are needed on the include path.
+# CW_Utils.cpp directly, so only the SDK directory is needed on the
+# include path.
 add_executable(fuzz_der fuzz_der.cpp)
 
 target_include_directories(fuzz_der PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/..                              # cryptnox-sdk-cpp headers
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../components/uECC/include  # uECC.h shim
+    ${CMAKE_CURRENT_SOURCE_DIR}/..   # cryptnox-sdk-cpp headers
 )
 
 target_compile_definitions(fuzz_der PRIVATE
@@ -20,7 +19,7 @@ target_compile_definitions(fuzz_der PRIVATE
 )
 
 target_compile_options(fuzz_der PRIVATE
-    -fsanitize=fuzzer,address
+    -fsanitize=fuzzer,address,undefined
     -g
     -O1
     -Wall
@@ -28,5 +27,5 @@ target_compile_options(fuzz_der PRIVATE
 )
 
 target_link_options(fuzz_der PRIVATE
-    -fsanitize=fuzzer,address
+    -fsanitize=fuzzer,address,undefined
 )
