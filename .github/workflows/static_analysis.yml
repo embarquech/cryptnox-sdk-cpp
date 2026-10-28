@@ -79,7 +79,8 @@ jobs:
 
       - name: TRON self-test
         run: |
-          g++ -std=c++17 -Wall -Wextra -Werror -DCW_TRON_SELFTEST -I . \
+          g++ -std=c++17 -Wall -Wextra -Werror -g -fsanitize=address,undefined -fno-sanitize-recover=all \
+            -DCW_TRON_SELFTEST -I . \
             CW_Tron.cpp CW_Utils.cpp -o cw_tron_selftest
           ./cw_tron_selftest
 
@@ -102,7 +103,7 @@ jobs:
       - name: DER fuzzer (60 s)
         run: |
           sudo apt-get install -y clang
-          clang++ -std=c++17 -g -O1 -fsanitize=fuzzer,address,undefined \
+          clang++ -std=c++17 -g -O1 -fsanitize=fuzzer,address,undefined -fno-sanitize-recover=all \
             -DCW_FUZZ_BUILD=1 -DCW_DEBUG_LOGGING=0 -I . fuzz/fuzz_der.cpp -o fuzz_der
           mkdir -p fuzz-corpus
           ./fuzz_der fuzz-corpus -max_total_time=60 -max_len=512

@@ -394,6 +394,11 @@ static void check_safe_memcpy(void) {
     CHECK(!CW_Utils::safe_memcpy(buf, 8U, buf + 4, 8U));                  /* overlap */
     CHECK(CW_Utils::safe_memcpy(buf + 8, 8U, buf, 8U) && (buf[15] == 8U)); /* adjacent */
     CHECK(!CW_Utils::safe_memcpy(NULL, 8U, src, 8U) && !CW_Utils::safe_memcpy(buf, 8U, NULL, 8U));
+
+    /* Distinct objects: the overlap check compares unrelated addresses. */
+    uint8_t other[8] = { 0U };
+    CHECK(CW_Utils::safe_memcpy(other, sizeof(other), src, sizeof(src)) && (other[7] == 8U));
+    CHECK(CW_Utils::safe_memcpy(buf, sizeof(buf), other, sizeof(other)) && (buf[7] == 8U));
 }
 
 /******************************************************************

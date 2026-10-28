@@ -429,10 +429,38 @@ static void check_base58(void) {
     assert(!base58_decode_payload(bad, ignored));
 }
 
+/* decodeAddress() must reject the length before touching the provider. */
+class NullCrypto : public CW_CryptoProvider {
+public:
+    bool sha256(const uint8_t*, size_t, uint8_t*) override { return false; }
+    bool sha512(const uint8_t*, size_t, uint8_t*) override { return false; }
+    uint16_t aesCbcEncrypt(const uint8_t*, uint16_t, uint8_t*, const uint8_t*, uint8_t,
+                           uint8_t*, bool) override { return 0U; }
+    uint16_t aesCbcDecrypt(uint8_t*, uint16_t, uint8_t*, const uint8_t*, uint8_t,
+                           uint8_t*, bool) override { return 0U; }
+    bool ecdh(const uint8_t*, const uint8_t*, uint8_t*, CW_Curve) override { return false; }
+    bool makeKey(uint8_t*, uint8_t*, CW_Curve) override { return false; }
+    bool random(uint8_t*, unsigned) override { return false; }
+    bool ecdsaVerify(const uint8_t*, const uint8_t*, size_t, const uint8_t*, CW_Curve) override {
+        return false;
+    }
+};
+
+static void check_decode_unterminated(void) {
+    /* L17: exactly CW_TRON_ADDRESS_STR_SIZE bytes, no '\0'. strnlen must stop
+     * at the bound (ASan catches an over-read) and the length is refused. */
+    char unterminated[CW_TRON_ADDRESS_STR_SIZE];
+    memset(unterminated, 'T', sizeof(unterminated));
+    NullCrypto crypto;
+    uint8_t out[CW_TRON_ADDRESS_BYTES];
+    assert(!CW_Tron::decodeAddress(unterminated, crypto, out));
+}
+
 int main(void) {
     check_keccak_empty();
     check_address_bytes();
     check_base58();
+    check_decode_unterminated();
     printf("CW_Tron self-check OK\n");
     return 0;
 }
