@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['opensecurechannel_0',['openSecureChannel',['../classCW__SecureChannel.html#a1e8132bd74fe103ee41ab6c0e449b446',1,'CW_SecureChannel']]],
-  ['opensession_1',['openSession',['../test__pr28_8cpp.html#a9a1a20504c57ad4221549b7f0193277e',1,'test_pr28.cpp']]],
-  ['operator_3d_2',['operator=',['../classCryptnoxWallet.html#a58a42d63ad36000234d879e44f28fd8b',1,'CryptnoxWallet::operator=()'],['../classCW__SecureChannel.html#a0954f7ac239499b82b72f5561c5bb2b8',1,'CW_SecureChannel::operator=()']]]
+  ['macivforcounter_0',['macIvForCounter',['../classCW__SecureChannel.html#ab383c509c399c2eaf093c1afacb51136',1,'CW_SecureChannel']]],
+  ['main_1',['main',['../test__pr28_8cpp.html#a840291bc02cba5474a4cb46a9b9566fe',1,'test_pr28.cpp']]],
+  ['makekey_2',['makeKey',['../classCW__CryptoProvider.html#adb0cb9fc0ee8264d09832d8992bae48c',1,'CW_CryptoProvider::makeKey()'],['../classFakeCrypto.html#a18dbf6fe5c4aefee2666538d3eb4cea6',1,'FakeCrypto::makeKey()']]],
+  ['mutuallyauthenticate_3',['mutuallyAuthenticate',['../classCW__SecureChannel.html#a2561fd15dadb9c6cef938e344e645c22',1,'CW_SecureChannel']]]
 ];

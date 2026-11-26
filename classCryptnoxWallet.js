@@ -13,6 +13,7 @@ var classCryptnoxWallet =
     [ "getPublicKey", "classCryptnoxWallet.html#a4a250b97782d932a604ec45ce7a87bc3", null ],
     [ "getPublicKey", "classCryptnoxWallet.html#aa2c8bf152658cfb47746b67ec2ede815", null ],
     [ "isSecureChannelOpen", "classCryptnoxWallet.html#a4338b672ed4cacef20656cc64bd91b97", null ],
+    [ "lastCertResult", "classCryptnoxWallet.html#a891e25981705ce8c83901db04e040551", null ],
     [ "operator=", "classCryptnoxWallet.html#a58a42d63ad36000234d879e44f28fd8b", null ],
     [ "parseDerSignature", "classCryptnoxWallet.html#a03e08d9bb6e9e5af10a886e715c05237", null ],
     [ "printPN532FirmwareVersion", "classCryptnoxWallet.html#a9342637fe7352965de1aefb74f082a6c", null ],
@@ -21,6 +22,7 @@ var classCryptnoxWallet =
     [ "validateSignRequest", "classCryptnoxWallet.html#a9a4781470793bc69b62150894e10d301", null ],
     [ "verifyPin", "classCryptnoxWallet.html#acfae75a7be8662c18d2e6af829ef77a0", null ],
     [ "writeUserData", "classCryptnoxWallet.html#ac2eea53c09988a2401be2d18661bdaf4", null ],
+    [ "_lastCertResult", "classCryptnoxWallet.html#ac3ade94f3a2a561cedf7bfac7ac4598b", null ],
     [ "_logger", "classCryptnoxWallet.html#a538b17a2655f1ad640cc37e806f01a70", null ],
     [ "_platform", "classCryptnoxWallet.html#a055dbbf78dfdf00fa5a4fab36857de6f", null ],
     [ "_secure", "classCryptnoxWallet.html#a0e62a45d25b98c3b0b48c8060d684908", null ]

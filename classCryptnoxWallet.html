@@ -116,6 +116,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a9231d6ed6a0634a8ab7c2a2710224a49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Connect to the Cryptnox card and establish a secure channel.  <br /></td></tr>
 <tr class="memitem:a8584e36b3c8c088ad1ee18358246262e" id="r_a8584e36b3c8c088ad1ee18358246262e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8584e36b3c8c088ad1ee18358246262e">establishSecureChannel</a> (<a class="el" href="structCW__SecureSession.html">CW_SecureSession</a> &amp;session)</td></tr>
 <tr class="memdesc:a8584e36b3c8c088ad1ee18358246262e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Establish a secure channel (SELECT → certificate → ECDH → mutual auth).  <br /></td></tr>
+<tr class="memitem:a891e25981705ce8c83901db04e040551" id="r_a891e25981705ce8c83901db04e040551"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a891e25981705ce8c83901db04e040551">lastCertResult</a> () const</td></tr>
+<tr class="memdesc:a891e25981705ce8c83901db04e040551"><td class="mdescLeft">&#160;</td><td class="mdescRight">Certificate-chain result of the last <a class="el" href="#a8584e36b3c8c088ad1ee18358246262e">establishSecureChannel()</a>.  <br /></td></tr>
 <tr class="memitem:a5e52a31fba0f21862e588e1546ad1898" id="r_a5e52a31fba0f21862e588e1546ad1898"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5e52a31fba0f21862e588e1546ad1898">disconnect</a> (<a class="el" href="structCW__SecureSession.html">CW_SecureSession</a> &amp;session)</td></tr>
 <tr class="memdesc:a5e52a31fba0f21862e588e1546ad1898"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disconnect and securely clear the session.  <br /></td></tr>
 <tr class="memitem:a8331fe2f662397916749769e17d68ecd" id="r_a8331fe2f662397916749769e17d68ecd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8331fe2f662397916749769e17d68ecd">getCardInfo</a> (<a class="el" href="structCW__SecureSession.html">CW_SecureSession</a> &amp;session, <a class="el" href="structCW__CardInfo.html">CW_CardInfo</a> *info=NULL)</td></tr>
@@ -157,6 +159,8 @@ Private Attributes</h2></td></tr>
 <tr class="memdesc:a055dbbf78dfdf00fa5a4fab36857de6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Platform abstraction (sleep_ms).  <br /></td></tr>
 <tr class="memitem:a0e62a45d25b98c3b0b48c8060d684908" id="r_a0e62a45d25b98c3b0b48c8060d684908"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCW__SecureChannel.html">CW_SecureChannel</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0e62a45d25b98c3b0b48c8060d684908">_secure</a></td></tr>
 <tr class="memdesc:a0e62a45d25b98c3b0b48c8060d684908"><td class="mdescLeft">&#160;</td><td class="mdescRight">Owned secure channel.  <br /></td></tr>
+<tr class="memitem:ac3ade94f3a2a561cedf7bfac7ac4598b" id="r_ac3ade94f3a2a561cedf7bfac7ac4598b"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac3ade94f3a2a561cedf7bfac7ac4598b">_lastCertResult</a> = <a class="el" href="CW__Defs_8h.html#aa87b10265a161be9fde707f97c4fff3f">CW_CERT_OK</a></td></tr>
+<tr class="memdesc:ac3ade94f3a2a561cedf7bfac7ac4598b"><td class="mdescLeft">&#160;</td><td class="mdescRight">See <a class="el" href="#a891e25981705ce8c83901db04e040551" title="Certificate-chain result of the last establishSecureChannel().">lastCertResult()</a>.  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>High-level interface for interacting with a Cryptnox Hardware Wallet over NFC. </p>
@@ -222,7 +226,7 @@ Private Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00079">79</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00412">_logger</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00413">_platform</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00414">_secure</a>, <a class="el" href="test__pr28_8cpp_source.html#l00133">logger</a>, and <a class="el" href="test__pr28_8cpp_source.html#l00134">platform</a>.</p>
+<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00425">_logger</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00426">_platform</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00427">_secure</a>, <a class="el" href="test__pr28_8cpp_source.html#l00133">logger</a>, and <a class="el" href="test__pr28_8cpp_source.html#l00134">platform</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="#a4cfad878f6d5c649b83d30b5ecf23527">CryptnoxWallet()</a>, and <a class="el" href="#a58a42d63ad36000234d879e44f28fd8b">operator=()</a>.</p>
 
@@ -276,7 +280,7 @@ Private Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00088">88</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00414">_secure</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00550">printPN532FirmwareVersion()</a>.</p>
+<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00427">_secure</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00553">printPN532FirmwareVersion()</a>.</p>
 
 </div>
 </div>
@@ -312,11 +316,11 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00623">623</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00626">626</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="CW__Defs_8h_source.html#l00140">CW_MAX_PIN_LENGTH</a>, <a class="el" href="CW__Defs_8h_source.html#l00141">CW_USER_DATA_PAGE_SIZE</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00023">cwIsEd25519()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00029">cwSignNeedsPath()</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00079">CW_SignRequest::derivePath</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00080">CW_SignRequest::derivePathLength</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00077">CW_SignRequest::hash</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00078">CW_SignRequest::hashLength</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00073">CW_SignRequest::keyType</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00075">CW_SignRequest::pin</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00076">CW_SignRequest::pinLessMode</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00381">sign()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00384">sign()</a>.</p>
 
 </div>
 </div>
@@ -351,7 +355,7 @@ On false: <code class="param">session</code> is zero-wiped. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00096">96</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00412">_logger</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00413">_platform</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00414">_secure</a>, <a class="el" href="CW__Defs_8h_source.html#l00210">CW_SecureSession::clear()</a>, <a class="el" href="CW__Defs_8h_source.html#l00145">CW_CONNECT_MAX_ATTEMPTS</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00127">establishSecureChannel()</a>, and <a class="el" href="platform__compat_8h_source.html#l00042">F</a>.</p>
+<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00425">_logger</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00426">_platform</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00427">_secure</a>, <a class="el" href="CW__Defs_8h_source.html#l00210">CW_SecureSession::clear()</a>, <a class="el" href="CW__Defs_8h_source.html#l00145">CW_CONNECT_MAX_ATTEMPTS</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00127">establishSecureChannel()</a>, and <a class="el" href="platform__compat_8h_source.html#l00042">F</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="test__pr28_8cpp_source.html#l00249">selectOnly()</a>.</p>
 
@@ -380,11 +384,11 @@ On false: <code class="param">session</code> is zero-wiped. </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00754">754</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00757">757</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00412">_logger</a>, <a class="el" href="CW__Defs_8h_source.html#l00117">CW_RAW_SIGNATURE_SIZE</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, and <a class="el" href="platform__compat_8h_source.html#l00035">HEX</a>.</p>
+<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00425">_logger</a>, <a class="el" href="CW__Defs_8h_source.html#l00117">CW_RAW_SIGNATURE_SIZE</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, and <a class="el" href="platform__compat_8h_source.html#l00035">HEX</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00381">sign()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00384">sign()</a>.</p>
 
 </div>
 </div>
@@ -413,9 +417,9 @@ On false: <code class="param">session</code> is zero-wiped. </dd></dl>
 </dl>
 <dl class="section pre"><dt>Precondition</dt><dd>Must be called at the end of every card-processing iteration — including iterations where <a class="el" href="#a9231d6ed6a0634a8ab7c2a2710224a49">connect()</a> failed — otherwise the NFC reader may remain in an unresponsive state. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00218">218</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00221">221</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00414">_secure</a>, <a class="el" href="CW__Defs_8h_source.html#l00210">CW_SecureSession::clear()</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00542">isSecureChannelOpen()</a>.</p>
+<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00427">_secure</a>, <a class="el" href="CW__Defs_8h_source.html#l00210">CW_SecureSession::clear()</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00545">isSecureChannelOpen()</a>.</p>
 
 </div>
 </div>
@@ -447,7 +451,7 @@ On false: <code class="param">session</code> is zero-wiped. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00127">127</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00412">_logger</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00414">_secure</a>, <a class="el" href="CW__Defs_8h_source.html#l00159">CW_CERT_OK</a>, <a class="el" href="CW__Defs_8h_source.html#l00184">CW_CURVE_SECP256R1</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="platform__compat_8h_source.html#l00035">HEX</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>.</p>
+<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00428">_lastCertResult</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00425">_logger</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00427">_secure</a>, <a class="el" href="CW__Defs_8h_source.html#l00159">CW_CERT_OK</a>, <a class="el" href="CW__Defs_8h_source.html#l00184">CW_CURVE_SECP256R1</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="platform__compat_8h_source.html#l00035">HEX</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00096">connect()</a>.</p>
 
@@ -485,11 +489,11 @@ On false: <code class="param">session</code> is zero-wiped. </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00691">691</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00694">694</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00412">_logger</a>, <a class="el" href="CW__Defs_8h_source.html#l00152">CW_DER_TAG_SEQUENCE</a>, <a class="el" href="CW__Defs_8h_source.html#l00081">CW_NOK</a>, <a class="el" href="CW__Defs_8h_source.html#l00117">CW_RAW_SIGNATURE_SIZE</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00114">CW_SignResult::errorCode</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00494">parseDerSignature()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>, and <a class="el" href="CryptnoxWallet_8h_source.html#l00113">CW_SignResult::signature</a>.</p>
+<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00425">_logger</a>, <a class="el" href="CW__Defs_8h_source.html#l00152">CW_DER_TAG_SEQUENCE</a>, <a class="el" href="CW__Defs_8h_source.html#l00081">CW_NOK</a>, <a class="el" href="CW__Defs_8h_source.html#l00117">CW_RAW_SIGNATURE_SIZE</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00114">CW_SignResult::errorCode</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00497">parseDerSignature()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>, and <a class="el" href="CryptnoxWallet_8h_source.html#l00113">CW_SignResult::signature</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00381">sign()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00384">sign()</a>.</p>
 
 </div>
 </div>
@@ -522,9 +526,9 @@ On false: <code class="param">session</code> is zero-wiped. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if the secure exchange completed and (when <code>info</code> is non-NULL) parsing the name/email fields succeeded. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00225">225</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00228">228</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00412">_logger</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00414">_secure</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00045">CW_CARD_EMAIL_MAX_LEN</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00042">CW_CARD_NAME_MAX_LEN</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00057">CW_CardInfo::email</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00542">isSecureChannelOpen()</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00056">CW_CardInfo::name</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>.</p>
+<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00425">_logger</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00427">_secure</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00045">CW_CARD_EMAIL_MAX_LEN</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00042">CW_CARD_NAME_MAX_LEN</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00057">CW_CardInfo::email</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00545">isSecureChannelOpen()</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00056">CW_CardInfo::name</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>.</p>
 
 </div>
 </div>
@@ -572,11 +576,11 @@ On false: <code class="param">session</code> is zero-wiped. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>true on success; false on bad arguments, a closed session, a card refusal, or a response that is not an uncompressed key.</dd></dl>
 <dl class="section pre"><dt>Precondition</dt><dd>The PIN must already have been verified for this session (see <a class="el" href="#acfae75a7be8662c18d2e6af829ef77a0">verifyPin</a>) — the card refuses the export otherwise, except on the PIN-less path. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00342">342</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00345">345</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00412">_logger</a>, <a class="el" href="CW__Defs_8h_source.html#l00120">CW_RAW_PUBKEY_SIZE</a>, <a class="el" href="CW__Defs_8h_source.html#l00121">CW_SEC1_PUBKEY_SIZE</a>, <a class="el" href="CW__Defs_8h_source.html#l00122">CW_SEC1_UNCOMPRESSED_TAG</a>, <a class="el" href="CW__Defs_8h_source.html#l00088">CW_SIGN_CURR_K1</a>, <a class="el" href="CW__Defs_8h_source.html#l00090">CW_SIGN_DERIVE_K1</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00342">getPublicKey()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>.</p>
+<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00425">_logger</a>, <a class="el" href="CW__Defs_8h_source.html#l00120">CW_RAW_PUBKEY_SIZE</a>, <a class="el" href="CW__Defs_8h_source.html#l00121">CW_SEC1_PUBKEY_SIZE</a>, <a class="el" href="CW__Defs_8h_source.html#l00122">CW_SEC1_UNCOMPRESSED_TAG</a>, <a class="el" href="CW__Defs_8h_source.html#l00088">CW_SIGN_CURR_K1</a>, <a class="el" href="CW__Defs_8h_source.html#l00090">CW_SIGN_DERIVE_K1</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00345">getPublicKey()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="test__pr28_8cpp_source.html#l00305">check_ed25519_applet_gate()</a>, <a class="el" href="test__pr28_8cpp_source.html#l00259">check_pubkey_allow_list()</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00342">getPublicKey()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="test__pr28_8cpp_source.html#l00305">check_ed25519_applet_gate()</a>, <a class="el" href="test__pr28_8cpp_source.html#l00259">check_pubkey_allow_list()</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00345">getPublicKey()</a>.</p>
 
 </div>
 </div>
@@ -641,9 +645,9 @@ On false: <code class="param">session</code> is zero-wiped. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>true on success, false on closed/invalid session, bad parameters, a buffer too small for the returned key, or transport / MAC failure.</dd></dl>
 <dl class="section note"><dt>Note</dt><dd>Ed25519 key types require applet v2.0+. On an older applet this returns false without sending anything. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00426">426</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00429">429</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00412">_logger</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00414">_secure</a>, <a class="el" href="CW__Defs_8h_source.html#l00138">CW_MAX_DERIVE_PATH_LENGTH</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00023">cwIsEd25519()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00038">cwPubKeyTypeAllowed()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00029">cwSignNeedsPath()</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00542">isSecureChannelOpen()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>.</p>
+<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00425">_logger</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00427">_secure</a>, <a class="el" href="CW__Defs_8h_source.html#l00138">CW_MAX_DERIVE_PATH_LENGTH</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00023">cwIsEd25519()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00038">cwPubKeyTypeAllowed()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00029">cwSignNeedsPath()</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00545">isSecureChannelOpen()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>.</p>
 
 </div>
 </div>
@@ -670,11 +674,44 @@ On false: <code class="param">session</code> is zero-wiped. </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00542">542</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00545">545</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="CW__Defs_8h_source.html#l00201">CW_SecureSession::aesKey</a>, and <a class="el" href="CW__Defs_8h_source.html#l00075">CW_AESKEY_SIZE</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00218">disconnect()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00225">getCardInfo()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00426">getPublicKey()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00554">validateSignRequest()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00279">verifyPin()</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00302">writeUserData()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00221">disconnect()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00228">getCardInfo()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00429">getPublicKey()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00557">validateSignRequest()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00282">verifyPin()</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00305">writeUserData()</a>.</p>
+
+</div>
+</div>
+<a id="a891e25981705ce8c83901db04e040551" name="a891e25981705ce8c83901db04e040551"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a891e25981705ce8c83901db04e040551">&#9670;&#160;</a></span>lastCertResult()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t CryptnoxWallet::lastCertResult </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Certificate-chain result of the last <a class="el" href="#a8584e36b3c8c088ad1ee18358246262e">establishSecureChannel()</a>. </p>
+<p>Lets a caller tell a card that failed its authenticity check from one that was pulled away or did not answer — both make <a class="el" href="#a8584e36b3c8c088ad1ee18358246262e" title="Establish a secure channel (SELECT → certificate → ECDH → mutual auth).">establishSecureChannel()</a> return false.</p>
+<dl class="section return"><dt>Returns</dt><dd><code>CW_CERT_OK</code> unless the last attempt reached the chain check and it failed; then the <code>CW_CERT_*</code> code (<a class="el" href="CW__Defs_8h.html">CW_Defs.h</a>). Reset to <code>CW_CERT_OK</code> at the start of every attempt. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8h_source.html#l00225">225</a> of file <a class="el" href="CryptnoxWallet_8h_source.html">CryptnoxWallet.h</a>.</p>
+
+<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00428">_lastCertResult</a>.</p>
 
 </div>
 </div>
@@ -766,11 +803,11 @@ On false: <code class="param">session</code> is zero-wiped. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true on success, false on malformed DER. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00494">494</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00497">497</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
 
 <p class="reference">References <a class="el" href="CW__Defs_8h_source.html#l00153">CW_DER_TAG_INTEGER</a>, <a class="el" href="CW__Defs_8h_source.html#l00152">CW_DER_TAG_SEQUENCE</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00691">extractRawSignature()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00694">extractRawSignature()</a>.</p>
 
 </div>
 </div>
@@ -797,9 +834,9 @@ On false: <code class="param">session</code> is zero-wiped. </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00550">550</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00553">553</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00414">_secure</a>.</p>
+<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00427">_secure</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00088">begin()</a>.</p>
 
@@ -857,11 +894,11 @@ On false: <code class="param">session</code> is zero-wiped. </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00664">664</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00667">667</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00412">_logger</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00414">_secure</a>, <a class="el" href="CW__Defs_8h_source.html#l00109">CW_SIGN_NO_KEY_LOADED</a>, <a class="el" href="CW__Defs_8h_source.html#l00105">CW_SIGN_SIG_EDDSA</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00023">cwIsEd25519()</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00114">CW_SignResult::errorCode</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00073">CW_SignRequest::keyType</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00072">CW_SignRequest::session</a>, and <a class="el" href="CryptnoxWallet_8h_source.html#l00074">CW_SignRequest::signatureType</a>.</p>
+<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00425">_logger</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00427">_secure</a>, <a class="el" href="CW__Defs_8h_source.html#l00109">CW_SIGN_NO_KEY_LOADED</a>, <a class="el" href="CW__Defs_8h_source.html#l00105">CW_SIGN_SIG_EDDSA</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00023">cwIsEd25519()</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00114">CW_SignResult::errorCode</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00073">CW_SignRequest::keyType</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00072">CW_SignRequest::session</a>, and <a class="el" href="CryptnoxWallet_8h_source.html#l00074">CW_SignRequest::signatureType</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00381">sign()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00384">sign()</a>.</p>
 
 </div>
 </div>
@@ -910,9 +947,9 @@ On false: <code class="param">session</code> is zero-wiped. </dd></dl>
 </dl>
 <dl class="section warning"><dt>Warning</dt><dd>When <code>pinLessMode</code> is false the <code>request.pin</code> field must be populated. The destructor of <a class="el" href="structCW__SignRequest.html">CW_SignRequest</a> securely wipes the PIN, but the caller must zero any other copy. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00381">381</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00384">384</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00412">_logger</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00623">buildSignPayload()</a>, <a class="el" href="CW__Defs_8h_source.html#l00081">CW_NOK</a>, <a class="el" href="CW__Defs_8h_source.html#l00080">CW_OK</a>, <a class="el" href="CW__Defs_8h_source.html#l00117">CW_RAW_SIGNATURE_SIZE</a>, <a class="el" href="CW__Defs_8h_source.html#l00104">CW_SIGN_SIG_SCHNORR_BIP340</a>, <a class="el" href="CW__Defs_8h_source.html#l00141">CW_USER_DATA_PAGE_SIZE</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00023">cwIsEd25519()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00754">debugPrintSignature()</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00114">CW_SignResult::errorCode</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00691">extractRawSignature()</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00073">CW_SignRequest::keyType</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00664">sendSignApdu()</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00113">CW_SignResult::signature</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00074">CW_SignRequest::signatureType</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00554">validateSignRequest()</a>.</p>
+<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00425">_logger</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00626">buildSignPayload()</a>, <a class="el" href="CW__Defs_8h_source.html#l00081">CW_NOK</a>, <a class="el" href="CW__Defs_8h_source.html#l00080">CW_OK</a>, <a class="el" href="CW__Defs_8h_source.html#l00117">CW_RAW_SIGNATURE_SIZE</a>, <a class="el" href="CW__Defs_8h_source.html#l00104">CW_SIGN_SIG_SCHNORR_BIP340</a>, <a class="el" href="CW__Defs_8h_source.html#l00141">CW_USER_DATA_PAGE_SIZE</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00023">cwIsEd25519()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00757">debugPrintSignature()</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00114">CW_SignResult::errorCode</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00694">extractRawSignature()</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00073">CW_SignRequest::keyType</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00667">sendSignApdu()</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00113">CW_SignResult::signature</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00074">CW_SignRequest::signatureType</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00557">validateSignRequest()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="test__pr28_8cpp_source.html#l00296">signWith()</a>.</p>
 
@@ -945,11 +982,11 @@ On false: <code class="param">session</code> is zero-wiped. </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00554">554</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00557">557</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00412">_logger</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00414">_secure</a>, <a class="el" href="CW__Defs_8h_source.html#l00118">CW_HASH_SIZE</a>, <a class="el" href="CW__Defs_8h_source.html#l00082">CW_INVALID_SESSION</a>, <a class="el" href="CW__Defs_8h_source.html#l00138">CW_MAX_DERIVE_PATH_LENGTH</a>, <a class="el" href="CW__Defs_8h_source.html#l00140">CW_MAX_PIN_LENGTH</a>, <a class="el" href="CW__Defs_8h_source.html#l00139">CW_MIN_PIN_LENGTH</a>, <a class="el" href="CW__Defs_8h_source.html#l00112">CW_SIGN_INVALID_PATH</a>, <a class="el" href="CW__Defs_8h_source.html#l00108">CW_SIGN_KEY_TOO_SHORT</a>, <a class="el" href="CW__Defs_8h_source.html#l00111">CW_SIGN_KEY_TOO_SHORT_WITH_PINLESS_MODE</a>, <a class="el" href="CW__Defs_8h_source.html#l00113">CW_SIGN_MESSAGE_TOO_LONG</a>, <a class="el" href="CW__Defs_8h_source.html#l00110">CW_SIGN_PIN_INCORRECT</a>, <a class="el" href="CW__Defs_8h_source.html#l00092">CW_SIGN_PINLESS_K1</a>, <a class="el" href="CW__Defs_8h_source.html#l00114">CW_SIGN_UNSUPPORTED_KEY_TYPE</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00023">cwIsEd25519()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00059">cwMaxEd25519Message()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00029">cwSignNeedsPath()</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00079">CW_SignRequest::derivePath</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00080">CW_SignRequest::derivePathLength</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00114">CW_SignResult::errorCode</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00077">CW_SignRequest::hash</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00078">CW_SignRequest::hashLength</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00542">isSecureChannelOpen()</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00073">CW_SignRequest::keyType</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00075">CW_SignRequest::pin</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00076">CW_SignRequest::pinLessMode</a>, and <a class="el" href="CryptnoxWallet_8h_source.html#l00072">CW_SignRequest::session</a>.</p>
+<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00425">_logger</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00427">_secure</a>, <a class="el" href="CW__Defs_8h_source.html#l00118">CW_HASH_SIZE</a>, <a class="el" href="CW__Defs_8h_source.html#l00082">CW_INVALID_SESSION</a>, <a class="el" href="CW__Defs_8h_source.html#l00138">CW_MAX_DERIVE_PATH_LENGTH</a>, <a class="el" href="CW__Defs_8h_source.html#l00140">CW_MAX_PIN_LENGTH</a>, <a class="el" href="CW__Defs_8h_source.html#l00139">CW_MIN_PIN_LENGTH</a>, <a class="el" href="CW__Defs_8h_source.html#l00112">CW_SIGN_INVALID_PATH</a>, <a class="el" href="CW__Defs_8h_source.html#l00108">CW_SIGN_KEY_TOO_SHORT</a>, <a class="el" href="CW__Defs_8h_source.html#l00111">CW_SIGN_KEY_TOO_SHORT_WITH_PINLESS_MODE</a>, <a class="el" href="CW__Defs_8h_source.html#l00113">CW_SIGN_MESSAGE_TOO_LONG</a>, <a class="el" href="CW__Defs_8h_source.html#l00110">CW_SIGN_PIN_INCORRECT</a>, <a class="el" href="CW__Defs_8h_source.html#l00092">CW_SIGN_PINLESS_K1</a>, <a class="el" href="CW__Defs_8h_source.html#l00114">CW_SIGN_UNSUPPORTED_KEY_TYPE</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00023">cwIsEd25519()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00059">cwMaxEd25519Message()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00029">cwSignNeedsPath()</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00079">CW_SignRequest::derivePath</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00080">CW_SignRequest::derivePathLength</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00114">CW_SignResult::errorCode</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00077">CW_SignRequest::hash</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00078">CW_SignRequest::hashLength</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00545">isSecureChannelOpen()</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00073">CW_SignRequest::keyType</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00075">CW_SignRequest::pin</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00076">CW_SignRequest::pinLessMode</a>, and <a class="el" href="CryptnoxWallet_8h_source.html#l00072">CW_SignRequest::session</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00381">sign()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00384">sign()</a>.</p>
 
 </div>
 </div>
@@ -990,9 +1027,9 @@ On false: <code class="param">session</code> is zero-wiped. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>true if the card accepted the PIN, false on wrong PIN, closed or invalid session, length out of range, or transport / MAC failure.</dd></dl>
 <dl class="section warning"><dt>Warning</dt><dd>Each failed attempt decrements the card's PIN counter. Treat a false return as "wrong PIN" only after confirming session validity — a transport glitch should not be retried with a new PIN. A wrong PIN or any card / transport failure clears <code class="param">session:</code> call <a class="el" href="#a9231d6ed6a0634a8ab7c2a2710224a49">connect</a> again before the next command. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00279">279</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00282">282</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00412">_logger</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00414">_secure</a>, <a class="el" href="CW__Defs_8h_source.html#l00140">CW_MAX_PIN_LENGTH</a>, <a class="el" href="CW__Defs_8h_source.html#l00139">CW_MIN_PIN_LENGTH</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00542">isSecureChannelOpen()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>.</p>
+<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00425">_logger</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00427">_secure</a>, <a class="el" href="CW__Defs_8h_source.html#l00140">CW_MAX_PIN_LENGTH</a>, <a class="el" href="CW__Defs_8h_source.html#l00139">CW_MIN_PIN_LENGTH</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00545">isSecureChannelOpen()</a>, <a class="el" href="CW__Utils_8cpp_source.html#l00050">CW_Utils::safe_memcpy()</a>, and <a class="el" href="CW__Utils_8cpp_source.html#l00037">CW_Utils::secure_wipe()</a>.</p>
 
 </div>
 </div>
@@ -1038,13 +1075,41 @@ On false: <code class="param">session</code> is zero-wiped. </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true on success, false on closed session, bad parameters, <code class="param">dataLength</code> above one page, or transport / MAC failure. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00302">302</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8cpp_source.html#l00305">305</a> of file <a class="el" href="CryptnoxWallet_8cpp_source.html">CryptnoxWallet.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00412">_logger</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00414">_secure</a>, <a class="el" href="CW__Defs_8h_source.html#l00141">CW_USER_DATA_PAGE_SIZE</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00542">isSecureChannelOpen()</a>.</p>
+<p class="reference">References <a class="el" href="CryptnoxWallet_8h_source.html#l00425">_logger</a>, <a class="el" href="CryptnoxWallet_8h_source.html#l00427">_secure</a>, <a class="el" href="CW__Defs_8h_source.html#l00141">CW_USER_DATA_PAGE_SIZE</a>, <a class="el" href="platform__compat_8h_source.html#l00042">F</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00545">isSecureChannelOpen()</a>.</p>
 
 </div>
 </div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="ac3ade94f3a2a561cedf7bfac7ac4598b" name="ac3ade94f3a2a561cedf7bfac7ac4598b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3ade94f3a2a561cedf7bfac7ac4598b">&#9670;&#160;</a></span>_lastCertResult</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t CryptnoxWallet::_lastCertResult = <a class="el" href="CW__Defs_8h.html#aa87b10265a161be9fde707f97c4fff3f">CW_CERT_OK</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>See <a class="el" href="#a891e25981705ce8c83901db04e040551" title="Certificate-chain result of the last establishSecureChannel().">lastCertResult()</a>. </p>
+
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8h_source.html#l00428">428</a> of file <a class="el" href="CryptnoxWallet_8h_source.html">CryptnoxWallet.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00127">establishSecureChannel()</a>, and <a class="el" href="CryptnoxWallet_8h_source.html#l00225">lastCertResult()</a>.</p>
+
+</div>
+</div>
 <a id="a538b17a2655f1ad640cc37e806f01a70" name="a538b17a2655f1ad640cc37e806f01a70"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a538b17a2655f1ad640cc37e806f01a70">&#9670;&#160;</a></span>_logger</h2>
 
@@ -1067,9 +1132,9 @@ On false: <code class="param">session</code> is zero-wiped. </dd></dl>
 
 <p>Logging interface. </p>
 
-<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8h_source.html#l00412">412</a> of file <a class="el" href="CryptnoxWallet_8h_source.html">CryptnoxWallet.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8h_source.html#l00425">425</a> of file <a class="el" href="CryptnoxWallet_8h_source.html">CryptnoxWallet.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00096">connect()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00079">CryptnoxWallet()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00754">debugPrintSignature()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00127">establishSecureChannel()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00691">extractRawSignature()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00225">getCardInfo()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00342">getPublicKey()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00426">getPublicKey()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00664">sendSignApdu()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00381">sign()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00554">validateSignRequest()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00279">verifyPin()</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00302">writeUserData()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00096">connect()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00079">CryptnoxWallet()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00757">debugPrintSignature()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00127">establishSecureChannel()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00694">extractRawSignature()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00228">getCardInfo()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00345">getPublicKey()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00429">getPublicKey()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00667">sendSignApdu()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00384">sign()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00557">validateSignRequest()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00282">verifyPin()</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00305">writeUserData()</a>.</p>
 
 </div>
 </div>
@@ -1095,7 +1160,7 @@ On false: <code class="param">session</code> is zero-wiped. </dd></dl>
 
 <p>Platform abstraction (sleep_ms). </p>
 
-<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8h_source.html#l00413">413</a> of file <a class="el" href="CryptnoxWallet_8h_source.html">CryptnoxWallet.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8h_source.html#l00426">426</a> of file <a class="el" href="CryptnoxWallet_8h_source.html">CryptnoxWallet.h</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00096">connect()</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00079">CryptnoxWallet()</a>.</p>
 
@@ -1123,9 +1188,9 @@ On false: <code class="param">session</code> is zero-wiped. </dd></dl>
 
 <p>Owned secure channel. </p>
 
-<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8h_source.html#l00414">414</a> of file <a class="el" href="CryptnoxWallet_8h_source.html">CryptnoxWallet.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="CryptnoxWallet_8h_source.html#l00427">427</a> of file <a class="el" href="CryptnoxWallet_8h_source.html">CryptnoxWallet.h</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00088">begin()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00096">connect()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00079">CryptnoxWallet()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00218">disconnect()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00127">establishSecureChannel()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00225">getCardInfo()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00426">getPublicKey()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00550">printPN532FirmwareVersion()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00664">sendSignApdu()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00554">validateSignRequest()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00279">verifyPin()</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00302">writeUserData()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="CryptnoxWallet_8cpp_source.html#l00088">begin()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00096">connect()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00079">CryptnoxWallet()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00221">disconnect()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00127">establishSecureChannel()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00228">getCardInfo()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00429">getPublicKey()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00553">printPN532FirmwareVersion()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00667">sendSignApdu()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00557">validateSignRequest()</a>, <a class="el" href="CryptnoxWallet_8cpp_source.html#l00282">verifyPin()</a>, and <a class="el" href="CryptnoxWallet_8cpp_source.html#l00305">writeUserData()</a>.</p>
 
 </div>
 </div>
