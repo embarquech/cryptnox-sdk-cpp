@@ -213,6 +213,19 @@ public:
     bool establishSecureChannel(CW_SecureSession& session);
 
     /**
+     * @brief Certificate-chain result of the last @ref establishSecureChannel().
+     *
+     * Lets a caller tell a card that failed its authenticity check from one
+     * that was pulled away or did not answer — both make
+     * establishSecureChannel() return false.
+     *
+     * @return @c CW_CERT_OK unless the last attempt reached the chain check and
+     *         it failed; then the @c CW_CERT_* code (@ref CW_Defs.h). Reset to
+     *         @c CW_CERT_OK at the start of every attempt.
+     */
+    uint8_t lastCertResult() const { return _lastCertResult; }
+
+    /**
      * @brief Disconnect and securely clear the session.
      *
      * Wipes any session keys and resets the NFC reader so the next card
@@ -430,6 +443,7 @@ private:
     CW_Logger&       _logger;   ///< Logging interface.
     CW_Platform&     _platform; ///< Platform abstraction (sleep_ms).
     CW_SecureChannel _secure;   ///< Owned secure channel.
+    uint8_t          _lastCertResult = CW_CERT_OK; ///< See lastCertResult().
 
     static bool isSecureChannelOpen(const CW_SecureSession& session);
     bool printPN532FirmwareVersion();

@@ -195,6 +195,8 @@ bool CryptnoxWallet::establishSecureChannel(CW_SecureSession& session) {
     uint8_t clientPublicKey[64U]       = { 0U };
     CW_Curve sessionCurve              = CW_CURVE_SECP256R1;
 
+    _lastCertResult = CW_CERT_OK;   /* only a failed chain check sets it */
+
     if (_secure.selectApdu()) {
         /* Fetch the manufacturer certificate BEFORE getCardCertificate().
          * The Cryptnox card state machine advances after GET_CARD_CERTIFICATE
@@ -219,6 +221,7 @@ bool CryptnoxWallet::establishSecureChannel(CW_SecureSession& session) {
                 _logger.println(F("*** CW_VERIFY_CERT=0: card authenticity NOT verified."));
 #endif
                 if (certResult != CW_CERT_OK) {
+                    _lastCertResult = certResult;   /* for lastCertResult() */
 #if CW_DEBUG_LOGGING
                     _logger.print(F("Card authenticity check failed (code 0x"));
                     _logger.print(certResult, HEX);
