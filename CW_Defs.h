@@ -55,8 +55,8 @@
  * @defgroup util Utilities & shared definitions
  * @brief Platform-independent helpers and shared constants.
  *
- * Includes @ref CW_Utils (constant-time compare, secure wipe, safe memcpy),
- * the @c CW_CERT_* / @c CW_SIGN_* error codes, and the trusted-CA
+ * Includes @ref CW_Utils (constant-time compare, secure wipe, safe memcpy,
+ * RNG), the @c CW_CERT_* / @c CW_SIGN_* error codes, and the trusted-CA
  * key table (@ref CW_TrustedKeys.h).
  */
 
@@ -114,6 +114,7 @@
 #define CW_SIGN_UNSUPPORTED_KEY_TYPE           (0x86U)  /**< Unknown key / signature type, or one that needs a newer applet (Ed25519 on < 2.0) */
 #define CW_SIGN_PIN_REJECTED                   (0x87U)  /**< Card refused the PIN (SW 63Cx, x = tries left); see CW_SignResult::cardSw */
 #define CW_SIGN_CHANNEL_ERROR                  (0x88U)  /**< Transport, MAC or channel failure: the card's answer is unknown, CW_SignResult::cardSw is 0 */
+#define CW_SIGN_BAD_DIGEST_LENGTH              (0x89U)  /**< ECDSA / Schnorr digest is not exactly 32 bytes; nothing was sent */
 
 /* Size constants */
 #define CW_RAW_SIGNATURE_SIZE         (64U)    /**< Raw signature (r[32] + s[32], or Ed25519 R||S) */
@@ -252,10 +253,20 @@ struct CW_SecureSession {
 #ifndef CW_VERIFY_CERT
 #define CW_VERIFY_CERT 1
 #endif
+
+/* Release marker for the guards below. NDEBUG alone is not enough: ESP-IDF,
+ * Arduino and PlatformIO keep assert() on in release, so they never define it.
+ * Their release scripts pass -DCW_RELEASE=1 instead. */
+#if defined(NDEBUG) || (defined(CW_RELEASE) && (CW_RELEASE))
+#  define CW_IS_RELEASE_BUILD 1
+#else
+#  define CW_IS_RELEASE_BUILD 0
+#endif
+
 /* !(...) rather than == 0: -DCW_VERIFY_CERT="0&&1" must not slip past. */
 #if !(CW_VERIFY_CERT)
-#  if defined(CW_ALLOW_UNVERIFIED_CARD) && (CW_ALLOW_UNVERIFIED_CARD == 1) && defined(NDEBUG)
-#    error "CW_ALLOW_UNVERIFIED_CARD=1 in an NDEBUG (release) build: card authenticity verification must stay on."
+#  if defined(CW_ALLOW_UNVERIFIED_CARD) && (CW_ALLOW_UNVERIFIED_CARD == 1) && CW_IS_RELEASE_BUILD
+#    error "CW_ALLOW_UNVERIFIED_CARD=1 in a release build (NDEBUG or CW_RELEASE=1): card authenticity verification must stay on."
 #  elif defined(CW_ALLOW_UNVERIFIED_CARD) && (CW_ALLOW_UNVERIFIED_CARD == 1)
 #    warning "CW_VERIFY_CERT=0: card authenticity verification is compiled out (CRIT-02/H-07). Never ship this."
 #  else
@@ -289,15 +300,14 @@ struct CW_SecureSession {
  *
  * No key, PIN, salt or plaintext is logged, but the output (status words,
  * failure reasons) still helps someone probing the card. Bring-up only.
- * The NDEBUG guard below only fires where the build defines NDEBUG, which
- * Arduino, PlatformIO and default ESP-IDF builds do not.
+ * The guard below fires on NDEBUG or -DCW_RELEASE=1 (see CW_IS_RELEASE_BUILD).
  */
 #ifndef CW_DEBUG_LOGGING
 #  define CW_DEBUG_LOGGING 0
 #endif
 
-#if CW_DEBUG_LOGGING && defined(NDEBUG)
-#  error "CW_DEBUG_LOGGING=1 is set but NDEBUG is defined (release/optimised build). " \
+#if CW_DEBUG_LOGGING && CW_IS_RELEASE_BUILD
+#  error "CW_DEBUG_LOGGING=1 in a release build (NDEBUG or CW_RELEASE=1). " \
          "Debug logging must not ship in production firmware.  Remove -DCW_DEBUG_LOGGING=1 from your release build flags (SEC-012)."
 #endif
 

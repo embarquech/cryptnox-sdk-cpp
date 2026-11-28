@@ -553,6 +553,9 @@ static void check_parsers(void) {   /* M4, L6 */
     const uint8_t ok[] = { 0x30U, 0x06U, 0x02U, 0x01U, 0x05U, 0x02U, 0x01U, 0x07U };
     CHECK(CW_SecureChannel::parseDerSigToRaw(ok, sizeof(ok), raw) && (raw[31] == 5U) && (raw[63] == 7U));
     CHECK(CryptnoxWallet::parseDerSignature(ok, sizeof(ok), r, rl, s, sl) && (rl == 1U) && (sl == 1U));
+    const uint8_t padded[] = { 0x30U, 0x07U, 0x02U, 0x02U, 0x00U, 0x85U, 0x02U, 0x01U, 0x07U };   /* needed pad */
+    CHECK(CW_SecureChannel::parseDerSigToRaw(padded, sizeof(padded), raw) && (raw[31] == 0x85U));
+    CHECK(CryptnoxWallet::parseDerSignature(padded, sizeof(padded), r, rl, s, sl) && (rl == 2U));
 
     const uint8_t zero[] = { 0x30U, 0x06U, 0x02U, 0x01U, 0x00U, 0x02U, 0x01U, 0x00U };   /* r = s = 0 */
     const uint8_t sZero[] = { 0x30U, 0x06U, 0x02U, 0x01U, 0x05U, 0x02U, 0x01U, 0x00U };
@@ -560,17 +563,19 @@ static void check_parsers(void) {   /* M4, L6 */
     uint8_t long33[2U + 35U + 3U] = { 0x30U, 38U, 0x02U, 33U, 0x7FU };       /* 33 bytes, no 0x00 pad */
     long33[2U + 35U] = 0x02U; long33[2U + 36U] = 0x01U; long33[2U + 37U] = 0x07U;
     const uint8_t noSLen[] = { 0x30U, 0x06U, 0x02U, 0x01U, 0x05U, 0x02U };    /* s length byte missing */
+    const uint8_t nonMin[] = { 0x30U, 0x07U, 0x02U, 0x02U, 0x00U, 0x05U, 0x02U, 0x01U, 0x07U };  /* superfluous 0x00 */
+    const uint8_t negative[] = { 0x30U, 0x06U, 0x02U, 0x01U, 0x85U, 0x02U, 0x01U, 0x07U };       /* sign bit set */
     const uint8_t trailing[] = { 0x30U, 0x07U, 0x02U, 0x01U, 0x05U, 0x02U, 0x01U, 0x07U, 0xEEU };
 
-    const uint8_t* bad[] = { zero, sZero, empty, long33, noSLen, trailing };
+    const uint8_t* bad[] = { zero, sZero, empty, long33, noSLen, nonMin, negative, trailing };
     const uint8_t badLen[] = { sizeof(zero), sizeof(sZero), sizeof(empty), sizeof(long33),
-                               sizeof(noSLen), sizeof(trailing) };
-    for (uint8_t i = 0U; i < 6U; i++) {
+                               sizeof(noSLen), sizeof(nonMin), sizeof(negative), sizeof(trailing) };
+    for (uint8_t i = 0U; i < 8U; i++) {
         memset(raw, 0xAAU, sizeof(raw));
         CHECK(!CW_SecureChannel::parseDerSigToRaw(bad[i], badLen[i], raw));
         CHECK(raw[0] == 0U);   /* zeroed on failure */
     }
-    for (uint8_t i = 0U; i < 5U; i++) {   /* the public parser does not police the SEQUENCE end */
+    for (uint8_t i = 0U; i < 7U; i++) {   /* the public parser does not police the SEQUENCE end */
         CHECK(!CryptnoxWallet::parseDerSignature(bad[i], badLen[i], r, rl, s, sl));
     }
 }
@@ -613,8 +618,8 @@ static void check_sign_requests(void) {   /* M2, L10, L11, L13 */
 
     struct Bad { uint8_t keyType; uint8_t sigType; bool pinless; uint8_t hashLen; bool path; const char* pin; uint8_t code; };
     const Bad bad[] = {
-        { CW_SIGN_CURR_K1,   0U, false, 23U, false, "1234",  CW_SIGN_KEY_TOO_SHORT },   /* PIN would enter the digest */
-        { CW_SIGN_CURR_K1,   2U, false, 31U, false, "1234",  CW_SIGN_KEY_TOO_SHORT },   /* Schnorr too */
+        { CW_SIGN_CURR_K1,   0U, false, 23U, false, "1234",  CW_SIGN_BAD_DIGEST_LENGTH },   /* PIN would enter the digest */
+        { CW_SIGN_CURR_K1,   2U, false, 31U, false, "1234",  CW_SIGN_BAD_DIGEST_LENGTH },   /* Schnorr too */
         { CW_SIGN_CURR_K1,   0U, false, 32U, false, "12a4",  CW_SIGN_PIN_INCORRECT },
         { CW_SIGN_CURR_K1,   0U, false, 32U, false, "123",   CW_SIGN_PIN_INCORRECT },
         { 0x02U,             0U, false, 32U, true,  "1234",  CW_SIGN_UNSUPPORTED_KEY_TYPE },  /* derive-and-make-current */

@@ -328,8 +328,8 @@ public:
      *
      * @retval CW_OK                                  Signature valid.
      * @retval CW_INVALID_SESSION                     Secure channel not open.
-     * @retval CW_SIGN_KEY_TOO_SHORT                  Missing hash buffer, zero length, or an
-     *                                                ECDSA / Schnorr digest that is not 32 bytes.
+     * @retval CW_SIGN_KEY_TOO_SHORT                  Missing hash buffer or zero length.
+     * @retval CW_SIGN_BAD_DIGEST_LENGTH              ECDSA / Schnorr digest that is not 32 bytes.
      * @retval CW_SIGN_INVALID_PATH                   Bad derivation path, or a path with a
      *                                                current-key / PIN-less key type.
      * @retval CW_SIGN_MESSAGE_TOO_LONG               Hash/message too long for the key type.

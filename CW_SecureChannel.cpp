@@ -1124,8 +1124,8 @@ static bool derWalkMfCert(const uint8_t* buf, uint16_t bufLen,
 
 /* Read one DER INTEGER at der[pos] into a right-aligned 32-byte big-endian
  * value and advance pos. Refuses a missing tag or length byte, a zero-length
- * or over-long INTEGER, a 33-byte one without the 0x00 pad, and the value 0
- * (M4: r or s = 0 must never reach a verifier). */
+ * or over-long INTEGER, a 33-byte one without the 0x00 pad, a negative or
+ * non-minimal one, and the value 0 (M4: r or s = 0 must never reach a verifier). */
 static bool derIntTo32(const uint8_t* der, uint8_t derLen, uint8_t& pos, uint8_t* out32) {
     bool ok = false;
 
@@ -1133,7 +1133,10 @@ static bool derIntTo32(const uint8_t* der, uint8_t derLen, uint8_t& pos, uint8_t
         uint8_t len = der[pos + 1U];
         const uint8_t* p = der + pos + 2U;
 
-        if ((len >= 1U) && (len <= 33U) && (((uint16_t)pos + 2U + len) <= derLen)) {
+        /* Strict DER: no sign bit (negative), no superfluous leading 0x00. */
+        if ((len >= 1U) && (len <= 33U) && (((uint16_t)pos + 2U + len) <= derLen) &&
+            ((p[0] & 0x80U) == 0U) &&
+            ((len == 1U) || (p[0] != 0x00U) || ((p[1] & 0x80U) != 0U))) {
             pos = (uint8_t)(pos + 2U + len);
             if (len == 33U) {
                 if (p[0] == 0x00U) { p++; len = 32U; }

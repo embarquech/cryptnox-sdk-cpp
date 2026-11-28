@@ -61,7 +61,8 @@ static bool cwSignKeyTypeAllowed(uint8_t keyType) {
 
 /* Read one DER INTEGER at der[pos] (tag, short-form length, value), refusing
  * a missing tag or length byte, a zero-length or over-long INTEGER, a 33-byte
- * one without the 0x00 pad, and the value 0 (M4). */
+ * one without the 0x00 pad, a negative or non-minimal one (sign bit set, or a
+ * superfluous leading 0x00), and the value 0 (M4). */
 static bool cwDerReadInt(const uint8_t* der, uint8_t derLength, uint8_t& pos,
                          uint8_t* out, uint8_t& outLength) {
     bool ok = false;
@@ -71,7 +72,9 @@ static bool cwDerReadInt(const uint8_t* der, uint8_t derLength, uint8_t& pos,
         const uint8_t* p = der + pos + 2U;
 
         if ((len >= 1U) && (len <= 33U) && (((uint16_t)pos + 2U + len) <= derLength) &&
-            ((len < 33U) || (p[0] == 0x00U))) {
+            ((len < 33U) || (p[0] == 0x00U)) &&
+            ((p[0] & 0x80U) == 0U) &&
+            ((len == 1U) || (p[0] != 0x00U) || ((p[1] & 0x80U) != 0U))) {
             uint8_t acc = 0U;
             for (uint8_t i = 0U; i < len; i++) { acc |= p[i]; }
             if (acc != 0U) {
@@ -648,7 +651,7 @@ bool CryptnoxWallet::validateSignRequest(const CW_SignRequest& request, CW_SignR
 #if CW_DEBUG_LOGGING
         _logger.println(F("Error: ECDSA / Schnorr need a 32-byte digest."));
 #endif
-        result.errorCode = CW_SIGN_KEY_TOO_SHORT;
+        result.errorCode = CW_SIGN_BAD_DIGEST_LENGTH;
     }
     else if ((request.pinLessMode) != (request.keyType == CW_SIGN_PINLESS_K1)) {
 #if CW_DEBUG_LOGGING
@@ -706,7 +709,10 @@ void CryptnoxWallet::buildSignPayload(const CW_SignRequest& request,
 
     if (!request.pinLessMode) {
         const uint8_t pinLength = cwPinLength(request);
-        if (pinLength > 0U) {
+        /* validateSignRequest() sizes the message so the PIN always fits; the
+         * capacity check keeps the memset bounded if that ever changes. */
+        if ((pinLength > 0U) &&
+            ((kDataBufSize - static_cast<size_t>(dataLength)) >= CW_MAX_PIN_LENGTH)) {
             /* PIN is a fixed 9-byte field, right-padded with 0x00. Copy only the
              * PIN itself: bytes after its terminator may be a stale longer PIN,
              * which the card would reject, burning a retry (M2). */
@@ -764,9 +770,12 @@ bool CryptnoxWallet::extractRawSignature(const uint8_t* derResponse, uint16_t de
     }
     else {
         uint8_t derContentLength = derResponse[1];
-        uint8_t derTotalLength   = 2U + derContentLength;
+        /* uint16_t: 2 + 254 or 255 would wrap in a uint8_t. */
+        const uint16_t derTotalLength = static_cast<uint16_t>(2U + derContentLength);
 
-        if (derTotalLength > derLength) {
+        /* parseDerSigToRaw() takes a uint8_t length; an ECDSA signature is
+         * at most 72 bytes anyway. */
+        if ((derTotalLength > derLength) || (derTotalLength > UINT8_MAX)) {
 #if CW_DEBUG_LOGGING
             _logger.println(F("Error: DER signature length exceeds response."));
 #endif
@@ -775,7 +784,8 @@ bool CryptnoxWallet::extractRawSignature(const uint8_t* derResponse, uint16_t de
         else {
             /* Same strict parser as the certificate chain: zero, empty or
              * over-long r / s are refused, never returned as CW_OK (M4). */
-            if (!CW_SecureChannel::parseDerSigToRaw(derResponse, derTotalLength, result.signature)) {
+            if (!CW_SecureChannel::parseDerSigToRaw(derResponse, static_cast<uint8_t>(derTotalLength),
+                                                    result.signature)) {
 #if CW_DEBUG_LOGGING
                 _logger.println(F("Error: Failed to parse DER signature."));
 #endif
