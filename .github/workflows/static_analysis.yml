@@ -133,5 +133,8 @@ jobs:
         run: |
           . "$IDF_PATH/export.sh"
           for ex in Sign TronSigning; do
+            # config.h is gitignored; the placeholder template compiles as-is,
+            # as in sdk-esp32's own build.yml.
+            cp "sdk-esp32/examples/$ex/config.template.h" "sdk-esp32/examples/$ex/main/config.h"
             idf.py -C "sdk-esp32/examples/$ex" -B "build-$ex" build
           done
