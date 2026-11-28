@@ -54,11 +54,15 @@ public:
     /**
      * @brief Send an APDU command to the card and receive the response.
      *
-     * @param[in]  apdu         APDU command bytes.
-     * @param[in]  apduLen      Length of the APDU command.
-     * @param[out] response     Buffer to receive the card response.
-     * @param[out] responseLen  Actual number of bytes written to @p response.
-     * @return true if the exchange succeeded, false otherwise.
+     * @param[in]     apdu         APDU command bytes.
+     * @param[in]     apduLen      Length of the APDU command.
+     * @param[out]    response     Buffer to receive the card response (data || SW1 SW2).
+     * @param[in,out] responseLen  On entry: capacity of @p response. On exit:
+     *                             bytes written, never more than the capacity.
+     * @return true if the exchange succeeded, false otherwise. The driver MUST
+     *         return false, writing nothing past the capacity, when the
+     *         response does not fit, including a 256-byte answer plus SW
+     *         (258 bytes), which no @c uint8_t length can express.
      */
     virtual bool sendAPDU(const uint8_t* apdu, uint8_t apduLen,
                           uint8_t* response, uint8_t& responseLen) = 0;
@@ -76,7 +80,8 @@ public:
      * @param[out]    response    Buffer to receive the card response.
      * @param[in,out] responseLen On entry: capacity of @p response.
      *                            On exit: actual bytes written.
-     * @return true if the exchange succeeded, false otherwise.
+     * @return true if the exchange succeeded, false otherwise (including a
+     *         response larger than the capacity, as for @ref sendAPDU).
      */
     virtual bool sendAPDULarge(const uint8_t* apdu, uint8_t apduLen,
                                uint8_t* response, uint16_t& responseLen) {

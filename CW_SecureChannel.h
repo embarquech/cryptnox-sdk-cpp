@@ -107,10 +107,25 @@ public:
     uint8_t appletMajor() const { return _appletMajor; }
 
     /**
+     * @brief Status word of the last @ref aesCbcEncrypt exchange.
+     *
+     * The inner SW when the response MAC verified, otherwise the bare outer
+     * SW (which carries no MAC: an NFC man-in-the-middle can forge it), or 0
+     * when no SW was received (transport, MAC or local failure).
+     * Use it to tell a wrong PIN (63Cx, x = tries left) from other failures.
+     */
+    uint16_t lastCardSw() const { return _lastCardSw; }
+
+    /**
      * @brief Send the SELECT APDU to activate the Cryptnox application.
      *
      * Also records the applet major version (SELECT byte 1), which gates the
      * 2.0 channel features: the anti-replay MAC counter and the mutual-auth proof.
+     *
+     * On 1.6.x the response MAC uses a zero IV and no counter, so a response
+     * recorded earlier in the same session can be replayed for a later command
+     * (only its first block decrypts wrongly). That is a protocol limit: build
+     * with @c -DCW_MIN_APPLET_MAJOR=2 wherever only 2.x cards are deployed.
      * @return true on success, false otherwise.
      */
     bool selectApdu();
@@ -186,8 +201,7 @@ public:
      *
      * @pre @ref openSecureChannel must have been called and returned true.
      * @post On true: @p session has Kenc, Kmac, and rolling IV ready for
-     *       @ref aesCbcEncrypt. On false: @p session is left untouched and
-     *       must not be used.
+     *       @ref aesCbcEncrypt. On false: @p session is cleared.
      * @warning All ephemeral key material in the caller's stack
      *          (@p clientPrivateKey, @p salt) must be wiped after this call.
      */
@@ -252,10 +266,11 @@ public:
      * @brief AES-CBC encrypt + MAC, send APDU, and decrypt response.
      *
      * Performs one secure messaging round-trip: pads and encrypts @p data
-     * with Kenc using the current IV; computes a CMAC over (header || cipher)
-     * with Kmac; sends the wrapped APDU; on the response, verifies the MAC
-     * and decrypts the payload. The new IV for the next call is the first
-     * 16 bytes of the response, i.e. the card's response MAC (rolling IV).
+     * with Kenc using a copy of the current IV; computes a raw AES-CBC-MAC
+     * (16-byte tag, not CMAC) over (header || Lc block || cipher) with Kmac;
+     * sends the wrapped APDU; on the response, verifies the MAC and decrypts
+     * the payload. Only then does the session IV move: the new IV is the
+     * first 16 bytes of the response, i.e. the card's response MAC (rolling IV).
      *
      * @param[in,out] session               Secure session (Kenc / Kmac / IV).
      * @param[in]     apdu                  APDU header (CLA, INS, P1, P2).
@@ -270,9 +285,12 @@ public:
      * @return true if the APDU was sent and the response MAC verified +
      *         decrypted successfully; false otherwise. The session is cleared
      *         (renegotiate) on an exhausted MAC counter, a MAC IV or MAC
-     *         computation failure, a send-length failure, a transport failure,
+     *         computation failure, a send-length failure, a transport failure
+     *         (including a driver reporting more bytes than the buffer holds),
      *         a bad response MAC, or any status word other than 9000. It is
-     *         NOT cleared on bad parameters rejected before anything is sent.
+     *         NOT cleared on bad parameters (header not 4 bytes, payload too
+     *         large) or a data encryption failure, both before the counter
+     *         advances. @ref lastCardSw gives the card's status word.
      *
      * @pre @p session must be the output of a successful
      *      @ref mutuallyAuthenticate call.
@@ -340,6 +358,20 @@ public:
     bool checkStatusWord(const uint8_t* response, uint16_t responseLength,
                          uint8_t sw1Expected, uint8_t sw2Expected);
 
+    /**
+     * @brief Parse a DER ECDSA signature into raw r[32] || s[32].
+     *
+     * Strict: the SEQUENCE must end exactly after s, and each INTEGER must be
+     * 1-33 bytes (33 only with the 0x00 sign pad) and non-zero.
+     *
+     * @param[in]  der    DER signature (SEQUENCE { INTEGER r, INTEGER s }).
+     * @param[in]  derLen Bytes available at @p der (the SEQUENCE may be shorter).
+     * @param[out] raw64  64-byte output, zeroed on failure.
+     * @return true if well formed with r, s != 0.
+     */
+    static bool parseDerSigToRaw(const uint8_t* der, uint8_t derLen,
+                                 uint8_t* raw64);
+
 private:
     CW_NfcTransport&   _driver;   ///< NFC transport for APDU exchange.
     CW_Logger&         _logger;   ///< Logging interface.
@@ -349,7 +381,14 @@ private:
     /** @brief Nonce sent in the last getCardCertificate() call; checked in verifyCertificateChain(). */
     uint8_t _lastNonce[CW_CERT_NONCE_SIZE] {};
 
-    /** @brief Non-zero when s_mfCertBuf holds a valid pre-fetched manufacturer certificate. */
+    /** @brief True between getCardCertificate() and the verifyCertificateChain() that consumes the nonce. */
+    bool _haveNonce {};
+
+    /** @brief See @ref lastCardSw. */
+    uint16_t _lastCardSw {};
+
+    /** @brief Non-zero when s_mfCertBuf holds a valid pre-fetched manufacturer certificate.
+     *  s_mfCertBuf is shared by every instance: one reader at a time. */
     uint16_t _cachedMfCertLen {};
 
     /** @brief Applet major version from the last SELECT (0 = unknown → legacy channel). */
@@ -357,9 +396,6 @@ private:
 
     /** @brief MAC IV for the current counter (zero on 1.6.x). @return false if AES failed. */
     bool macIvForCounter(const CW_SecureSession& session, uint8_t* macIv);
-
-    static bool parseDerSigToRaw(const uint8_t* der, uint8_t derLen,
-                                 uint8_t* raw64);
 
     bool verifyEcdsaSha256(const uint8_t* pubKey64,
                            const uint8_t* message, uint16_t msgLen,

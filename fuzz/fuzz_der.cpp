@@ -105,16 +105,6 @@ public:
     void sleep_ms(uint32_t) override {}
 };
 
-/* ── CW_Utils::fill_secure_random stub ─────────────────────────────────
- * The real implementation is ESP32-specific (esp32_random.cpp).
- * The DER parsers never call this; the stub exists only for the linker. */
-bool CW_Utils::fill_secure_random(uint8_t* dest, size_t len) {
-    if ((dest != NULL) && (len > 0U)) {
-        memset(dest, 0xA5U, len);
-    }
-    return true;
-}
-
 /* ── Pull in the production code under test ─────────────────────────── */
 #include "../CW_Utils.cpp"
 #include "../CW_SecureChannel.cpp"
